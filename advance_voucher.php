@@ -1,0 +1,141 @@
+<?php 
+	$page_title = "Advance Voucher";
+	include("include_user_check_and_files.php");
+	$page_number = $GLOBALS['page_number']; $page_limit = $GLOBALS['page_limit'];
+
+    $login_staff_id = "";
+    if(isset($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id']) && !empty($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id'])) {
+        if(!empty($GLOBALS['user_type']) && $GLOBALS['user_type'] != $GLOBALS['admin_user_type']) {
+            $login_staff_id = $_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id'];
+            $permission_module = $GLOBALS['advance_voucher_module'];
+            include("permission_check.php");
+        }
+    }
+
+    $from_date = date('Y-m-d', strtotime('-30 days')); $to_date = date("Y-m-d"); 
+    $current_date = date("Y-m-d");
+
+
+    $bill_company_id = $GLOBALS['bill_company_id'];
+    $engineer_list = array();
+    $engineer_list = $obj->getTableRecords($GLOBALS['engineer_table'],'','',''); 
+
+    $cancelled_bill = array(); $cancelled_count = 0;
+    $cancelled_bill = $obj->getAllRecords($GLOBALS['advance_voucher_table'], 'deleted', 1);
+    $cancelled_count = count($cancelled_bill);
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title> <?php if(!empty($project_title)) { echo $project_title; } ?> - <?php if(!empty($page_title)) { echo $page_title; } ?> </title>
+        <?php 
+         include "link_style_script.php"; ?>
+        <script type="text/javascript" src="include/js/payment.js"></script>
+    </head>	
+<body>
+<?php include "header.php"; ?>
+    <!--Right Content-->
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="border card-box d-none add_update_form_content" id="add_update_form_content" ></div>
+                            <div class="border card-box" id="table_records_cover">
+                                <div class="card-header align-items-center">
+                                    <form name="table_listing_form" method="post">
+                                        <div class="row justify-content-end p-2">
+                                            <div class="col-lg-2 col-md-3 col-12">
+                                                <div class="form-group pb-2">
+                                                    <div class="form-label-group in-border">
+                                                    <input type="date" name="from_date" class="form-control shadow-none" value="<?php if(!empty($from_date)) { echo $from_date; } ?>" max="<?php if(!empty($current_date)) { echo $current_date; } ?>" onchange="Javascript:table_listing_records_filter();checkDateCheck();" placeholder="">
+                                                    <label>From Date</label>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                            <div class="col-lg-2 col-md-3 col-12">
+                                                <div class="form-group pb-2">
+                                                    <div class="form-label-group in-border">
+                                                    <input type="date" name="to_date" class="form-control shadow-none" value="<?php if(!empty($to_date)) { echo $to_date; } ?>" onchange="Javascript:table_listing_records_filter();checkDateCheck();" placeholder="" max="<?php if(!empty($current_date)) { echo $current_date; } ?>">
+                                                    <label>To Date</label>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-12 party_display">
+                                                <div class="form-group pb-2">
+                                                    <div class="form-label-group in-border">
+                                                        <select name="filter_engineer_id" class="select2 select2-danger smallfnt" data-dropdown-css-class="select2-danger" onchange="Javascript:table_listing_records_filter();">
+                                                            <option value="">Select Employee </option>
+                                                            <?php
+                                                            if(!empty($engineer_list)) {
+                                                                foreach($engineer_list as $data) { ?>
+                                                                    <option value="<?php if(!empty($data['engineer_id'])) { echo $data['engineer_id']; } ?>"> <?php
+                                                                        if(!empty($data['engineer_name'])) {
+                                                                            $data['engineer_name'] = html_entity_decode($obj->encode_decode('decrypt', $data['engineer_name']));
+                                                                            echo $data['engineer_name'];
+                                                                        }
+                                                                        if(!empty($data['mobile_number'])) {
+                                                                            $data['mobile_number'] = html_entity_decode($obj->encode_decode('decrypt', $data['mobile_number']));
+                                                                            echo " - ".$data['mobile_number'];
+                                                                        } ?>
+                                                                    </option> 
+                                                                    <?php
+                                                                }
+                                                            } ?>
+                                                        </select>
+                                                        <label>Select Employee </label>
+                                                    </div>
+                                                </div>        
+                                            </div>
+                                            <div class="col-lg-3 col-md-4 col-6 mb-3">
+                                                <div class="input-group">
+                                                <input type="text" name="search_text" class="form-control" style="height:34px;" placeholder="Search By Bill No" aria-label="Search" aria-describedby="basic-addon2" onkeyup="Javascript:table_listing_records_filter();">
+                                                <span class="input-group-text" style="height:34px;" id="basic-addon2" onclick="Javascript:table_listing_records_filter();"><i class="bi bi-search"></i></span>
+                                                </div>
+                                            </div>
+                                            <?php
+                                            
+                                                $add_access_error = "";
+                                                if(!empty($login_staff_id)) {
+                                                    $permission_action = $add_action;
+                                                    include('permission_action.php');
+                                                }
+                                                if(empty($add_access_error)) {
+                                            ?>
+                                            <div class="col-lg-2 col-md-3 col-4">
+                                                <button class="btn btn-danger float-end" style="font-size:11px;" type="button" onclick="Javascript:ShowModalContent('<?php if(!empty($page_title)) { echo $page_title; } ?>', '');"> <i class="fa fa-plus-circle"></i> Add </button>
+                                            </div>
+                                            <?php } ?>
+                                        </div>
+                                        <input type="hidden" name='show_bill' value="0" id='show_bill'>
+                                        <?php if($cancelled_count > 0) { ?>
+                                            <div class="row mx-0 justify-content-end p-2">
+                                                <div class="col-sm-4 col-lg-2 text-end">
+                                                    <button class="btn btn-dark poppins" id='show_button' style="font-size:11px;" type="button" onclick="Javascript:assign_bill_value();">Show Inactive Bill</button>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                        <div class="col-sm-6 col-xl-8">
+                                            <input type="hidden" name="page_number" value="<?php if(!empty($page_number)) { echo $page_number; } ?>">
+                                            <input type="hidden" name="page_limit" value="<?php if(!empty($page_limit)) { echo $page_limit; } ?>">
+                                            <input type="hidden" name="page_title" value="<?php if(!empty($page_title)) { echo $page_title; } ?>">
+                                        </div>	
+                                    </form>
+                                </div>
+                                <div id="table_listing_records"></div>
+                            </div>
+                        </div>   
+                    </div>
+                </div>  
+            </div>
+        </div>          
+    <!--Right Content End-->
+<?php include "footer.php"; ?>
+<script>
+    $(document).ready(function(){
+        $("#advancevoucher").addClass("active");
+        table_listing_records_filter();
+    });
+</script>
