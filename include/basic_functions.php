@@ -435,7 +435,7 @@
 					}
 				}
 				else{
-					if(!empty($column) && !empty($value)) {		
+					if((!empty($column) && !empty($value)) || (!empty($column) && $value == 0)) {		
 						$select_query = "SELECT * FROM ".$table." WHERE ".$column." = '".$value."' AND deleted = '0' ORDER BY id DESC";	
 					}
 					else if(empty($column) && empty($value)) {		
@@ -444,7 +444,9 @@
 				}
 				
 			}		
-			//echo $select_query;
+			// if($table == $GLOBALS['job_card_table']) {
+			// echo $select_query;
+			// }
 			if(!empty($select_query)) {
 				$result = $this->getQueryRecords($table, $select_query);
 			}

@@ -2,7 +2,7 @@
 	include("include_files.php");
     $login_staff_id = "";
     if(isset($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id']) && !empty($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id'])) {
-        if(!empty($GLOBALS['user_type']) && $GLOBALS['user_type'] != $GLOBALS['admin_user_type']) {
+        if($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_type'] == $GLOBALS['staff_user_type']) {
             $login_staff_id = $_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id'];
             $permission_module = $GLOBALS['bank_module'];
         }
@@ -483,18 +483,15 @@
         if(!empty($page_number) && !empty($page_limit)) {
             $prefix = ($page_number * $page_limit) - $page_limit;
         }
-        $login_staff_id = "";
-        if($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_type'] == $GLOBALS['staff_user_type']) {
-            $login_staff_id =  $_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id'];
-        }
 
         $view_access_error = "";
         if(!empty($login_staff_id)) {
             $permission_action = $view_action;
             include('permission_action.php');
         }
-        if(empty($view_access_error)) { 
+        if(empty($view_access_error)) {
         ?>
+
         
 		<table class="table nowrap cursor text-center smallfnt">
             <thead class="bg-light">
@@ -569,9 +566,9 @@
                                             </a>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
                                                 <!-- <li><a class="dropdown-item" href="#">View</a></li> -->
-                                                
+                                                    <?php if(empty($edit_access_error)) {  ?>
                                                     <li><a class="dropdown-item" href="Javascript:ShowModalContent('<?php if(!empty($page_title)) { echo $page_title; } ?>', '<?php if(!empty($list['bank_id'])) { echo $list['bank_id']; } ?>');"> <i class="fa fa-pencil"></i> &ensp;Edit</a></li>
-                                                    <?php
+                                                    <?php }
                                                     if(empty($delete_access_error)) { 
                                                     /*$linked_count = 0;
                                                     $linked_count = $obj->GetBankLinkedCount($list['bank_id']); 

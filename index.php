@@ -173,6 +173,7 @@
 							$_SESSION[$GLOBALS['site_name_user_prefix'].'_user_name_mobile'] =  $obj->encode_decode('decrypt', $data['name_mobile']);
 							$_SESSION[$GLOBALS['site_name_user_prefix'].'_login_id'] = $obj->encode_decode('decrypt', $data['login_id']);
                             $_SESSION[$GLOBALS['site_name_user_prefix'].'_user_type'] = $data['type'];
+                            $GLOBALS['user_type'] = $data['type'];
                         }
 					}
 					

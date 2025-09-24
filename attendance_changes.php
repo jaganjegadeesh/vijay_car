@@ -2,7 +2,7 @@
 	include("include_files.php");
     $login_staff_id = "";
     if(isset($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id']) && !empty($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id'])) {
-        if(!empty($GLOBALS['user_type']) && $GLOBALS['user_type'] != $GLOBALS['admin_user_type']) {
+        if($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_type'] == $GLOBALS['staff_user_type']) {
             $login_staff_id = $_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id'];
             $permission_module = $GLOBALS['attendance_module'];
         }
@@ -501,7 +501,7 @@
                                 ?>
 								<td class="text-center px-2 py-2">
                                     <?php 
-                                    if(empty($edit_access_error) || empty($delete_access_error)) {
+                                    if(empty($edit_access_error)) {
                                          ?>
                                         <div class="dropdown">
                                             <a href="#" role="button" class="btn btn-dark py-1 px-1" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-expanded="false">

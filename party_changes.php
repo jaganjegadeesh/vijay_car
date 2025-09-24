@@ -2,7 +2,7 @@
 	include("include_files.php");
     $login_staff_id = "";
     if(isset($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id']) && !empty($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id'])) {
-        if(!empty($GLOBALS['user_type']) && $GLOBALS['user_type'] != $GLOBALS['admin_user_type']) {
+        if($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_type'] == $GLOBALS['staff_user_type']) {
             $login_staff_id = $_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id'];
             $permission_module = $GLOBALS['party_module'];
         }
@@ -924,10 +924,10 @@
                                                 <i class="bi bi-three-dots-vertical"></i>
                                             </a>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                                              
-                                                <li><a class="dropdown-item" href="Javascript:ShowModalContent('<?php if(!empty($page_title)) { echo $page_title; } ?>', '<?php if(!empty($data['party_id'])) { echo $data['party_id']; } ?>');"><i class="fa fa-pencil"></i> &ensp;Edit</a></li>
+                                                <?php if(empty($edit_access_error)) {  ?>
+                                                    <li><a class="dropdown-item" href="Javascript:ShowModalContent('<?php if(!empty($page_title)) { echo $page_title; } ?>', '<?php if(!empty($data['party_id'])) { echo $data['party_id']; } ?>');"><i class="fa fa-pencil"></i> &ensp;Edit</a></li>
                                                 
-                                                    <?php 
+                                                <?php }
                                                        
                                                 if(empty($delete_access_error)) {
                                                     $linked_count = 0;

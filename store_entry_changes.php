@@ -2,7 +2,7 @@
 	include("include_files.php");
     $login_staff_id = "";
     if(isset($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id']) && !empty($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id'])) {
-        if(!empty($GLOBALS['user_type']) && $GLOBALS['user_type'] != $GLOBALS['admin_user_type']) {
+        if($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_type'] == $GLOBALS['staff_user_type']) {
             $login_staff_id = $_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id'];
             $permission_module = $GLOBALS['store_entry_module'];
         }
@@ -82,7 +82,7 @@
         $store_list = $obj->getTableRecords($GLOBALS['store_room_table'], '','', '');
 
         $job_card_list = array();
-        $job_card_list = $obj->getTableRecords($GLOBALS['job_card_table'], '','');
+        $job_card_list = $obj->getTableRecords($GLOBALS['job_card_table'], 'invoice_status',0);
 
         $unit_list = array();
         $unit_list = $obj->getTableRecords($GLOBALS['unit_table'], 'bill_company_id', $GLOBALS['bill_company_id']);

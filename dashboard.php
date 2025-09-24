@@ -13,6 +13,7 @@
             <div class="row">
                 <div class="col-xl-6">
                     <div class="card">
+                        <?php print_r($_SESSION);?>
                         <div class="card-header p-2">
                             <h4 class="card-title p-3">Line Chart</h4>
                         </div>

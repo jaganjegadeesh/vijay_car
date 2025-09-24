@@ -4,7 +4,7 @@
 
 	date_default_timezone_set('Asia/Calcutta');
 	$GLOBALS['create_date_time_label'] = date('Y-m-d H:i:s');
-	$GLOBALS['site_name_user_prefix'] = "smt_".date("d-m-Y"); $GLOBALS['user_id'] = ""; $GLOBALS['creator'] = "";
+	$GLOBALS['site_name_user_prefix'] = "vijay_garage_".date("d-m-Y"); $GLOBALS['user_id'] = ""; $GLOBALS['creator'] = "";
 	$GLOBALS['creator_name'] = ""; $GLOBALS['bill_company_id'] = ""; $GLOBALS['null_value'] = "NULL";
 
 	$GLOBALS['page_number'] = 1; $GLOBALS['page_limit'] = 10; $GLOBALS['page_limit_list'] = array("10", "25", "50", "100");
@@ -55,7 +55,7 @@
 
 	$GLOBALS['Reset_to_one'] = "Reset To 1"; $GLOBALS['continue_last_number'] = "Continue from last number"; $GLOBALS['custom_number'] = "Custom Number";
 	
-	$GLOBALS['admin_user_type'] = "Super Admin"; $GLOBALS['staff_user_type'] = "Staff";
+	$GLOBALS['admin_user_type'] = "Super Admin"; $GLOBALS['staff_user_type'] = "Staff"; $GLOBALS['user_type'] = "";
 
 	if(!empty($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id']) && isset($_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id'])) {
 		$GLOBALS['creator'] = $_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id'];
@@ -71,23 +71,55 @@
 
 	$GLOBALS['paymentmode_module'] = "Payment Mode";
 	$GLOBALS['bank_module'] = "Bank";
+	$GLOBALS['engineer_module'] = "Engineer";
+	$GLOBALS['department_module'] = "Department";
+	$GLOBALS['store_room_module'] = "Store Room";
+	$GLOBALS['unit_module'] = "Unit";
+	$GLOBALS['product_module'] = "Product";
+	$GLOBALS['vehicle_module'] = "Vehicle";
+	$GLOBALS['party_module'] = "Party";
 	$GLOBALS['purchase_entry_module'] = "Purchase Entry";
+	$GLOBALS['job_card_module'] = "Job Card";
+	$GLOBALS['store_entry_module'] = "Store Entry";
 	$GLOBALS['reports_module'] = "Reports";
 	$GLOBALS['quotation_module'] = "Quotation";
 	$GLOBALS['invoice_module'] = "Invoice";
 	$GLOBALS['estimate_module'] = "Estimate";
 	$GLOBALS['store_entry_module'] = "Store Entry";
 	$GLOBALS['material_transfer_module'] = "Material Transfer";
+	$GLOBALS['attendance_module'] = "Attendance";
+	$GLOBALS['salary_module'] = "salary";
+	$GLOBALS['advance_voucher_module'] = "Advance Voucher";
+	$GLOBALS['voucher_module'] = "Voucher";
+	$GLOBALS['receipt_module'] = "Receipt";
+	$GLOBALS['quotation_module'] = "Quotation";
+	$GLOBALS['estimate_module'] = "Estimate";
+	$GLOBALS['invoice_module'] = "Invoice";
+	$GLOBALS['stock_adjustment_module'] = "Stock Adjustment";
+
 	$access_pages_list = array();
 	$access_pages_list[] = $GLOBALS['paymentmode_module'];
 	$access_pages_list[] = $GLOBALS['bank_module'];
+	$access_pages_list[] = $GLOBALS['engineer_module'];
+	$access_pages_list[] = $GLOBALS['department_module'];
+	$access_pages_list[] = $GLOBALS['store_room_module'];
+	$access_pages_list[] = $GLOBALS['unit_module'];
+	$access_pages_list[] = $GLOBALS['product_module'];
+	$access_pages_list[] = $GLOBALS['party_module'];
+	$access_pages_list[] = $GLOBALS['vehicle_module'];
 	$access_pages_list[] = $GLOBALS['purchase_entry_module'];
+	$access_pages_list[] = $GLOBALS['job_card_module'];
 	$access_pages_list[] = $GLOBALS['store_entry_module'];
 	$access_pages_list[] = $GLOBALS['material_transfer_module'];
-	$access_pages_list[] = $GLOBALS['invoice_module'];
-	$access_pages_list[] = $GLOBALS['estimate_module'];
+	$access_pages_list[] = $GLOBALS['stock_adjustment_module'];
+	$access_pages_list[] = $GLOBALS['attendance_module'];
+	$access_pages_list[] = $GLOBALS['salary_module'];
+	$access_pages_list[] = $GLOBALS['advance_voucher_module'];
 	$access_pages_list[] = $GLOBALS['quotation_module'];
-	
+	$access_pages_list[] = $GLOBALS['estimate_module'];
+	$access_pages_list[] = $GLOBALS['invoice_module'];
+	$access_pages_list[] = $GLOBALS['voucher_module'];
+	$access_pages_list[] = $GLOBALS['receipt_module'];
 	$access_pages_list[] = $GLOBALS['reports_module'];
 	$GLOBALS['access_pages_list'] = $access_pages_list;
 

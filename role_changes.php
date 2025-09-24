@@ -142,7 +142,7 @@
                                                             ?> -->
                                             
                                                             <!-- <?php 
-                                                                if($module != $GLOBALS['reports_module'] && $module != $GLOBALS['group_module'] && $module != $GLOBALS['receipt_module'] && $module != $GLOBALS['voucher_module'] && $module != $GLOBALS['suspense_receipt_module'] && $module != $GLOBALS['suspense_voucher_module'] && $module != $GLOBALS['expense_module']) {
+                                                                if($module != $GLOBALS['reports_module'] && $module != $GLOBALS['group_module'] && $module != $GLOBALS['receipt_module'] && $module != $GLOBALS['voucher_module'] && $module != $GLOBALS['suspense_receipt_module'] && $module != $GLOBALS['suspense_voucher_module'] && $module != $GLOBALS['advance_voucher_module'] && $module != $GLOBALS['expense_module']) {
                                                             ?> -->
                                                                 <div class="form-check pe-3">
                                                                 <input class="form-check-input" type="checkbox" name="<?php if(!empty($module_encrypted)) { echo $module_encrypted."_edit"; } ?>" id="<?php if(!empty($module_encrypted)) { echo $module_encrypted."_edit"; } ?>" value="<?php if(!empty($edit_checkbox_value)) { echo $edit_checkbox_value; } ?>" <?php if(!empty($edit_checkbox_value) && $edit_checkbox_value == 1) { ?>checked="checked"<?php } ?> onClick="Javascript:CustomCheckboxToggle(this, '<?php if(!empty($module_encrypted)) { echo $module_encrypted."_edit"; } ?>');">

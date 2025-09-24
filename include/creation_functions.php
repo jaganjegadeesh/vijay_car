@@ -452,7 +452,7 @@
 		public function getProductSalesData($party_id, $vehicle_id) {
 			$list = array(); $select_query = ''; $final_data = array();
 			if(!empty($party_id) && $vehicle_id) {
-				$select_query = "SELECT * FROM " . $GLOBALS['job_card_table'] . " WHERE party_id = '". $party_id ."' AND vehicle_id = '". $vehicle_id ."' AND deleted = '0' GROUP BY job_card_id";
+				$select_query = "SELECT * FROM " . $GLOBALS['job_card_table'] . " WHERE party_id = '". $party_id ."' AND vehicle_id = '". $vehicle_id ."' AND deleted = '0' AND invoice_status ='0' GROUP BY job_card_id";
 				if(!empty($select_query)) {
 					$list = $this->getQueryRecords($GLOBALS['job_card_table'], $select_query);
 				}
