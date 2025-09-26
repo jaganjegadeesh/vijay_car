@@ -134,8 +134,7 @@
                                             </div> 
                                         </div>
                                         <div class="col-lg-3 col-md-4 col-12 text-end">
-                                            <button class="btn btn-success m-1" style="font-size:11px;" type="button" onclick="Javascript:ShowModalContent('<?php if(!empty($page_title)) { echo $page_title; } ?>', '');"> <i class="fa fa-print"></i> Print </button>
-                                            <button class="btn btn-danger m-1" style="font-size:11px;" type="button" onclick="Javascript:ShowModalContent('<?php if(!empty($page_title)) { echo $page_title; } ?>', '');"> <i class="fa fa-download"></i> Export </button>  
+                                            <button class="btn btn-success " style="font-size:11px;" type="button" onClick="window.open('reports/rpt_current_stock_report_a4.php?from_date=<?php echo $from_date; ?>&to_date=<?php echo $to_date; ?>&filter_product_id=<?php if(!empty($product_id)) { echo $product_id; } ?>&filter_store_id=<?php if(!empty($store_id)) { echo $store_id; } ?>&from=')"> <i class="fa fa-print"></i> Print </button>
                                         </div> 
                                         <div class="col-sm-6 col-xl-8">
                                             <input type="hidden" name="page_number" value="<?php if(!empty($page_number)) { echo $page_number; } ?>">

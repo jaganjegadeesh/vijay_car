@@ -1290,6 +1290,7 @@ function getStoreType() {
     var store_type = "";
     if (jQuery('select[name="store_type"]').length > 0) {
         store_type = jQuery('select[name="store_type"]').val();
+        jQuery('input[name="store_type"]').val(store_type);
     }
 
     if (store_type == '1') {

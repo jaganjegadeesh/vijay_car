@@ -11,10 +11,10 @@
         exit;
     }
 
-    $purchase_entry_date = date('Y-m-d');$purchase_bill_date = date('Y-m-d'); $current_date = date('Y-m-d');$purchase_entry_number = "";$gst_option = 0; $tax_type = 0; $tax_option = 0; $overall_tax = "";$purchase_store_ids = ""; $store_type =""; $indv_store_id =array(); $overall_store_id =""; $discount =""; $discount_value=""; $charges_tax =array(); $charges_value=""; $amount =array(); $round_off =""; $round_off_type =""; $round_off_value =""; $store_ids = array(); $product_ids = array(); $product_names = array(); $product_amount = array();$discount = ""; $discount_value = "";$extra_charges = ""; $extra_charges_value = ""; $unit_ids =array(); $unit_names=array(); $charges_id = array(); $charges_type = array(); $charges_value = array();  $product_tax =array(); $draft =0; $discount_name = ""; $charges_tax_array = array(); $party_details = array(); $sub_total = 0; $discounted_total = 0; $charges_total = 0; $overall_tax = 0; $cgst_value = 0; $igst_value = 0; $sgst_value = 0; $total_tax_value = 0; $round_off = 0; $round_off_type = 0; $round_off_value = 0;$bill_total = 0; $terms_and_condition = "";
+    $purchase_entry_date = date('Y-m-d');$purchase_bill_date = date('Y-m-d'); $current_date = date('Y-m-d');$purchase_entry_number = "";$gst_option = 0; $tax_type = 0; $tax_option = 0; $overall_tax = "";$purchase_store_ids = ""; $store_type =""; $indv_store_id =array(); $overall_store_id =""; $discount =""; $discount_value=""; $charges_tax =array(); $charges_value=""; $amount =array(); $round_off =""; $round_off_type =""; $round_off_value =""; $store_ids = array(); $product_ids = array(); $product_names = array(); $product_amount = array();$discount = ""; $discount_value = "";$extra_charges = ""; $extra_charges_value = ""; $unit_ids =array(); $unit_names=array(); $charges_id = array(); $charges_type = array(); $charges_value = array();  $product_tax =array(); $draft =0; $discount_name = ""; $charges_tax_array = array(); $party_details = array(); $sub_total = 0; $discounted_total = 0; $charges_total = 0; $overall_tax = 0; $cgst_value = 0; $igst_value = 0; $sgst_value = 0; $total_tax_value = 0; $round_off = 0; $round_off_type = 0; $round_off_value = 0;$bill_total = 0; $terms_and_condition = ""; $cancelled = 0;
     if(!empty($view_purchase_entry_id)) {
         $purchase_entry_list = array();
-        $purchase_entry_list = $obj->getTableRecords($GLOBALS['purchase_entry_table'], 'purchase_entry_id', $view_purchase_entry_id, '');
+        $purchase_entry_list = $obj->getAllRecords($GLOBALS['purchase_entry_table'], 'purchase_entry_id', $view_purchase_entry_id);
         if(!empty($purchase_entry_list)) {
             foreach($purchase_entry_list as $data) {
                 if(!empty($data['purchase_entry_date'])) {
@@ -209,6 +209,9 @@
                 if(!empty($data['total_amount']) && $data['total_amount'] != $GLOBALS['null_value']) {
                     $bill_total = $data['total_amount'];
                 }
+                if(!empty($data['deleted']) && $data['deleted'] != $GLOBALS['null_value']) {
+                    $cancelled = $data['deleted'];
+                }
             }
         }
         $company_state = "";$country = "India"; $state = "";
@@ -241,6 +244,14 @@
         $file_name="Purchase Entry";
         include("rpt_header.php");
         $pdf->SetY($header_end);
+        
+        if($cancelled == '1') {
+            if(file_exists('../include/images/cancelled.jpg')) {
+                $pdf->SetAlpha(0.3);
+                $pdf->Image('../include/images/cancelled.jpg',45,110,125,70);
+                $pdf->SetAlpha(1);
+            }
+        }
 
         $bill_to_y = $pdf->GetY();
 
@@ -378,7 +389,13 @@
                     $file_name="Purchase Entry";
                     include("rpt_header.php");
                     $pdf->SetY($header_end);
-
+                    if($cancelled == '1') {
+                        if(file_exists('../include/images/cancelled.jpg')) {
+                            $pdf->SetAlpha(0.3);
+                            $pdf->Image('../include/images/cancelled.jpg',45,110,125,70);
+                            $pdf->SetAlpha(1);
+                        }
+                    }
                     $bill_to_y = $pdf->GetY();
 
                     $pdf->Cell(0,1,'',0,1,'L',0);
@@ -641,6 +658,13 @@
             $file_name="Purchase Entry";
             include("rpt_header.php");
             $pdf->SetY($header_end);
+            if($cancelled == '1') {
+                if(file_exists('../include/images/cancelled.jpg')) {
+                    $pdf->SetAlpha(0.3);
+                    $pdf->Image('../include/images/cancelled.jpg',45,110,125,70);
+                    $pdf->SetAlpha(1);
+                }
+            }
 
             $bill_to_y = $pdf->GetY();
 
@@ -869,12 +893,11 @@
         }
 
         if(!empty($bill_total)) {
-            $bill_total = $obj->numberFormat($bill_total,2);
 
             $pdf->SetFont('Arial','B',8);
             $pdf->Cell(165,5,'Bill Total',1,0,'R',0);
             $pdf->SetFont('Arial','',8);
-            $pdf->Cell(0,5,$bill_total,1,1,'R',0);
+            $pdf->Cell(0,5,$obj->numberFormat($bill_total,2),1,1,'R',0);
         }
 
         $y3=$pdf->getY();
@@ -885,7 +908,7 @@
         $pdf->Cell(0,5,'E. & O.E',0,1,'R',0);
         $pdf->SetFont('Arial','B',8);
         $pdf->SetX(10);
-        $pdf->MultiCell(150,5,getIndianCurrency($total_amount).' Only',0,'L',0);
+        $pdf->MultiCell(150,5,getIndianCurrency($bill_total).' Only',0,'L',0);
         $y31=$pdf->GetY();
         $pdf->SetY($y3);
         $pdf->Cell(0,$y31-$y3,'',1,1,'L');

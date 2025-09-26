@@ -651,7 +651,7 @@
                                     <div class="form-label-group in-border">
                                         <div class="input-group">
                                             <input type='hidden' name='hidden_charges[]' id='hidden_charges' value="<?php if(!empty($charges_tax)){ echo $charges_tax; } ?>">                                        
-                                            <input type="text"  name="charges_value[]" onkeyup="Javascript:CheckCharges();" value="<?php if(!empty($charges_value)) { echo $charges_value; } ?>" class="form-control shadow-none">
+                                            <input type="text"  name="charges_value[]" onkeyup="Javascript:CheckCharges();" value="<?php if(!empty($charges)) { echo $charges; } ?>" class="form-control shadow-none">
                                             <div class="input-group-append charges_tax <?php if($gst_option == 0) { ?> d-none <?php } ?>" style="width:50%!important;">
                                                     <select name="charges_tax[]"  class="select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;" onChange="Javascript:checkGST();">
                                                         <option value="" >select tax</option>       
@@ -1883,6 +1883,12 @@
                     $charges_tax = implode(",", $charges_tax);
                 }else{
                     $charges_tax = $GLOBALS['null_value'];
+                }
+                if(!empty($round_off_value)) {
+                    $value = explode('.',$round_off_value);
+                    if(isset($value[1])) {
+                        $round_off_value = $value[1];
+                    }
                 }
 
 

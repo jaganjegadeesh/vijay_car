@@ -10,10 +10,9 @@
         exit;
     }
     if(isset($_REQUEST['view_material_transfer_id'])) { 
-        $bill_date = date('Y-m-d'); $godown_id = ""; $product_count = 0; $size_ids = array(); $gsm_ids = array(); $bf_ids = array(); $bill_number = ""; $cancelled = ""; $godown_name = "";
-        $quantity = array(); $size_name = array(); $bf_name = array(); $gsm_name = array();
+        $bill_date = date('Y-m-d'); $material_transfer_date = date('Y-m-d'); $current_date = date('Y-m-d');$material_transfer_number = "";$from_location_ids = "";$from_location_names = "";$to_location_ids = "";$to_location_names = ""; $unit_id = "";$unit_names = array();$quantity = array();$total_quantity = array();$unit_ids = array(); $cancelled = 0;
        $material_transfer_list = array();
-        $material_transfer_list = $obj->getTableRecords($GLOBALS['material_transfer_table'], 'material_transfer_id', $view_material_transfer_id, '');
+        $material_transfer_list = $obj->getAllRecords($GLOBALS['material_transfer_table'], 'material_transfer_id', $view_material_transfer_id);
         if(!empty($material_transfer_list)) {
             foreach($material_transfer_list as $data) {
                 if(!empty($data['from_location_id'])) {
@@ -77,6 +76,9 @@
                      $company_details =html_entity_decode($obj->encode_decode('decrypt',$data['bill_company_details']));
                      $company_details = explode("$$$", $company_details);
                 }
+                if(!empty($data['deleted']) && $data['deleted'] != $GLOBALS['null_value']) {
+                    $cancelled = $data['deleted'];
+                }
             }
         }
         $company_name = "";
@@ -103,6 +105,20 @@
 
         $file_name="Material Transfer";
         include("rpt_header.php");
+        if($cancelled == '1') {
+            if(file_exists('../include/images/cancelled.jpg')) {
+                $pdf->SetAlpha(0.3);
+                $pdf->Image('../include/images/cancelled.jpg',45,110,125,70);
+                $pdf->SetAlpha(1);
+            }
+        }
+        if($cancelled == '1') {
+            if(file_exists('../include/images/cancelled.jpg')) {
+                $pdf->SetAlpha(0.3);
+                $pdf->Image('../include/images/cancelled.jpg',45,110,125,70);
+                $pdf->SetAlpha(1);
+            }
+        }
         $bill_to_y = $pdf->GetY();
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->SetX(10);
@@ -426,6 +442,13 @@
 
                 $file_name="Material Transfer";
                 include("rpt_header.php");
+                if($cancelled == '1') {
+                    if(file_exists('../include/images/cancelled.jpg')) {
+                        $pdf->SetAlpha(0.3);
+                        $pdf->Image('../include/images/cancelled.jpg',45,110,125,70);
+                        $pdf->SetAlpha(1);
+                    }
+                }
                 $bill_to_y = $pdf->GetY();
                 $pdf->SetFont('Arial', 'B', 9);
                 $pdf->SetX(10);

@@ -694,5 +694,12 @@
 			$list = $create_obj->getVehicleHistory($vehicle_id);
 			return $list;
 		}
+		public function setClearTableRecords($table) {
+			$create_obj = "";
+			$create_obj = $this->creation_function_object();
+			$list = array();
+			$list = $create_obj->setClearTableRecords($table);
+			return $list;
+		}
 	}
 ?>

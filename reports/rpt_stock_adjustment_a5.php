@@ -14,8 +14,8 @@
         $stock_adjustment_date = date('Y-m-d'); $current_date = date('Y-m-d');
         $from_date = date('Y-m-d', strtotime('-7 days')); $to_date = date('Y-m-d');
         $stock_adjustment_date = date('Y-m-d');$product_ids = array(); $product_names = array(); $unit_ids = array(); $unit_names = array(); $quantity = array();$stock_action = array(); $remarks = ""; $store_id = "";$product_count = 0;$store_ids = array(); $store_names = array();$total_quantity = array(); $company_details = array(); $stock_adjustment_number = "";
-        $stock_adjustment_list = array(); $shade_name = array(); $supplier_name = array(); $current_store = ""; $first_store = "";
-        $stock_adjustment_list = $obj->getTableRecords($GLOBALS['stock_adjustment_table'], 'stock_adjustment_id', $view_stock_adjustment_id); 
+        $stock_adjustment_list = array(); $shade_name = array(); $supplier_name = array(); $current_store = ""; $first_store = ""; $cancelled = 0;
+        $stock_adjustment_list = $obj->getAllRecords($GLOBALS['stock_adjustment_table'], 'stock_adjustment_id', $view_stock_adjustment_id); 
         if(!empty($stock_adjustment_list)) {
             foreach($stock_adjustment_list as $data) {
                 if(!empty($data['store_id'])) {
@@ -66,6 +66,9 @@
                 }
                 if(!empty($data['remarks']) && $data['remarks'] != $GLOBALS['null_value']) {
                     $remarks = $obj->encode_decode('decrypt', $data['remarks']);
+                }
+                 if(!empty($data['deleted']) && $data['deleted'] != $GLOBALS['null_value']) {
+                    $cancelled = $data['deleted'];
                 }
             }
         }
@@ -138,6 +141,13 @@
         $pdf->Cell(0,($end_y - 10),'',1,1,'C');
         $header_end = $pdf->GetY();
         $pdf->SetY($header_end);
+        if($cancelled == '1') {
+            if(file_exists('../include/images/cancelled.jpg')) {
+                $pdf->SetAlpha(0.3);
+                $pdf->Image('../include/images/cancelled.jpg',45,85,55,55);
+                $pdf->SetAlpha(1);
+            }
+        }
         $bill_to_y = $pdf->GetY();
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->SetX(10);
@@ -285,6 +295,13 @@
                     $pdf->Cell(0,($end_y - 10),'',1,1,'C');
                     $header_end = $pdf->GetY();
                     $pdf->SetY($header_end);
+                    if($cancelled == '1') {
+                        if(file_exists('../include/images/cancelled.jpg')) {
+                            $pdf->SetAlpha(0.3);
+                            $pdf->Image('../include/images/cancelled.jpg',45,85,55,55);
+                            $pdf->SetAlpha(1);
+                        }
+                    }
                     $bill_to_y = $pdf->GetY();
                     $pdf->SetFont('Arial', 'B', 9);
                     $pdf->SetX(10);
@@ -497,6 +514,13 @@
             $pdf->Cell(0,($end_y - 10),'',1,1,'C');
             $header_end = $pdf->GetY();
             $pdf->SetY($header_end);
+            if($cancelled == '1') {
+                if(file_exists('../include/images/cancelled.jpg')) {
+                    $pdf->SetAlpha(0.3);
+                    $pdf->Image('../include/images/cancelled.jpg',45,85,55,55);
+                    $pdf->SetAlpha(1);
+                }
+            }
             $bill_to_y = $pdf->GetY();
             $pdf->SetFont('Arial', 'B', 9);
             $pdf->SetX(10);

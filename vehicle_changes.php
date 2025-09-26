@@ -552,18 +552,18 @@
                 if(!empty($vehicle_no)) {
                     $action = "Store Room Deleted. Name - " . $obj->encode_decode('decrypt', $vehicle_no);
                 }
-                // $linked_count = 0;
-                // $linked_count = $obj->GetStore RoomLinkedCount($delete_vehicle_id);
-                // if(empty($linked_count)) {
+                $linked_count = 0;
+                $linked_count = $obj->getTableRecords($GLOBALS['job_card_table'],'vehicle_id', $delete_vehicle_id);
+                if(empty($linked_count)) {
                     $columns = array();
                     $values = array();
                     $columns = array('deleted');
                     $values = array("'1'");
                     $msg = $obj->UpdateSQL($GLOBALS['vehicle_table'], $vehicle_unique_id, $columns, $values, $action);
-                // // }
-                // else {
-                //     $msg = "This Store Room is associated with other screens";
-                // }
+                }
+                else {
+                    $msg = "This Vehicle is associated with other screens";
+                }
             }
         }
         echo $msg;

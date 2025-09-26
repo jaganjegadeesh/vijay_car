@@ -10,8 +10,8 @@
     if(isset($_REQUEST['view_store_entry_id'])) { 
         $store_entry_date = date('Y-m-d'); $current_date = date('Y-m-d');$store_entry_number = ""; $job_card_id = ""; $job_card_number = "";
         $remarks = ""; $store_store_ids = ""; $store_store_names = ""; $store_type = "";  $store_ids = array(); $unit_names = array();$quantity = array();$total_quantity = array();$unit_ids = array(); $product_ids = array(); $product_names = array(); $product_count = 0; $store_names = array();
-        $store_entry_list = array();  $overall_store = ""; $overall_store_name = "";
-        $store_entry_list = $obj->getTableRecords($GLOBALS['store_entry_table'], 'store_entry_id', $view_store_entry_id, '');
+        $store_entry_list = array();  $overall_store = ""; $overall_store_name = ""; $cancelled = 0;
+        $store_entry_list = $obj->getAllRecords($GLOBALS['store_entry_table'], 'store_entry_id', $view_store_entry_id, '');
         if(!empty($store_entry_list)) {
             foreach($store_entry_list as $data) {
                 if(!empty($data['store_entry_date'])) {
@@ -76,6 +76,9 @@
                     $quantity = $data['quantity'];
                     $quantity = explode(",", $quantity);
                     $quantity = array_reverse($quantity);
+                }
+                if(!empty($data['deleted']) && $data['deleted'] != $GLOBALS['null_value']) {
+                    $cancelled = $data['deleted'];
                 }
 
             }
@@ -148,6 +151,13 @@
         $pdf->Cell(0,($end_y - 10),'',1,1,'C');
         $header_end = $pdf->GetY();
         $pdf->SetY($header_end);
+        if($cancelled == '1') {
+            if(file_exists('../include/images/cancelled.jpg')) {
+                $pdf->SetAlpha(0.3);
+                $pdf->Image('../include/images/cancelled.jpg',45,85,55,55);
+                $pdf->SetAlpha(1);
+            }
+        }
 
         if($store_type == "1"){
            $bill_to_y = $pdf->GetY();
@@ -342,6 +352,13 @@
                     $pdf->Cell(0,($end_y - 10),'',1,1,'C');
                     $header_end = $pdf->GetY();
                     $pdf->SetY($header_end);
+                    if($cancelled == '1') {
+                        if(file_exists('../include/images/cancelled.jpg')) {
+                            $pdf->SetAlpha(0.3);
+                            $pdf->Image('../include/images/cancelled.jpg',45,85,55,55);
+                            $pdf->SetAlpha(1);
+                        }
+                    }
 
                     if($store_type == "1"){
                         $bill_to_y = $pdf->GetY();
@@ -643,7 +660,13 @@
             $pdf->Cell(0,($end_y - 10),'',1,1,'C');
             $header_end = $pdf->GetY();
             $pdf->SetY($header_end);
-
+            if($cancelled == '1') {
+                if(file_exists('../include/images/cancelled.jpg')) {
+                    $pdf->SetAlpha(0.3);
+                    $pdf->Image('../include/images/cancelled.jpg',45,85,55,55);
+                    $pdf->SetAlpha(1);
+                }
+            }
             if($store_type == "1"){
                 $bill_to_y = $pdf->GetY();
                 $pdf->SetFont('Arial', 'B', 9);

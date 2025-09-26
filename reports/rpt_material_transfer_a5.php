@@ -11,9 +11,9 @@
         exit;
     }
     if(isset($_REQUEST['view_material_transfer_id'])) { 
-        $material_transfer_date = date('Y-m-d'); $current_date = date('Y-m-d');$material_transfer_number = "";$from_location_ids = "";$from_location_names = "";$to_location_ids = "";$to_location_names = ""; $unit_id = "";$unit_names = array();$quantity = array();$total_quantity = array();$unit_ids = array();
+        $material_transfer_date = date('Y-m-d'); $current_date = date('Y-m-d');$material_transfer_number = "";$from_location_ids = "";$from_location_names = "";$to_location_ids = "";$to_location_names = ""; $unit_id = "";$unit_names = array();$quantity = array();$total_quantity = array();$unit_ids = array(); $cancelled = 0;
         $material_transfer_list = array();
-        $material_transfer_list = $obj->getTableRecords($GLOBALS['material_transfer_table'], 'material_transfer_id', $view_material_transfer_id, '');
+        $material_transfer_list = $obj->getAllRecords($GLOBALS['material_transfer_table'], 'material_transfer_id', $view_material_transfer_id);
         if(!empty($material_transfer_list)) {
             foreach($material_transfer_list as $data) {
                 if(!empty($data['from_location_id'])) {
@@ -76,6 +76,9 @@
                 if(!empty($data['bill_company_details']) && $data['bill_company_details'] != $GLOBALS['null_value']) {
                      $company_details =html_entity_decode($obj->encode_decode('decrypt',$data['bill_company_details']));
                      $company_details = explode("$$$", $company_details);
+                }
+                if(!empty($data['deleted']) && $data['deleted'] != $GLOBALS['null_value']) {
+                    $cancelled = $data['deleted'];
                 }
             }
         }
@@ -151,6 +154,13 @@
         $pdf->Cell(0,($end_y - 10),'',1,1,'C');
         $header_end = $pdf->GetY();
         $pdf->SetY($header_end);
+        if($cancelled == '1') {
+            if(file_exists('../include/images/cancelled.jpg')) {
+                $pdf->SetAlpha(0.3);
+                $pdf->Image('../include/images/cancelled.jpg',45,85,55,55);
+                $pdf->SetAlpha(1);
+            }
+        }
 
         $bill_to_y = $pdf->GetY();
         $pdf->SetFont('Arial', 'B', 9);
@@ -276,13 +286,6 @@
                     $pdf->SetY(11);
 
                     $file_name="Material Transfer";
-                    $company_list = array(); $company_details = "";
-                    $company_list = $obj->getTableColumnValue($GLOBALS['company_table'], 'primary_company', '1', 'company_details');
-                    if(!empty($company_list)){
-                        $company_details =html_entity_decode($obj->encode_decode('decrypt',$company_list));
-                        $company_details = explode("$$$", $company_details);
-                    }
-
                     $bill_company_id = $GLOBALS['bill_company_id'];
                     $pdf->SetY(10);
                     $pdf->SetX(10);
@@ -324,7 +327,13 @@
                     $pdf->Cell(0,($end_y - 10),'',1,1,'C');
                     $header_end = $pdf->GetY();
                     $pdf->SetY($header_end);
-
+                    if($cancelled == '1') {
+                        if(file_exists('../include/images/cancelled.jpg')) {
+                            $pdf->SetAlpha(0.3);
+                            $pdf->Image('../include/images/cancelled.jpg',45,85,55,55);
+                            $pdf->SetAlpha(1);
+                        }
+                    }
                     $bill_to_y = $pdf->GetY();
                     $pdf->SetFont('Arial', 'B', 9);
                     $pdf->SetX(10);
@@ -507,13 +516,6 @@
                 $pdf->SetY(11);
 
                 $file_name="Material Transfer";
-                $company_list = array(); $company_details = "";
-                $company_list = $obj->getTableColumnValue($GLOBALS['company_table'], 'primary_company', '1', 'company_details');
-                if(!empty($company_list)){
-                    $company_details =html_entity_decode($obj->encode_decode('decrypt',$company_list));
-                    $company_details = explode("$$$", $company_details);
-                }
-
                 $bill_company_id = $GLOBALS['bill_company_id'];
                 $pdf->SetY(10);
                 $pdf->SetX(10);
@@ -555,7 +557,13 @@
                 $pdf->Cell(0,($end_y - 10),'',1,1,'C');
                 $header_end = $pdf->GetY();
                 $pdf->SetY($header_end);
-
+                if($cancelled == '1') {
+                    if(file_exists('../include/images/cancelled.jpg')) {
+                        $pdf->SetAlpha(0.3);
+                        $pdf->Image('../include/images/cancelled.jpg',45,85,55,55);
+                        $pdf->SetAlpha(1);
+                    }
+                }
                 $bill_to_y = $pdf->GetY();
                 $pdf->SetFont('Arial', 'B', 9);
                 $pdf->SetX(10);

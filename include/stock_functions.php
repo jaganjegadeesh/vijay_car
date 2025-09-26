@@ -378,8 +378,19 @@
         public function DeleteStoreEntry($bill_unique_id) {
             $store_entry_list = array(); $store_id = array();  $product_id = array(); $unit_id =array(); $quantity = array();
             $store_entry_list = $this->getTableRecords($GLOBALS['store_entry_table'], 'store_entry_id', $bill_unique_id, '');
+            $can_delete = 1;
             if(!empty($store_entry_list)) {
                 foreach($store_entry_list as $data) {
+                    if(!empty($data['job_card_id'])) {
+                        $job_card_id = $data['job_card_id'];
+                        $job_card_list = $this->getTableRecords($GLOBALS['job_card_table'], 'job_card_id', $job_card_id);
+                        $invoice_delete = $job_card_list[0]['invoice_status'];
+                        $estimate_delete = $job_card_list[0]['estimate_status'];
+                        $quotation_delete = $job_card_list[0]['quotation_status'];
+                        if($quotation_delete == '0' && $estimate_delete == '0' && $invoice_delete == '0' && empty($store_delete))  {} else {
+                            $can_delete = 0;
+                        }
+                    }
                     if(!empty($data['store_id'])) {
                         $store_id = $data['store_id'];
                         $store_id = explode(",", $store_id);
@@ -399,18 +410,19 @@
                     }                                        
                 }
             }
-            $can_delete = 1;
-            if(!empty($product_id)){
-                $index=0;
-                for($i=0; $i < count($product_id); $i++) {
-                    if(!empty($product_id[$i])) {
-                        $current_inward_stock = 0; $current_outward_stock = 0;
-                        $current_inward_stock = $this->getInwardQty($bill_unique_id,$store_id[$i],$product_id[$i],$unit_id[$i]);
+            if($can_delete == '1'){
+                if(!empty($product_id)){
+                    $index=0;
+                    for($i=0; $i < count($product_id); $i++) {
+                        if(!empty($product_id[$i])) {
+                            $current_inward_stock = 0; $current_outward_stock = 0;
+                            $current_inward_stock = $this->getInwardQty($bill_unique_id,$store_id[$i],$product_id[$i],$unit_id[$i]);
 
-                        $current_outward_stock = $this->getOutwardQty($bill_unique_id,$store_id[$i],$product_id[$i],$unit_id[$i]);
+                            $current_outward_stock = $this->getOutwardQty($bill_unique_id,$store_id[$i],$product_id[$i],$unit_id[$i]);
 
-                        if($current_inward_stock < $current_outward_stock) {
-                            $can_delete = 0;
+                            if($current_inward_stock < $current_outward_stock) {
+                                $can_delete = 0;
+                            }
                         }
                     }
                 }

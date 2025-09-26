@@ -894,6 +894,28 @@
         echo $msg;
         exit;	
     } 
+
+    if(isset($_REQUEST['check_product_count'])){
+        $check_product_count = $_REQUEST['check_product_count'];
+    
+        $product_list = array();
+        $product_list = $obj->getTableRecords($GLOBALS['product_table'], '', '','');
+        
+        if(!empty($product_list)){
+            echo $product_count = count($product_list);
+        }
+    }
+
+    if(isset($_REQUEST['clear_product_tables'])) {
+        $clear_product_tables = $_REQUEST['clear_product_tables'];
+        if(!empty($clear_product_tables) && $clear_product_tables == 1) {
+            $clear_records = 1;
+            $tables = array($GLOBALS['product_table']);
+            $clear_records = $obj->setClearTableRecords($tables);
+            echo $clear_records;
+            exit;
+        }
+    }
     ?>
 
     

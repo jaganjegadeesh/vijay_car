@@ -248,9 +248,9 @@
                                             ?>
                                         </select>
                                         <label>Product</label>
-                                        <!-- <div class="input-group-append">
+                                        <div class="input-group-append">
                                             <span class="input-group-text" onclick="Javascript:CustomAddModalContent('product');" style="background-color:#f06548!important; cursor:pointer; height:100%;"><i class="fa fa-plus text-white"></i></span>
-                                        </div> -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>        
@@ -478,6 +478,10 @@
     if(isset($_REQUEST['edit_id'])) {
         $store_entry_date = ""; $store_entry_date_error = ""; $result = '';
         $valid_store = ""; $form_name = "store_entry_form";  $hsn_codes = array();
+
+        $product_ids = $quantity = $unit_ids = $store_ids = $store_name = $product_names = $unit_names = $stock_unique_ids = array();
+
+        $edit_id = $store_type = $job_card_id = $job_card_id_error = $remarks = $remarks_error = $gdwn_id = "";
 
         if(isset($_POST['edit_id'])) {
             $edit_id = $_POST['edit_id'];
@@ -980,11 +984,8 @@
                                 </td>
                                 <td>
                                     <?php
-                                        if(!empty($list['job_card_id']) && $list['job_card_id'] != $GLOBALS['null_value']) {
-                                            $job_card_number = $obj->getTableColumnValue($GLOBALS['job_card_table'], 'job_card_id', $list['job_card_id'], 'job_card_number');
-                                            if(!empty($job_card_number) && $job_card_number != $GLOBALS['null_value']) {
-                                                echo $job_card_number;
-                                            }
+                                        if(!empty($list['job_card_number']) && $list['job_card_number'] != $GLOBALS['null_value']) {
+                                            echo $list['job_card_number'];
                                         }
                                     ?>
                                 </td>

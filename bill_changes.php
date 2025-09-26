@@ -221,15 +221,29 @@
                     if(!empty($data['party_name_mobile_city']) && $data['party_name_mobile_city'] != $GLOBALS['null_value']) {
                         $customer_name = $obj->encode_decode('decrypt', $data['party_name_mobile_city']);
                     }
-                    
+                    if(!empty($data['department_name']) && $data['department_name'] != $GLOBALS['null_value']) {
+                        $department_name = $obj->encode_decode('decrypt', $data['department_name']);
+                    }
                     if(!empty($data['job_card_date']) && $data['job_card_date'] != $GLOBALS['null_value']) {
                         $job_card_date =  $data['job_card_date'];
                         $job_card_date = date('d-m-Y', strtotime($job_card_date));
                     }
                 }	
-            }
-
-            ?>
+            } ?>
+            <div class="row" style="margin-bottom: 20px;">
+                <div class="col-lg-12 col-xl-12 d-flex">
+                    <div class="col-lg-4 col-xl-4 col-sm-6"><b>Date of Entry </b></div>
+                    <div class="col-lg-8 col-xl-8 col-sm-6" style="margin: 0 -35px;"><?php if(!empty($job_card_date)){ echo ": " .$job_card_date; }?> </div>
+                </div>
+            </div>
+            <?php if(!empty($department_name) && ($department_name != 'NULL')){ ?>
+                <div class="row" style="margin-bottom: 20px;">
+                    <div class="col-lg-12 col-xl-12 d-flex">
+                        <div class="col-lg-4 col-xl-4 col-sm-6"><b>Department </b></div>
+                        <div class="col-lg-8 col-xl-8 col-sm-6" style="margin: 0 -35px;"><?php if(!empty($department_name)){ echo ": " .$department_name; }?> </div>
+                    </div>
+                </div> <?php
+            } ?>
             <div class="row" style="margin-bottom: 20px;">
                 <div class="col-lg-12 col-xl-12 d-flex">
                     <div class="col-lg-4 col-xl-4 col-sm-6"><b>Job Card Number </b></div>
@@ -250,14 +264,7 @@
                     </div>
                 </div> <?php
             } ?>
-            <?php if(!empty($mobile_number) && ($mobile_number != 'NULL')){ ?>
-                <div class="row" style="margin-bottom: 20px;">
-                    <div class="col-lg-12 col-xl-12 d-flex">
-                        <div class="col-lg-4 col-xl-4 col-sm-6"><b>Phone Number </b></div>
-                        <div class="col-lg-8 col-xl-8 col-sm-6" style="margin: 0 -35px;"><?php if(!empty($mobile_number)){ echo ": " .$mobile_number; }?> </div>
-                    </div>
-                </div> <?php
-            } ?>
+            
             <?php if(!empty($address) && ($address != 'NULL')){ ?>
                 <div class="row" style="margin-bottom: 20px;">
                     <div class="col-lg-12 col-xl-12 d-flex">
@@ -266,12 +273,7 @@
                     </div>
                 </div> <?php
             } ?>
-            <div class="row" style="margin-bottom: 20px;">
-                <div class="col-lg-12 col-xl-12 d-flex">
-                    <div class="col-lg-4 col-xl-4 col-sm-6"><b>Date of Entry </b></div>
-                    <div class="col-lg-8 col-xl-8 col-sm-6" style="margin: 0 -35px;"><?php if(!empty($job_card_date)){ echo ": " .$job_card_date; }?> </div>
-                </div>
-            </div>
+            
             <?php
         }
     }

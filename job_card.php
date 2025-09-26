@@ -101,38 +101,39 @@
                                                     </div>
                                                 </div>        
                                             </div>
-                                            <div class="col-lg-3 col-md-4 col-6">
+                                            <div class="col-lg-2 col-md-4 col-6">
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" name="search_text" style="height:34px;" placeholder="Search Job No" aria-label="Search" aria-describedby="basic-addon2" onkeyup="Javascript:table_listing_records_filter();">
                                                     <span class="input-group-text" style="height:34px;" id="basic-addon2"><i class="bi bi-search"></i></span>
                                                 </div>
                                             </div>
-                                            <?php if(!empty($cancelled_count)) { ?>                                    
-                                                <div class="col-lg-2 col-md-8 col-4 text-end px-lg-1 px-1 py-lg-0 py-2 align-self-center">
+                                            <div class="col-lg-3 col-md-8 col-6 text-end  align-self-center">
+                                                <?php if(!empty($cancelled_count)) { ?>                                    
                                                     <button class="btn btn-dark float-end" id='show_button' style="font-size:11px;" type="button" onclick="Javascript:assign_bill_value();">Inactive Bill</button>
-                                                </div>                                    
-                                            <?php  } ?>
-                                            <div class="col-lg-1 col-md-8 col-3 text-end px-2 px-lg-2 align-self-center">
-                                                <?php
-                                                    $add_access_error = "";
-                                                    if(!empty($login_staff_id)) {
-                                                        $permission_action = $add_action;
-                                                        include('permission_action.php');
-                                                    }
-                                                    if(empty($add_access_error)) { 
-                                                        ?>
-                                                            <button class="btn btn-danger " style="font-size:11px;" type="button" onclick="Javascript:ShowModalContent('<?php if(!empty($page_title)) { echo $page_title; } ?>', '');"> <i class="fa fa-plus-circle"></i> Add </button>   
-                                                        <?php 
-                                                    }
-                                                ?>                                            
-                                            </div>
-                                            <div class="col-lg-2 col-md-8 col-3 text-end px-2 px-lg-2 align-self-center">
+                                                <?php  } ?>
                                                 <?php 
                                                     if($jobcard_count > 0) { ?>
                                                             <button class="btn btn-primary py-2 mx-2" style="font-size:12px;" type="button" onclick="Javascript:PrintJobCardA4();"> <i class="fa fa-print"></i> Print</button>
                                                         <?php
                                                     } 
-                                                ?>                                           
+                                                ?>  
+                                            </div>                                    
+                                            <?php
+                                                $add_access_error = "";
+                                                if(!empty($login_staff_id)) {
+                                                    $permission_action = $add_action;
+                                                    include('permission_action.php');
+                                                }
+                                                if(empty($add_access_error)) { 
+                                                        ?>
+                                                        <div class="col-lg-1 col-md-8 col-6 text-end px-2 px-lg-2 align-self-center">
+                                                            <button class="btn btn-danger " style="font-size:11px;" type="button" onclick="Javascript:ShowModalContent('<?php if(!empty($page_title)) { echo $page_title; } ?>', '');"> <i class="fa fa-plus-circle"></i> Add </button>   
+                                                        </div>
+                                                    <?php 
+                                                }
+                                            ?>                                            
+                                            <div class="col-lg-12 col-md-4 col-6 text-end px-2 px-lg-2 align-self-center" >
+                                                                                         
                                             </div>
                                             <div class="col-sm-6 col-xl-8">
                                                 <input type="hidden" name="page_number" value="<?php if(!empty($page_number)) { echo $page_number; } ?>">

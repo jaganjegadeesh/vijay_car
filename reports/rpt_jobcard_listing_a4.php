@@ -18,7 +18,7 @@
     }
 
     $total_records_list = array();
-    $total_records_list = $obj->getJobCardList($from_date, $to_date,'',$filter_party_id);
+    $total_records_list = $obj->getJobCardList($from_date, $to_date,$show_bill,$filter_party_id);
     // print_r($total_records_list);
     
     if(!empty($search_text)) {
@@ -39,8 +39,8 @@
         $company_name = $obj->encode_decode('decrypt', $company_name);
     } 
 
-    require_once('../fpdf/fpdf.php');
-    $pdf = new FPDF('P','mm','A4');
+    require_once('../fpdf/AlphaPDF.php');
+    $pdf = new AlphaPDF('P','mm','A4');
     $pdf->AliasNbPages(); 
     $pdf->AddPage();
     $pdf->SetAutoPageBreak(false);
@@ -48,6 +48,13 @@
     $file_name="Jobcard List";
     include("rpt_header.php");
     $pdf->SetY($header_end);
+    if($show_bill == '1') {
+        if(file_exists('../include/images/cancelled.jpg')) {
+            $pdf->SetAlpha(0.3);
+            $pdf->Image('../include/images/cancelled.jpg',45,110,125,70);
+            $pdf->SetAlpha(1);
+        }
+    }
     $pdf->SetTitle('Jobcard List');
     $pdf->SetFont('Arial','B',12);
     

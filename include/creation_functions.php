@@ -245,7 +245,7 @@
 			$select_query = ''; $where = '';
 			if(!empty($type)) {
 				if($type == '1' || $type == '2') {
-					$where = "party_type = '" .$type."' OR party_type = '3'";
+					$where = "(party_type = '" .$type."' OR party_type = '3')";
 				} else {
 					$where = "party_type = '" .$type."'";
 				}
@@ -641,6 +641,52 @@
 				}
 			}
 			return $final_data;
+		}
+		public function setClearTableRecords($tables) {
+			$success = 0; $con = $this->connect();
+			if(!empty($tables)) {
+				foreach($tables as $table) {
+					if(!empty($table)) {
+						if($table == $GLOBALS['product_table']) {
+							$list = array(); $success++;
+							$list = $this->getTableRecords($GLOBALS['product_table'], '', '', '');
+							if(!empty($list)) {
+								foreach($list as $data) {
+									$linked_count = 0;
+									if(!empty($data['product_id']) && $data['product_id'] != $GLOBALS['null_value']) {
+										$linked_count = '0';
+										if($linked_count == '0') {
+											$columns = array(); 
+											$values = array();
+											$columns = array('deleted'); 
+											$values = array("'1'");
+											$product_update_id = $this->UpdateSQL($GLOBALS['product_table'], $data['id'], $columns, $values, '');
+										}
+									}
+								}
+							}
+						}
+						else {
+							$table = trim(str_replace("'", "", $table));
+							$update_query = "";
+							$update_query = "UPDATE ".$table." SET deleted = '1'";
+							if(!empty($update_query)) {							
+								$result = $con->prepare($update_query);
+								if($result->execute() === TRUE) {
+									$success++;	
+								}
+							}
+						}
+					}
+				}
+				if($success == count($tables)) {
+					$success = 1;
+				}
+				else {
+					$success = "Unable to clear";
+				}
+			}
+			return $success;
 		}
     }
 ?>

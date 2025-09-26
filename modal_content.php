@@ -169,3 +169,28 @@
         </div>
     </div>
 </div>
+
+<button type="button" data-bs-toggle="modal" data-bs-target="#ProductUploadModal" class="d-none product_upload_modal_button"></button>
+<?php                             
+$current_file = pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME);                             
+?>
+<div class="modal fade" id="ProductUploadModal" data-bs-keyboard="false" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content" style="height:150px !important;">
+        
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" id="product_modal_header"></h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        
+            <!-- Modal body -->
+            <div class="modal-body text-center">
+                <button type="button" class="btn btn-success" onClick="Javascript:UploadExcel('1','<?php echo $current_file ?>');">New</button>
+                &nbsp;
+                <button type="button" class="btn btn-success" onClick="Javascript:UploadExcel('2','<?php echo $current_file ?>');">Overwrite</button>
+            </div>                                    
+        </div>
+    </div>
+</div>

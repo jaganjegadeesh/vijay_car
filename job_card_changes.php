@@ -353,13 +353,15 @@
         }
         $work_details = $_POST['work_details'];
         $work_details = trim($work_details);
-        $work_details_error = $valid->common_validation($work_details, 'Work Details', '1');
-        if(!empty($work_details_error)) {
-            if(!empty($valid_job_card)) {
-                $valid_job_card = $valid_job_card." ".$valid->error_display($form_name, 'work_details', $work_details_error, 'text');
-            }
-            else {
-                $valid_job_card = $valid->error_display($form_name, 'work_details', $work_details_error, 'text');
+        if(!empty($work_details)) {
+            $work_details_error = $valid->common_validation($work_details, 'Work Details', '0');
+            if(!empty($work_details_error)) {
+                if(!empty($valid_job_card)) {
+                    $valid_job_card = $valid_job_card." ".$valid->error_display($form_name, 'work_details', $work_details_error, 'textarea');
+                }
+                else {
+                    $valid_job_card = $valid->error_display($form_name, 'work_details', $work_details_error, 'textarea');
+                }
             }
         }
 
@@ -729,22 +731,23 @@
         $msg = "";
         if(!empty($delete_job_card_id)) {	
             $job_card_unique_id = ""; $voucher_unique_id = ""; $voucher_id = "";
-            $job_card_unique_id = $obj->getTableColumnValue($GLOBALS['job_card_table'], 'job_card_id', $delete_job_card_id, 'id');
+            $job_card_list = $obj->getTableRecords($GLOBALS['job_card_table'], 'job_card_id', $delete_job_card_id);
+            $job_card_unique_id = $job_card_list[0]['id'];
             if(preg_match("/^\d+$/", $job_card_unique_id)) {
                 $bill_number = "";
-                $bill_number = $obj->getTableColumnValue($GLOBALS['job_card_table'], 'job_card_id', $delete_job_card_id, 'job_card_number');
+                $bill_number = $job_card_list[0]['job_card_number'];
             
                 $action = "";
-                $job_card_delete = "1";
-                // $job_card_delete = $obj->GetJobCardLinkedCount($delete_job_card_id);
-                if($job_card_delete == '1') {
+                $invoice_delete = $job_card_list[0]['invoice_status'];
+                $estimate_delete = $job_card_list[0]['estimate_status'];
+                $quotation_delete = $job_card_list[0]['quotation_status'];
+                $store_delete = $obj->getTableRecords($GLOBALS['store_entry_table'],'job_card_id',$delete_job_card_id);
+                if($quotation_delete == '0' && $estimate_delete == '0' && $invoice_delete == '0' && empty($store_delete))  {
                     $action = "Job Card Deleted. Job Card No. - ".$bill_number;
                     $columns = array(); $values = array();			
                     $columns = array('deleted');
                     $values = array("'1'");
                     $msg = $obj->UpdateSQL($GLOBALS['job_card_table'], $job_card_unique_id, $columns, $values, $action);
-
-
                 }
                 else {
                     $msg = "Can't Delete.";
