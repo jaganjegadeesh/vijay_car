@@ -616,18 +616,18 @@
                     $action = "Bank Account Deleted. Name - ".$obj->encode_decode('decrypt', $account_name);
                 }
                 
-                // $linked_count = 0;
-                // $linked_count = $obj->GetBankLinkedCount($delete_bank_id); 
+                $linked_count = 0;
+                $linked_count = $obj->getTableRecords($GLOBALS['payment_table'],'bank_id', $delete_bank_id); 
             
-                // if(empty($linked_count)) {
+                if(empty($linked_count)) {
                     $columns = array(); $values = array();			
                     $columns = array('deleted');
                     $values = array("'1'");
                     $msg = $obj->UpdateSQL($GLOBALS['bank_table'], $bank_unique_id, $columns, $values, $action);
-                // }
-                // else {
-                //     $msg = "This Bank Account is associated with other screens";
-                // }
+                }
+                else {
+                    $msg = "This Bank Account is associated with other screens";
+                }
             }
         }
         echo $msg;

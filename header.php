@@ -576,9 +576,9 @@
                                     <li class="nav-item" id="daybook">
                                         <a href="daybook.php" class="nav-link"><i class="bi bi-dash"></i> Day Book </a>
                                     </li>
-                                    <!-- <li class="nav-item" id="jobcardreport">
-                                        <a href="jobcard_report.php" class="nav-link"><i class="bi bi-dash"></i> Job Card Report </a>
-                                    </li> -->
+                                    <li class="nav-item" id="jobcardreport">
+                                        <a href="jobcard_report.php" class="nav-link"><i class="bi bi-dash"></i> Vehicle History Report </a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>

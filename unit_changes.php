@@ -448,18 +448,18 @@
                 if(!empty($unit_name)) {
                     $action = "Unit Name Deleted - ".$obj->encode_decode("decrypt",$unit_name);
                 }
-                // $linked_count = 0;
-                // $linked_count = $obj->GetPaymentmodeLinkedCount($delete_unit_id); 
+                $linked_count = 0;
+                $linked_count = $obj->getTableRecords($GLOBALS['product_table'],'unit_id',$delete_unit_id); 
             
-                // if(empty($linked_count)) {
+                if(empty($linked_count)) {
                     $columns = array(); $values = array();			
                     $columns = array('deleted');
                     $values = array("'1'");
                     $msg = $obj->UpdateSQL($GLOBALS['unit_table'], $unit_unique_id, $columns, $values, $action);
-                // }
-                // else {
-                //     $msg = "This Unit Name is associated with other screens";
-                // }
+                }
+                else {
+                    $msg = "This Unit Name is associated with other screens";
+                }
             }
         }
         echo $msg;

@@ -669,9 +669,6 @@
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                                            <li>
-                                                <a class="dropdown-item" style="cursor:pointer;"  target="_blank" href="reports/rpt_job_card_a4.php?view_job_card_id=<?php if(!empty($list['job_card_id'])) { echo $list['job_card_id']; } ?>"><i class="fa fa-print"></i>&ensp;Print</a>
-                                            </li>
                                             <?php 
                                                 if(empty($edit_access_error) && $list['deleted'] == '0') {
                                                     ?>

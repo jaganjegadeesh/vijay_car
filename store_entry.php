@@ -84,9 +84,6 @@
                                                     <button class="btn btn-dark float-end" id='show_button' style="font-size:11px;" type="button" onclick="Javascript:assign_bill_value();">Inactive Bill</button>
                                                 </div>                                    
                                             <?php  } ?>
-                                            <div class="col-lg-3 col-md-4 col-12 text-end">
-                                                <button class="btn btn-success m-1" style="font-size:11px;" type="button" onclick="Javascript:ShowModalContent('<?php if(!empty($page_title)) { echo $page_title; } ?>', '');"> <i class="fa fa-print"></i> Print </button>
-                                            </div>
                                             <div class="col-lg-1 col-md-8 col-3 text-end px-2 px-lg-2 align-self-center">
                                                 <?php
                                                     $add_access_error = "";

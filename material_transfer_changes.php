@@ -884,7 +884,10 @@
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
                                                 <li>
-                                                    <a class="dropdown-item" style="cursor:pointer;"  target="_blank" href="reports/rpt_material_transfer_a4.php?view_material_transfer_id=<?php if(!empty($list['material_transfer_id'])) { echo $list['material_transfer_id']; } ?>"><i class="fa fa-print"></i>&ensp;Print</a>
+                                                    <a class="dropdown-item" style="cursor:pointer;"  target="_blank" href="reports/rpt_material_transfer_a4.php?view_material_transfer_id=<?php if(!empty($list['material_transfer_id'])) { echo $list['material_transfer_id']; } ?>"><i class="fa fa-print"></i>&ensp;Print A4</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" style="cursor:pointer;"  target="_blank" href="reports/rpt_material_transfer_a5.php?view_material_transfer_id=<?php if(!empty($list['material_transfer_id'])) { echo $list['material_transfer_id']; } ?>"><i class="fa fa-print"></i>&ensp;Print A5</a>
                                                 </li>
                                                 <?php 
                                                     if(empty($edit_access_error) && $list['deleted'] == '0') {

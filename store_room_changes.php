@@ -535,18 +535,18 @@
                 if(!empty($store_room_name)) {
                     $action = "Store Room Deleted. Name - " . $obj->encode_decode('decrypt', $store_room_name);
                 }
-                // $linked_count = 0;
-                // $linked_count = $obj->GetStore RoomLinkedCount($delete_store_room_id);
-                // if(empty($linked_count)) {
+                $linked_count = 0;
+                $linked_count = $obj->getTableRecords($GLOBALS['stock_table'],'store_id',$delete_store_room_id);
+                if(empty($linked_count)) {
                     $columns = array();
                     $values = array();
                     $columns = array('deleted');
                     $values = array("'1'");
                     $msg = $obj->UpdateSQL($GLOBALS['store_room_table'], $store_room_unique_id, $columns, $values, $action);
-                // // }
-                // else {
-                //     $msg = "This Store Room is associated with other screens";
-                // }
+                }
+                else {
+                    $msg = "This Store Room is associated with other screens";
+                }
             }
         }
         echo $msg;

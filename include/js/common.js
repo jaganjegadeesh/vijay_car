@@ -719,3 +719,34 @@ function assign_bill_value() {
 		table_listing_records_filter();
 	}
 }
+
+function GetVehicleHistory(vehicle_id) {
+	var check_login_session = 1;
+	var post_url = "dashboard_changes.php?check_login_session=1";
+	jQuery.ajax({
+		url: post_url, success: function (check_login_session) {
+			if (check_login_session == 1) {
+				if(vehicle_id != '') {
+					post_url = "bill_changes.php?GetVehicleHistory="+vehicle_id;
+					jQuery.ajax({
+						url: post_url, success: function (result) {
+							if(result != '') {
+								if($(".job_card_history").length > 0 ) {
+									$(".job_card_history").html(result);
+								}
+							} else {
+								if($(".job_card_history").length > 0 ) {
+									$(".job_card_history").html('');
+								}
+							}
+						}
+					});
+				} else {
+					if($(".job_card_history").length > 0 ) {
+						$(".job_card_history").html('');
+					}
+				}
+			}
+		}
+	});
+}

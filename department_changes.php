@@ -476,18 +476,18 @@
                 if(!empty($department_name)) {
                     $action = "Department Deleted. Name - " . $obj->encode_decode('decrypt', $department_name);
                 }
-                // $linked_count = 0;
-                // $linked_count = $obj->GetDepartmentLinkedCount($delete_department_id);
-                // if(empty($linked_count)) {
+                $linked_count = 0;
+                $linked_count = $obj->getTableRecords($GLOBALS['job_card_table'],'department_id', $delete_department_id);
+                if(empty($linked_count)) {
                     $columns = array();
                     $values = array();
                     $columns = array('deleted');
                     $values = array("'1'");
                     $msg = $obj->UpdateSQL($GLOBALS['department_table'], $department_unique_id, $columns, $values, $action);
-                // }
-                // else {
-                //     $msg = "This Department is associated with other screens";
-                // }
+                }
+                else {
+                    $msg = "This Department is associated with other screens";
+                }
             }
         }
         echo $msg;

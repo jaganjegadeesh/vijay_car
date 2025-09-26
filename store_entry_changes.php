@@ -12,7 +12,7 @@
         $show_store_entry_id = trim($show_store_entry_id);
         $store_entry_date = date('Y-m-d'); $current_date = date('Y-m-d');
         
-        $store_type = "";
+        $store_type = ""; $job_status = 0;
 
         $store_entry_list = $obj->getTableRecords($GLOBALS['store_entry_table'], 'store_entry_id', $show_store_entry_id, '');   
         
@@ -26,6 +26,7 @@
                 }
                 if(!empty($data['job_card_id']) && $data['job_card_id'] != $GLOBALS['null_value']) {
                     $job_card_id = $data['job_card_id'];
+                    $job_status = $obj->getTableColumnValue($GLOBALS['job_card_table'],'job_card_id',$job_card_id,'invoice_status');
                 }
                 if(!empty($data['job_card_number']) && $data['job_card_number'] != $GLOBALS['null_value']) {
                     $job_card_number = $data['job_card_number'];
@@ -389,7 +390,9 @@
                         </div>
                         <div class="col-md-12 py-3 text-center">
                             <div class="col-md-12 py-3 text-center">
-                                <button class="btn btn-dark" type="button" onClick="Javascript:SaveModalContent(event, 'store_entry_form', 'store_entry_changes.php', 'store_entry.php');"> Submit </button>
+                                <?php if($job_status == '0' || empty($job_status)) { ?>
+                                    <button class="btn btn-dark" type="button" onClick="Javascript:SaveModalContent(event, 'store_entry_form', 'store_entry_changes.php', 'store_entry.php');"> Submit </button>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -1017,7 +1020,10 @@
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
                                             <li>
-                                                <a class="dropdown-item" style="cursor:pointer;"  target="_blank" href="reports/rpt_store_entry_a4.php?view_store_entry_id=<?php if(!empty($list['store_entry_id'])) { echo $list['store_entry_id']; } ?>"><i class="fa fa-print"></i>&ensp;Print</a>
+                                                <a class="dropdown-item" style="cursor:pointer;"  target="_blank" href="reports/rpt_store_entry_a4.php?view_store_entry_id=<?php if(!empty($list['store_entry_id'])) { echo $list['store_entry_id']; } ?>"><i class="fa fa-print"></i>&ensp;Print A4</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" style="cursor:pointer;"  target="_blank" href="reports/rpt_store_entry_a5.php?view_store_entry_id=<?php if(!empty($list['store_entry_id'])) { echo $list['store_entry_id']; } ?>"><i class="fa fa-print"></i>&ensp;Print A5</a>
                                             </li>
                                             <?php 
                                                 if(empty($edit_access_error) && $list['deleted'] == '0') {

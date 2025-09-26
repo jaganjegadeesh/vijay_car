@@ -447,18 +447,18 @@
                 if(!empty($payment_mode_name)) {
                     $action = "Payment Mode Deleted - ".$obj->encode_decode("decrypt",$payment_mode_name);
                 }
-                // $linked_count = 0;
-                // $linked_count = $obj->GetPaymentmodeLinkedCount($delete_payment_mode_id); 
+                $linked_count = 0;
+                $linked_count = $obj->getTableRecords($GLOBALS['bank_table'],'payment_mode_id', $delete_payment_mode_id); 
             
-                // if(empty($linked_count)) {
+                if(empty($linked_count)) {
                     $columns = array(); $values = array();			
                     $columns = array('deleted');
                     $values = array("'1'");
                     $msg = $obj->UpdateSQL($GLOBALS['payment_mode_table'], $payment_mode_unique_id, $columns, $values, $action);
-                // }
-                // else {
-                //     $msg = "This payment mode is associated with other screens";
-                // }
+                }
+                else {
+                    $msg = "This payment mode is associated with other screens";
+                }
             }
         }
         echo $msg;

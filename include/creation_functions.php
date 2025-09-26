@@ -557,5 +557,90 @@
 				}
 			}
 		}
+		public function getSalesRecords($page, $unique_id) {
+			$list = array(); $select_query = ""; $where = ""; $table = "";
+			if(!empty($unique_id)) {
+				if($page == 'estimate') {
+					$table = $GLOBALS['estimate_table'];
+				} else if($page == 'quotation') {
+					$table = $GLOBALS['quotation_table'];
+				} else if($page == 'invoice') {
+					$table = $GLOBALS['invoice_table'];
+				}
+				if(!empty($table)) {
+					$where = " ".$page."_id = '".$unique_id."'";
+					$select_query = "SELECT * FROM ".$table." WHERE ".$where;
+				}
+			}
+			if(!empty($select_query)) {
+				$list = $this->getQueryRecords($table, $select_query);
+			}
+			return $list;
+		}
+		public function getVehicleHistory($vehicle_id) {
+			$list = array(); $select_query = ''; $final_data = array(); $where = '';
+			
+			if(!empty($vehicle_id)) {
+				if(!empty($where)) {
+					$where .= " AND vehicle_id = '" . $vehicle_id ."'"; 
+				} else {
+					$where = " vehicle_id = '" . $vehicle_id ."'";
+				}
+			}
+			
+			$select_query = "SELECT * FROM " . $GLOBALS['job_card_table'] . " WHERE ". $where ." AND deleted = '0' GROUP BY job_card_id";
+			if(!empty($select_query)) {
+				$list = $this->getQueryRecords($GLOBALS['job_card_table'], $select_query);
+			}
+
+			if(!empty($list)) {
+				foreach ($list as $data) {
+					if(!empty($data['job_card_id'])) {
+						$job_card_id = $data['job_card_id'];
+					}
+					if(!empty($data['job_card_number'])) {
+						$job_card_number = $data['job_card_number'];
+					}
+					if(!empty($data['job_card_date'])) {
+						$job_card_date = date('Y-m-d', strtotime($data['job_card_date']));
+					}
+					if(!empty($data['party_id']) && $data['party_id'] != $GLOBALS['null_value']) {
+						$party_id = $data['party_id'];
+					}
+					if(!empty($data['department_id']) && $data['department_id'] != $GLOBALS['null_value']) {
+						$department_id = $data['department_id'];
+					}
+					if(!empty($data['department_name']) && $data['department_name'] != $GLOBALS['null_value']) {
+						$department_name = $data['department_name'];
+					}
+					if(!empty($data['engineer_id']) && $data['engineer_id'] != $GLOBALS['null_value']) {
+						$engineer_id = $data['engineer_id'];
+					}
+					if(!empty($data['work_details']) && $data['work_details'] != $GLOBALS['null_value']) {
+						$work_details = $data['work_details'];
+					}
+
+					$details = array();
+
+					$select_query = "SELECT * FROM " . $GLOBALS['store_entry_table'] . " WHERE job_card_id = '" . $job_card_id . "' AND deleted = '0'";
+					if(!empty($select_query)) {
+						$details = $this->getQueryRecords($GLOBALS['store_entry_table'], $select_query);
+					}
+					$final_data[] = [
+						"job_card_id" => $job_card_id,
+						"job_card_number" => $job_card_number,
+						"job_card_date" => $job_card_date,
+						"party_id" => $party_id,
+						"department_id" => $department_id,
+						"department_name" => $department_name,
+						"engineer_id" => $engineer_id,
+						"work_details" => $work_details,
+						"store_details" => $details
+					];
+					
+				}
+			}
+			return $final_data;
+		}
     }
 ?>

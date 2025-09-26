@@ -275,3 +275,111 @@
             <?php
         }
     }
+
+    if(isset($_REQUEST['GetVehicleHistory'])) {
+        $vehicle_id = $_REQUEST['GetVehicleHistory'];
+        $sales_list = $obj->getVehicleHistory($vehicle_id);
+        $store_data = array();
+        if(!empty($sales_list)) { ?>
+            <div class="col-12 col-lg-12 h2 text-dark p-3">Job Details :</div>
+            <table class="table table-bordered nowrap cursor text-center smallfnt">
+                <thead class="bg-light">
+                    <th>#</th>
+                    <th>Entry Date</th>
+                    <th>Job Card Number</th>
+                    <th>Department</th>
+                    <th>Engineer</th>
+                    <th>Details</th>
+                </thead>
+                <tbody>
+                    <?php foreach($sales_list as $key => $list) { ?>
+                        <tr>
+                            <td><?php echo $key+1; ?></td>
+                            <td>
+                                <?php if(!empty($list['job_card_date'])) {
+                                    echo date('d-m-Y', strtotime($list['job_card_date']));
+                                }?>
+                            </td>
+                            <td>
+                                <?php if(!empty($list['job_card_number'])) {
+                                    echo $list['job_card_number'];
+                                } ?>
+                            </td>
+                            <td>
+                                <?php if(!empty($list['department_name'])) {
+                                    echo $obj->encode_decode('decrypt',$list['department_name']);
+                                } ?>
+                            </td>
+                            <td>
+                                <?php if(!empty($list['engineer_id'])) {
+                                    $engineer = explode(',',$list['engineer_id']);
+                                    $name = array();
+                                    for($e=0;$e<count($engineer);$e++) {
+                                        $name[$e] = $obj->getTableColumnValue($GLOBALS['engineer_table'],'engineer_id',$engineer[$e],'engineer_name');
+                                        $name[$e] = $obj->encode_decode('decrypt',$name[$e]);
+                                    }
+                                    $engineer_name = implode(', <br>',$name);
+                                    if(!empty($engineer_name)) {
+                                        echo $engineer_name;
+                                    }
+                                } ?>
+                            </td>
+                            <td>
+                                <?php if(!empty($list['work_details'])) {
+                                    echo $obj->encode_decode('decrypt',$list['work_details']);
+                                } ?>
+                            </td>
+                        </tr>
+                    <?php $store_data = array_merge($list['store_details']);
+                } ?>
+                </tbody>
+            </table>
+            <?php if(!empty($store_data)) { ?>
+                <br><br>
+                <div class="col-12 col-lg-12 h2 text-dark p-3">Store Entry Details :</div>
+
+                <table class="table table-bordered nowrap cursor text-center smallfnt">
+                    <thead class="bg-light">
+                        <th>#</th>
+                        <th>Entry Date</th>
+                        <th>Store Entry Number</th>
+                        <th>Job Card Number</th>
+                        <th>Quantity</th>
+                    </thead>
+                    <tbody>
+                        <?php foreach($store_data as $index => $data) {?>
+                            <tr>
+                                <td><?php echo $index+1;?></td>
+                                <td>
+                                    <?php if(!empty($data['store_entry_date'])) {
+                                        echo date('d-m-Y', strtotime($data['store_entry_date']));
+                                    }?>
+                                </td>
+                                <td>
+                                    <?php if(!empty($data['store_entry_number'])) {
+                                        echo $data['store_entry_number'],"<br>";
+                                    } ?>
+                                    <a style="cursor:pointer;" href="reports/rpt_store_entry_a5.php?view_store_entry_id=<?php if(!empty($data['store_entry_id'])) { echo $data['store_entry_id']; } ?>" class="fs-10 text-primary" target="_blank">View <img src="images/pupil.gif" alt="Show" width="15"></a>
+                                </td>
+                                <td>
+                                    <?php if(!empty($data['job_card_number'])) {
+                                        echo $data['job_card_number'];
+                                    } ?>
+                                </td>
+                                <td>
+                                    <?php
+                                        if(!empty($data['quantity'])) {
+                                            echo number_format(array_sum(explode(",", $data['quantity'])),2);
+                                        }
+                                        else {
+                                            echo '-';
+                                        }
+                                    ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            <?php }
+        }
+    }

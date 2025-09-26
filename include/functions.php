@@ -680,5 +680,19 @@
 			return $list;
 		}
 
+		public function getSalesRecords($page, $sales_id) {
+			$create_obj = "";
+			$create_obj = $this->creation_function_object();
+			$list = array();
+			$list = $create_obj->getSalesRecords($page, $sales_id);
+			return $list;
+		}
+		public function getVehicleHistory($vehicle_id) {
+			$create_obj = "";
+			$create_obj = $this->creation_function_object();
+			$list = array();
+			$list = $create_obj->getVehicleHistory($vehicle_id);
+			return $list;
+		}
 	}
 ?>

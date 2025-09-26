@@ -813,7 +813,10 @@
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
                                                 <li>
-                                                    <a class="dropdown-item" style="cursor:pointer;"  target="_blank" href="reports/rpt_stock_adjustment_a4.php?view_stock_adjustment_id=<?php if(!empty($list['stock_adjustment_id'])) { echo $list['stock_adjustment_id']; } ?>"><i class="fa fa-print"></i>&ensp;Print</a>
+                                                    <a class="dropdown-item" style="cursor:pointer;"  target="_blank" href="reports/rpt_stock_adjustment_a4.php?view_stock_adjustment_id=<?php if(!empty($list['stock_adjustment_id'])) { echo $list['stock_adjustment_id']; } ?>"><i class="fa fa-print"></i>&ensp;Print A4</a>
+                                                </li>
+                                                 <li>
+                                                    <a class="dropdown-item" style="cursor:pointer;"  target="_blank" href="reports/rpt_stock_adjustment_a5.php?view_stock_adjustment_id=<?php if(!empty($list['stock_adjustment_id'])) { echo $list['stock_adjustment_id']; } ?>"><i class="fa fa-print"></i>&ensp;Print A5</a>
                                                 </li>
                                                 <?php 
                                                     if(empty($edit_access_error) && $list['deleted'] == '0') {

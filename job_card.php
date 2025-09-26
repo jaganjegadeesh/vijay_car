@@ -21,6 +21,11 @@
     $cancelled_bill = $obj->getAllRecords($GLOBALS['job_card_table'], 'deleted', 1);
     $cancelled_count = count($cancelled_bill);
 
+    $jobcard_count = 0;
+    $job_card_list =  array();
+    $job_card_list = $obj->getTableRecords($GLOBALS['job_card_table'], '', '', '');
+    $jobcard_count = count($job_card_list);
+
     $party_list = array();
     $party_list = $obj->getPartyList('2'); 
 ?>
@@ -121,6 +126,14 @@
                                                     }
                                                 ?>                                            
                                             </div>
+                                            <div class="col-lg-2 col-md-8 col-3 text-end px-2 px-lg-2 align-self-center">
+                                                <?php 
+                                                    if($jobcard_count > 0) { ?>
+                                                            <button class="btn btn-primary py-2 mx-2" style="font-size:12px;" type="button" onclick="Javascript:PrintJobCardA4();"> <i class="fa fa-print"></i> Print</button>
+                                                        <?php
+                                                    } 
+                                                ?>                                           
+                                            </div>
                                             <div class="col-sm-6 col-xl-8">
                                                 <input type="hidden" name="page_number" value="<?php if(!empty($page_number)) { echo $page_number; } ?>">
                                                 <input type="hidden" name="page_limit" value="<?php if(!empty($page_limit)) { echo $page_limit; } ?>">
@@ -140,6 +153,24 @@
 <!--Right Content End-->
 <?php include "footer.php"; ?>
 <script>
+    function PrintJobCardA4() {
+        var search_text = "", from_date = "", to_date = "",filter_party_id = "", show_bill = ""; var url = ""; 
+        search_text = jQuery('input[name="search_text"]').val();
+        show_bill = jQuery('input[name="show_bill"]').val();
+        if (jQuery('input[name="from_date"]').length > 0) {
+            from_date = jQuery('input[name="from_date"]').val();
+        }
+        if (jQuery('input[name="to_date"]').length > 0) {
+            to_date = jQuery('input[name="to_date"]').val();
+        }
+        if (jQuery('select[name="filter_party_id"]').length > 0) {
+            filter_party_id = jQuery('select[name="filter_party_id"]').val();
+        }
+    
+
+        url = "reports/rpt_jobcard_listing_a4.php?search_text="+search_text+"&from_date="+from_date+"&to_date="+to_date+"&filter_party_id="+filter_party_id+"&show_bill="+show_bill;
+        window.open(url,'_blank');
+    }
     $(document).ready(function(){
         $("#jobcard").addClass("active");
         table_listing_records_filter();
