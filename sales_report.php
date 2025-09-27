@@ -150,9 +150,9 @@
                                                             <td class="text-center px-2 py-2"><?php echo $index; ?></td>
                                                             <td  class="text-center px-2 py-2">
                                                                 <?php 
-                                                                if(!empty($data['invoice_number'])) {
+                                                                if(!empty($data['estimate_number'])) {
                                                                 
-                                                                echo $data['invoice_number']."<br>";
+                                                                echo $data['estimate_number']."<br>";
                                                                 }
                                                                 
                                                                 if (!empty($data['deleted'])) {
@@ -165,9 +165,9 @@
                                                             </td>
                                                             <td>
                                                                 <?php
-                                                                    if(!empty($data['invoice_date']))
+                                                                    if(!empty($data['estimate_date']))
                                                                     {
-                                                                        echo date('d-m-Y',strtotime($data['invoice_date']));   
+                                                                        echo date('d-m-Y',strtotime($data['estimate_date']));   
                                                                     }
                                                                 ?>
                                                             </td>

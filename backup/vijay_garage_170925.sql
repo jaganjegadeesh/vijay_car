@@ -23,7 +23,7 @@ CREATE TABLE `vijay_garage_advance_voucher` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
-INSERT INTO vijay_garage_advance_voucher (id, created_date_time, creator, creator_name, bill_company_id, advance_voucher_id, advance_voucher_number, advance_voucher_date, engineer_id, engineer_name, amount, narration, payment_mode_id, payment_mode_name, bank_id, bank_name, total_amount, deleted) VALUES ('1','2025-09-24 13:10:15','4d6a6b774f4449774d6a55774d7a49794d544a664d44493d','553352685a6d593d','4d6a6b774f4449774d6a55774d7a49784d6a4a664d44453d','4d6a51774f5449774d6a55774d5445774d5456664d44453d','ADV001/25-26','2025-09-24','4d546b774f5449774d6a55784d6a51304e5452664d44553d','5457396f59573568','100,100','6332466b59336836','4d6a49774f5449774d6a55774d7a4d314d7a68664d44593d,4d5467774f5449774d6a55774d5449324d7a4a664d444d3d','55476876626d565159586b3d,5132467a61413d3d','4d6a4d774f5449774d6a55774e6a45794e545a664d44553d,4d5467774f5449774d6a55774d5449334d6a4e664d44493d','56453143,55304a4a','200','0');
+INSERT INTO vijay_garage_advance_voucher (id, created_date_time, creator, creator_name, bill_company_id, advance_voucher_id, advance_voucher_number, advance_voucher_date, engineer_id, engineer_name, amount, narration, payment_mode_id, payment_mode_name, bank_id, bank_name, total_amount, deleted) VALUES ('1','2025-09-24 13:10:15','4d6a6b774f4449774d6a55774d7a49794d544a664d44493d','553352685a6d593d','4d6a6b774f4449774d6a55774d7a49784d6a4a664d44453d','4d6a51774f5449774d6a55774d5445774d5456664d44453d','ADV001/25-26','2025-09-24','4d546b774f5449774d6a55784d6a51304e5452664d44553d','5457396f59573568','100,100','6332466b59336836','4d6a49774f5449774d6a55774d7a4d314d7a68664d44593d,4d5467774f5449774d6a55774d5449324d7a4a664d444d3d','55476876626d565159586b3d,5132467a61413d3d','4d6a4d774f5449774d6a55774e6a45794e545a664d44553d,4d5467774f5449774d6a55774d5449334d6a4e664d44493d','56453143,55304a4a','200','1');
 
 
 CREATE TABLE `vijay_garage_attendance` (
@@ -169,7 +169,7 @@ INSERT INTO vijay_garage_engineer (id, created_date_time, creator, creator_name,
 
 INSERT INTO vijay_garage_engineer (id, created_date_time, creator, creator_name, bill_company_id, engineer_id, engineer_name, engineer_code, mobile_number, salary, engineer_name_code, lower_case_name, advance_amount, deleted) VALUES ('4','2025-09-19 12:44:54','4d6a6b774f4449774d6a55774d7a45354d546c664d44453d','55334a706332396d64486468636d5636','4d6a6b774f4449774d6a55774d7a49784d6a4a664d44453d','4d546b774f5449774d6a55784d6a51304e5452664d44513d','5332463261586c68','525535484d44417a','4f5463774f5467774e7a6b774f413d3d','12000','NULL','4e544d7a4d6a51324d7a49324d5455344e6d4d324f413d3d','300','0');
 
-INSERT INTO vijay_garage_engineer (id, created_date_time, creator, creator_name, bill_company_id, engineer_id, engineer_name, engineer_code, mobile_number, salary, engineer_name_code, lower_case_name, advance_amount, deleted) VALUES ('5','2025-09-19 12:44:54','4d6a6b774f4449774d6a55774d7a45354d546c664d44453d','55334a706332396d64486468636d5636','4d6a6b774f4449774d6a55774d7a49784d6a4a664d44453d','4d546b774f5449774d6a55784d6a51304e5452664d44553d','5457396f59573568','525535484d444130','4f5463354e6a6b774e7a6b774e773d3d','20000','NULL','4e5451314e7a4d354e6d59314f5455334d7a55324f413d3d','700','0');
+INSERT INTO vijay_garage_engineer (id, created_date_time, creator, creator_name, bill_company_id, engineer_id, engineer_name, engineer_code, mobile_number, salary, engineer_name_code, lower_case_name, advance_amount, deleted) VALUES ('5','2025-09-19 12:44:54','4d6a6b774f4449774d6a55774d7a45354d546c664d44453d','55334a706332396d64486468636d5636','4d6a6b774f4449774d6a55774d7a49784d6a4a664d44453d','4d546b774f5449774d6a55784d6a51304e5452664d44553d','5457396f59573568','525535484d444130','4f5463354e6a6b774e7a6b774e773d3d','20000','NULL','4e5451314e7a4d354e6d59314f5455334d7a55324f413d3d','500','0');
 
 
 CREATE TABLE `vijay_garage_estimate` (
@@ -357,7 +357,7 @@ CREATE TABLE `vijay_garage_login` (
   `type` mediumtext NOT NULL,
   `deleted` int(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 INSERT INTO vijay_garage_login (id, loginer_name, login_date_time, logout_date_time, ip_address, browser, os_detail, user_id, type, deleted) VALUES ('1','55334a706332396d64486468636d5636494367354f446b344e6a63354e6a51304b513d3d','2025-09-25 16:26:32','0000-00-00 00:00:00','::1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36','Windows NT JAGAN 10.0 build 26100 (Windows 11) AMD64','4d6a6b774f4449774d6a55774d7a45354d546c664d44453d','Super Admin','0');
@@ -366,7 +366,11 @@ INSERT INTO vijay_garage_login (id, loginer_name, login_date_time, logout_date_t
 
 INSERT INTO vijay_garage_login (id, loginer_name, login_date_time, logout_date_time, ip_address, browser, os_detail, user_id, type, deleted) VALUES ('3','55334a706332396d64486468636d5636494367354f446b344e6a63354e6a51304b513d3d','2025-09-26 11:16:46','2025-09-26 15:27:16','::1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36','Windows NT JAGAN 10.0 build 26100 (Windows 11) AMD64','4d6a6b774f4449774d6a55774d7a45354d546c664d44453d','Super Admin','0');
 
-INSERT INTO vijay_garage_login (id, loginer_name, login_date_time, logout_date_time, ip_address, browser, os_detail, user_id, type, deleted) VALUES ('4','55334a706332396d64486468636d5636494367354f446b344e6a63354e6a51304b513d3d','2025-09-26 15:27:17','0000-00-00 00:00:00','::1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36','Windows NT JAGAN 10.0 build 26100 (Windows 11) AMD64','4d6a6b774f4449774d6a55774d7a45354d546c664d44453d','Super Admin','0');
+INSERT INTO vijay_garage_login (id, loginer_name, login_date_time, logout_date_time, ip_address, browser, os_detail, user_id, type, deleted) VALUES ('4','55334a706332396d64486468636d5636494367354f446b344e6a63354e6a51304b513d3d','2025-09-26 15:27:17','2025-09-26 17:15:22','::1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36','Windows NT JAGAN 10.0 build 26100 (Windows 11) AMD64','4d6a6b774f4449774d6a55774d7a45354d546c664d44453d','Super Admin','0');
+
+INSERT INTO vijay_garage_login (id, loginer_name, login_date_time, logout_date_time, ip_address, browser, os_detail, user_id, type, deleted) VALUES ('5','55334a706332396d64486468636d5636494367354f446b344e6a63354e6a51304b513d3d','2025-09-26 17:15:23','0000-00-00 00:00:00','::1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36','Windows NT JAGAN 10.0 build 26100 (Windows 11) AMD64','4d6a6b774f4449774d6a55774d7a45354d546c664d44453d','Super Admin','0');
+
+INSERT INTO vijay_garage_login (id, loginer_name, login_date_time, logout_date_time, ip_address, browser, os_detail, user_id, type, deleted) VALUES ('6','55334a706332396d64486468636d5636494367354f446b344e6a63354e6a51304b513d3d','2025-09-27 09:46:42','0000-00-00 00:00:00','::1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36','Windows NT JAGAN 10.0 build 26100 (Windows 11) AMD64','4d6a6b774f4449774d6a55774d7a45354d546c664d44453d','Super Admin','0');
 
 
 CREATE TABLE `vijay_garage_material_transfer` (

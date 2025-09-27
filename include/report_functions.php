@@ -440,28 +440,28 @@
 			if(!empty($from_date)) {
 				$from_date = date("Y-m-d", strtotime($from_date));
 				if(!empty($where)) {
-					$where = $where." AND invoice_date >= '".$from_date."'"; 
+					$where = $where." AND estimate_date >= '".$from_date."'"; 
 				}
 				else {
-					$where = "invoice_date >= '".$from_date."'";
+					$where = "estimate_date >= '".$from_date."'";
 				}
 			}
 			
 			if(!empty($to_date)) {
 				$to_date = date("Y-m-d", strtotime($to_date));
 				if(!empty($where)) {
-					$where = $where." AND invoice_date <= '".$to_date."'"; 	
+					$where = $where." AND estimate_date <= '".$to_date."'"; 	
 				}
 				else {
-					$where = "invoice_date <= '".$to_date."'";
+					$where = "estimate_date <= '".$to_date."'";
 				}
 			}
 
 			$select_query = "";
 			if(!empty($where)) {
-				$select_query = "SELECT * FROM ".$GLOBALS['invoice_table']."  WHERE ".$where."  ORDER BY created_date_time ASC";
+				$select_query = "SELECT * FROM ".$GLOBALS['estimate_table']."  WHERE ".$where."  ORDER BY created_date_time ASC";
 			} else {
-				$select_query = "SELECT * FROM ".$GLOBALS['invoice_table']." ORDER BY created_date_time ASC";
+				$select_query = "SELECT * FROM ".$GLOBALS['estimate_table']." ORDER BY created_date_time ASC";
 			}
 
 			if(!empty($select_query)) {

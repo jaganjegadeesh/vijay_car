@@ -126,10 +126,10 @@
             }
             if($opening_debit > $opening_credit){
                 $total_debit = $opening_debit - $opening_credit;
-                $pdf->Cell(30,8,$obj->numberFormat($total_debit,2),1,1,'R',0);  
+                $pdf->Cell(35,8,$obj->numberFormat($total_debit,2),1,1,'R',0);  
 
             }else{
-                $pdf->Cell(0,8,'',1,1,'R',0); 
+                $pdf->Cell(35,8,'',1,1,'R',0); 
             } 
 
         }
@@ -199,7 +199,7 @@
                     $pdf->SetFont('Arial','',8);
                 }
                 $start_y = $pdf->GetY();
-                if($data['bill_type'] != 'Employee Opening Balance' && $data['bill_type'] != 'Customer Opening Balance' && $data['bill_type'] != 'Suspense Party Opening Balance'){
+                if($data['bill_type'] != 'Employee Opening Balance' && $data['bill_type'] != 'Party Opening Balance' && $data['bill_type'] != 'Suspense Party Opening Balance'){
                     $pdf->SetX(10);
                     $pdf->Cell(10,8,$index,0,0,'C',0);
                     if(!empty($data['bill_date']))
@@ -351,7 +351,7 @@
             $pdf->Cell(30,8,$obj->numberFormat(($total_credit- $total_debit),2)." Cr",1,0,'R',0);
         }else{
             $pdf->SetX(135);
-            $pdf->Cell(35,8,'0.00',1,0,'R',0);
+            $pdf->Cell(30,8,'0.00',1,0,'R',0);
         }
 
         if($total_debit > $total_credit)

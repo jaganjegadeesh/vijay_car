@@ -114,7 +114,7 @@
     $footer_height = 0;
     $footer_height = 10;
 
-    $total_quantity = 0; $total_salary = 0; $s_no = 1; $start_y = ""; $second_y = ""; $daily_production_y = ""; $contractor_end_y = "";$total_pf_amounts=0; $total_esi_amounts=0; 
+    $total_quantity = 0; $total_salary = 0; $s_no = 1; $start_y = ""; $second_y = ""; $daily_production_y = ""; $contractor_end_y = "";$total_pf_amounts=0; $total_esi_amounts=0;  $total_advance = 0;
 
     $engineer_name = ""; 
     if(!empty($view_salary_id) && !empty($engineer_ids)) {
@@ -227,6 +227,7 @@
             
             if(!empty($advance_amounts[$p])){
                 $pdf->MultiCell(25,7,$obj->numberFormat($advance_amounts[$p],2),0,'R',0);
+                $total_advance += $advance_amounts[$p];
             } else {
                 $pdf->MultiCell(25,7,'-',0,'C',0);
             }
@@ -356,7 +357,14 @@
 
     $pdf->SetFont('Arial','B',9);
     $pdf->SetX(10);
-    $pdf->Cell(125,10,'Total',1,0,'R',0);
+    $pdf->Cell(100,10,'Total',1,0,'R',0);
+    if(!empty($total_advance)) {
+        $pdf->SetX(110);
+        $pdf->Cell(25,10,$obj->numberFormat($total_advance,2) ,1,0,'R',0);
+    }else{
+        $pdf->SetX(110);
+        $pdf->Cell(25,10,'-' ,1,0,'C',0);
+    }
     if(!empty($total_amount)){
         $pdf->SetX(135);
         $pdf->Cell(35,10,$obj->numberFormat($total_amount,2) ,1,0,'R',0);

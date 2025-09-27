@@ -11,7 +11,7 @@
 	if(isset($_REQUEST['show_purchase_entry_id'])) { 
         $show_purchase_entry_id = $_REQUEST['show_purchase_entry_id'];
         $show_purchase_entry_id = trim($show_purchase_entry_id);
-        $purchase_entry_date = date('Y-m-d');$purchase_bill_date = date('Y-m-d'); $current_date = date('Y-m-d');$purchase_entry_number = "";$gst_option = 0; $tax_type = 0; $tax_option = 0; $overall_tax = "";$purchase_store_ids = ""; $store_type =""; $indv_store_id =array(); $overall_store_id =""; $discount =""; $discount_value=""; $charges_tax =array(); $charges_value=""; $amount =array(); $round_off =""; $round_off_type =""; $round_off_value =""; $store_ids = array(); $product_ids = array(); $product_names = array(); $product_amount = array();$discount = ""; $discount_value = "";$extra_charges = ""; $extra_charges_value = ""; $unit_ids =array(); $unit_names=array(); $charges_id = array(); $charges_type = array(); $charges_value = array();  $product_tax =array(); $draft =0; $discount_name = ""; $charges_tax_array = array();
+        $purchase_entry_date = date('Y-m-d');$purchase_bill_date = date('Y-m-d'); $current_date = date('Y-m-d');$purchase_entry_number = "";$gst_option = 0; $tax_type = 0; $tax_option = 0; $overall_tax = "";$purchase_store_ids = ""; $store_type =""; $indv_store_id =array(); $overall_store_id =""; $discount =""; $discount_value=""; $charges_tax =array(); $charges_value=""; $amount =array(); $round_off =""; $round_off_type =""; $round_off_value =""; $store_ids = array(); $product_ids = array(); $product_names = array(); $product_amount = array();$discount = ""; $discount_value = "";$extra_charges = ""; $extra_charges_value = ""; $unit_ids =array(); $unit_names=array(); $charges_id = array(); $charges_type = array(); $charges_value = array();  $product_tax =array(); $draft =0; $discount_name = ""; $charges_tax_array = array(); $bill_number ="";
         if(!empty($show_purchase_entry_id)) {
             $purchase_entry_list = $obj->getTableRecords($GLOBALS['purchase_entry_table'], 'purchase_entry_id', $show_purchase_entry_id, '');   
             if(!empty($purchase_entry_list)) {
@@ -21,6 +21,9 @@
                     }
                     if(!empty($data['purchase_bill_date'])) {
                         $purchase_bill_date = date('Y-m-d', strtotime($data['purchase_bill_date']));
+                    }
+                    if(!empty($data['bill_number'])) {
+                        $bill_number = $data['bill_number'];
                     }
                     if(!empty($data['purchase_entry_number']) && $data['purchase_entry_number'] != $GLOBALS['null_value']) {
                         $purchase_entry_number = $data['purchase_entry_number'];
@@ -223,6 +226,14 @@
                         </div>
                     </div> 
                 </div>
+                <div class="col-lg-2 col-md-3 col-6 py-2 px-lg-1">
+                    <div class="form-group">
+                        <div class="form-label-group in-border">
+                            <input type="text" id="bill_number" name="bill_number"  value="<?php if(!empty($bill_number)){ echo $bill_number; } ?>" class="form-control shadow-none" onkeydown="Javascript:KeyboardControls(this,'',25,1);" placeholder="" required>
+                            <label>Bill Number</label>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-lg-3 col-md-4 col-6 px-lg-1 py-2">
                     <div class="form-group">
                         <div class="form-label-group in-border chargesaction">
@@ -275,6 +286,8 @@
                         </div>
                     </div> 
                 </div> 
+            </div>
+            <div class="row p-3">
                 <div class="col-lg-2 col-md-3 col-6 px-lg-1 py-2 <?php if($gst_option !='1'){?>d-none<?php } ?> tax_cover1" id="tax_option_div">
                     <div class="form-group">
                         <div class="form-label-group in-border">
@@ -287,9 +300,6 @@
                         </div>
                     </div>  
                 </div>
-                
-            </div>
-            <div class="row p-3">
                 <div class="col-lg-2 col-md-3 col-6 px-lg-1 py-2 <?php if($tax_type !='2'){ ?>d-none <?php } ?> tax_cover2">
                     <div class="form-group">
                         <div class="form-label-group in-border mb-0">
@@ -1138,7 +1148,7 @@
     }
 
     if(isset($_REQUEST['edit_id'])) {
-        $purchase_entry_date = ""; $purchase_entry_date_error = ""; $party_id = ""; $party_id_error = "";  $gst_option_error = ""; $tax_type = ""; $tax_type_error = "";$tax_option = ""; $tax_option_error = ""; $overall_tax =""; $product_ids = array(); $quantity = array(); $total_qty = array();$rates = array();  $final_rate =array(); $product_amount =array(); $product_error = ""; $product_names = array(); $amount =array(); $cgst_value = 0; $sgst_value = 0; $igst_value = 0; $round_off = ""; $sub_total = 0; $total_amount = 0; $total_tax_value = 0; $overall_tax ="";$unit_id = "";$unit_ids = array(); $unit_id_error =""; $gst_option ="";  $product_tax =array(); $charges_tax =array(); $terms_and_condition ="";
+        $purchase_entry_date = ""; $bill_number =""; $purchase_entry_date_error = ""; $party_id = ""; $party_id_error = "";  $gst_option_error = ""; $tax_type = ""; $tax_type_error = "";$tax_option = ""; $tax_option_error = ""; $overall_tax =""; $product_ids = array(); $quantity = array(); $total_qty = array();$rates = array();  $final_rate =array(); $product_amount =array(); $product_error = ""; $product_names = array(); $amount =array(); $cgst_value = 0; $sgst_value = 0; $igst_value = 0; $round_off = ""; $sub_total = 0; $total_amount = 0; $total_tax_value = 0; $overall_tax ="";$unit_id = "";$unit_ids = array(); $unit_id_error =""; $gst_option ="";  $product_tax =array(); $charges_tax =array(); $terms_and_condition ="";
         $company_state = ""; $party_state = ""; $draft = 0; $charges_id = array(); $charges_names = array();
         $charges_values = array(); $charges_type = array(); $charges_total = array();  $is_discount =""; $discount_name = "";
         $purchase_balance =0;
@@ -1162,6 +1172,20 @@
             }
             else {
                 $valid_purchase = $valid->error_display($form_name, 'purchase_entry_date', $purchase_entry_date_error, 'text');
+            }
+        }
+        if(isset($_POST['bill_number'])){
+            $bill_number = $_POST['bill_number'];
+            if(empty($bill_number)){
+                $bill_number_error = "Enter Bill Number";
+            }
+            if(!empty($bill_number_error)){
+                if(!empty($valid_purchase)){
+                    $valid_purchase = $valid_purchase." ".$valid->error_display($form_name,'bill_number',$bill_number_error,'text');
+                }
+                else{
+                    $valid_purchase = $valid->error_display($form_name,'bill_number',$bill_number_error,'text');
+                }
             }
         }
 
@@ -1944,8 +1968,8 @@
                     $action = "New Purchase Created. ";
                     $null_value = $GLOBALS['null_value'];
                     $columns = array(); $values = array();
-                    $columns = array('created_date_time', 'creator', 'creator_name','bill_company_id', 'bill_company_details', 'purchase_entry_id', 'purchase_entry_number', 'purchase_entry_date','party_id', 'party_name_mobile_city', 'party_details', 'gst_option', 'tax_type', 'tax_option', 'overall_tax', 'charges_tax', 'product_tax', 'party_state', 'product_id', 'product_name', 'quantity', 'unit_id' ,'unit_name' , 'total_qty', 'rate','final_rate', 'product_amount', 'amount', 'sub_total', 'discount', 'discount_value', 'discounted_total',  'charges_name','charges',  'charges_value','charges_total',  'cgst_value', 'sgst_value', 'igst_value', 'total_tax_value', 'round_off', 'total_amount', 'round_off_type' , 'round_off_value', 'discount_name', 'deleted','store_id','store_name','store_type');
-                    $values = array("'".$created_date_time."'", "'".$creator."'", "'".$creator_name."'","'".$bill_company_id."'","'".$bill_company_details."'",  "'".$null_value."'", "'".$null_value."'", "'".$purchase_entry_date."'","'".$party_id."'", "'".$party_name_mobile_city."'", "'".$party_details."'", "'".$gst_option."'", "'".$tax_type."'", "'".$tax_option."'", "'".$overall_tax."'", "'".$charges_tax."'","'".$product_tax."'","'".$party_state."'", "'".$product_ids."'", "'".$product_names."'","'".$quantity."'", "'".$unit_ids."'","'".$unit_names."'", "'".$total_qty."'","'".$rates."'","'".$final_rate."'", "'".$product_amount."'", "'".$amount."'","'".$sub_total."'", "'".$discount."'", "'".$discount_value."'" , "'".$discounted_total."'",   "'".$charges_id."'",  "'".$charges_values."'", "'".$charges_total."'","'".$charged_total."'", "'".$cgst_value."'", "'".$sgst_value."'", "'".$igst_value."'", "'".$total_tax_value."'", "'".$round_off."'", "'".$total_amount."'", "'".$round_off_type."'", "'".$round_off_value."'", "'".$discount_name."'", "'0'","'".$store_ids."'","'".$store_name."'","'".$store_type."'");
+                    $columns = array('created_date_time', 'creator', 'creator_name','bill_company_id', 'bill_company_details', 'purchase_entry_id', 'purchase_entry_number', 'purchase_entry_date','bill_number','party_id', 'party_name_mobile_city', 'party_details', 'gst_option', 'tax_type', 'tax_option', 'overall_tax', 'charges_tax', 'product_tax', 'party_state', 'product_id', 'product_name', 'quantity', 'unit_id' ,'unit_name' , 'total_qty', 'rate','final_rate', 'product_amount', 'amount', 'sub_total', 'discount', 'discount_value', 'discounted_total',  'charges_name','charges',  'charges_value','charges_total',  'cgst_value', 'sgst_value', 'igst_value', 'total_tax_value', 'round_off', 'total_amount', 'round_off_type' , 'round_off_value', 'discount_name', 'deleted','store_id','store_name','store_type');
+                    $values = array("'".$created_date_time."'", "'".$creator."'", "'".$creator_name."'","'".$bill_company_id."'","'".$bill_company_details."'",  "'".$null_value."'", "'".$null_value."'", "'".$purchase_entry_date."'","'" . $bill_number . "'" ,"'".$party_id."'", "'".$party_name_mobile_city."'", "'".$party_details."'", "'".$gst_option."'", "'".$tax_type."'", "'".$tax_option."'", "'".$overall_tax."'", "'".$charges_tax."'","'".$product_tax."'","'".$party_state."'", "'".$product_ids."'", "'".$product_names."'","'".$quantity."'", "'".$unit_ids."'","'".$unit_names."'", "'".$total_qty."'","'".$rates."'","'".$final_rate."'", "'".$product_amount."'", "'".$amount."'","'".$sub_total."'", "'".$discount."'", "'".$discount_value."'" , "'".$discounted_total."'",   "'".$charges_id."'",  "'".$charges_values."'", "'".$charges_total."'","'".$charged_total."'", "'".$cgst_value."'", "'".$sgst_value."'", "'".$igst_value."'", "'".$total_tax_value."'", "'".$round_off."'", "'".$total_amount."'", "'".$round_off_type."'", "'".$round_off_value."'", "'".$discount_name."'", "'0'","'".$store_ids."'","'".$store_name."'","'".$store_type."'");
 
                     $purchase_insert_id = $obj->InsertSQL($GLOBALS['purchase_entry_table'], $columns, $values,'purchase_entry_id','purchase_entry_number',$action);
         
@@ -1969,8 +1993,8 @@
                         $action = "Purchase Entry Updated. Bill No. - ".$purchase_entry_number;
 
                         $columns = array(); $values = array();						
-                        $columns = array('creator_name','bill_company_id', 'bill_company_details', 'purchase_entry_date','party_id', 'party_name_mobile_city', 'party_details', 'gst_option', 'tax_type', 'tax_option', 'overall_tax', 'product_tax', 'party_state','product_id', 'product_name', 'quantity', 'unit_id' ,'unit_name' ,'total_qty', 'rate','final_rate', 'product_amount', 'amount', 'sub_total', 'discount', 'discount_value', 'discounted_total', 'charges_name',  'charges',  'charges_value', 'charges_total', 'cgst_value', 'sgst_value', 'igst_value', 'total_tax_value', 'round_off', 'total_amount', 'charges_tax', 'round_off_type', 'round_off_value', 'discount_name','store_id','store_name','store_type');
-                        $values = array("'".$creator_name."'","'".$bill_company_id."'","'".$bill_company_details."'",  "'".$purchase_entry_date."'","'".$party_id."'", "'".$party_name_mobile_city."'", "'".$party_details."'", "'".$gst_option."'", "'".$tax_type."'", "'".$tax_option."'", "'".$overall_tax."'","'".$product_tax."'", "'".$party_state."'", "'".$product_ids."'", "'".$product_names."'","'".$quantity."'", "'".$unit_ids."'","'".$unit_names."'", "'".$total_qty."'","'".$rates."'","'".$final_rate."'", "'".$product_amount."'", "'".$amount."'","'".$sub_total."'", "'".$discount."'", "'".$discount_value."'" , "'".$discounted_total."'",  "'".$charges_id."'",  "'".$charges_values."'", "'".$charges_total."'","'".$charged_total."'", "'".$cgst_value."'", "'".$sgst_value."'", "'".$igst_value."'", "'".$total_tax_value."'", "'".$round_off."'", "'".$total_amount."'", "'".$charges_tax."'","'".$round_off_type."'", "'".$round_off_value."'", "'".$discount_name."'","'".$store_ids."'","'".$store_name."'","'".$store_type."'");
+                        $columns = array('creator_name','bill_company_id', 'bill_company_details', 'purchase_entry_date','bill_number','party_id', 'party_name_mobile_city', 'party_details', 'gst_option', 'tax_type', 'tax_option', 'overall_tax', 'product_tax', 'party_state','product_id', 'product_name', 'quantity', 'unit_id' ,'unit_name' ,'total_qty', 'rate','final_rate', 'product_amount', 'amount', 'sub_total', 'discount', 'discount_value', 'discounted_total', 'charges_name',  'charges',  'charges_value', 'charges_total', 'cgst_value', 'sgst_value', 'igst_value', 'total_tax_value', 'round_off', 'total_amount', 'charges_tax', 'round_off_type', 'round_off_value', 'discount_name','store_id','store_name','store_type');
+                        $values = array("'".$creator_name."'","'".$bill_company_id."'","'".$bill_company_details."'",  "'".$purchase_entry_date."'","'" . $bill_number . "'" ,"'".$party_id."'", "'".$party_name_mobile_city."'", "'".$party_details."'", "'".$gst_option."'", "'".$tax_type."'", "'".$tax_option."'", "'".$overall_tax."'","'".$product_tax."'", "'".$party_state."'", "'".$product_ids."'", "'".$product_names."'","'".$quantity."'", "'".$unit_ids."'","'".$unit_names."'", "'".$total_qty."'","'".$rates."'","'".$final_rate."'", "'".$product_amount."'", "'".$amount."'","'".$sub_total."'", "'".$discount."'", "'".$discount_value."'" , "'".$discounted_total."'",  "'".$charges_id."'",  "'".$charges_values."'", "'".$charges_total."'","'".$charged_total."'", "'".$cgst_value."'", "'".$sgst_value."'", "'".$igst_value."'", "'".$total_tax_value."'", "'".$round_off."'", "'".$total_amount."'", "'".$charges_tax."'","'".$round_off_type."'", "'".$round_off_value."'", "'".$discount_name."'","'".$store_ids."'","'".$store_name."'","'".$store_type."'");
                         
                         $purchase_update_id = $obj->UpdateSQL($GLOBALS['purchase_entry_table'], $getUniqueID, $columns, $values, $action);
 

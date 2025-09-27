@@ -100,11 +100,11 @@ if(isset($_REQUEST['party_id'])) {
     $list = $obj->getPendingList($party_id);
 
     $party_name = ""; $opening_balance = 0; $opening_balance_type = "";
-    if($party_type == 'customer') {
-        $party_name = $obj->getTableColumnValue($GLOBALS['customer_table'], 'customer_id', $party_id, 'name_mobile_city');
+    if($party_type == 'party') {
+        $party_name = $obj->getTableColumnValue($GLOBALS['party_table'], 'party_id', $party_id, 'name_mobile_city');
         $party_name = $obj->encode_decode('decrypt', $party_name);
-        $opening_balance = $obj->getTableColumnValue($GLOBALS['customer_table'], 'customer_id', $party_id, 'opening_balance');
-        $opening_balance_type = $obj->getTableColumnValue($GLOBALS['customer_table'], 'customer_id', $party_id, 'opening_balance_type');
+        $opening_balance = $obj->getTableColumnValue($GLOBALS['party_table'], 'party_id', $party_id, 'opening_balance');
+        $opening_balance_type = $obj->getTableColumnValue($GLOBALS['party_table'], 'party_id', $party_id, 'opening_balance_type');
     }
     $current_balance = 0; $current_type = "";
     ?>

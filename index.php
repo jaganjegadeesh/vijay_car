@@ -295,7 +295,7 @@
                             <div class="card-body p-3">
                                 <div class=" text-center mt-2">
                                     <h5 class="text-danger">Welcome Back !</h5>
-                                    <p class="text-muted">Sign <?php if(!empty($users_count)) { ?>in<?php } else { ?>up<?php } ?> to continue to Padmaavathy Art Craft.</p>
+                                    <p class="text-muted">Sign <?php if(!empty($users_count)) { ?>in<?php } else { ?>up<?php } ?> to continue to Vijay Garage.</p>
                                 </div>
                                 <div class="row p-2 mt-4">
                                     <?php if(!empty($users_count)) { ?>

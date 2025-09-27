@@ -11,7 +11,7 @@
         exit;
     }
 
-    $purchase_entry_date = date('Y-m-d');$purchase_bill_date = date('Y-m-d'); $current_date = date('Y-m-d');$purchase_entry_number = "";$gst_option = 0; $tax_type = 0; $tax_option = 0; $overall_tax = "";$purchase_store_ids = ""; $store_type =""; $indv_store_id =array(); $overall_store_id =""; $discount =""; $discount_value=""; $charges_tax =array(); $charges_value=""; $amount =array(); $round_off =""; $round_off_type =""; $round_off_value =""; $store_ids = array(); $product_ids = array(); $product_names = array(); $product_amount = array();$discount = ""; $discount_value = "";$extra_charges = ""; $extra_charges_value = ""; $unit_ids =array(); $unit_names=array(); $charges_id = array(); $charges_type = array(); $charges_value = array();  $product_tax =array(); $draft =0; $discount_name = ""; $charges_tax_array = array(); $party_details = array(); $sub_total = 0; $discounted_total = 0; $charges_total = 0; $overall_tax = 0; $cgst_value = 0; $igst_value = 0; $sgst_value = 0; $total_tax_value = 0; $round_off = 0; $round_off_type = 0; $round_off_value = 0;$bill_total = 0; $terms_and_condition = ""; $cancelled = 0;
+    $purchase_entry_date = date('Y-m-d');$purchase_bill_date = date('Y-m-d'); $current_date = date('Y-m-d');$purchase_entry_number =  $bill_number = "";$gst_option = 0; $tax_type = 0; $tax_option = 0; $overall_tax = "";$purchase_store_ids = ""; $store_type =""; $indv_store_id =array(); $overall_store_id =""; $discount =""; $discount_value=""; $charges_tax =array(); $charges_value=""; $amount =array(); $round_off =""; $round_off_type =""; $round_off_value =""; $store_ids = array(); $product_ids = array(); $product_names = array(); $product_amount = array();$discount = ""; $discount_value = "";$extra_charges = ""; $extra_charges_value = ""; $unit_ids =array(); $unit_names=array(); $charges_id = array(); $charges_type = array(); $charges_value = array();  $product_tax =array(); $draft =0; $discount_name = ""; $charges_tax_array = array(); $party_details = array(); $sub_total = 0; $discounted_total = 0; $charges_total = 0; $overall_tax = 0; $cgst_value = 0; $igst_value = 0; $sgst_value = 0; $total_tax_value = 0; $round_off = 0; $round_off_type = 0; $round_off_value = 0;$bill_total = 0; $terms_and_condition = ""; $cancelled = 0;
     if(!empty($view_purchase_entry_id)) {
         $purchase_entry_list = array();
         $purchase_entry_list = $obj->getAllRecords($GLOBALS['purchase_entry_table'], 'purchase_entry_id', $view_purchase_entry_id);
@@ -23,8 +23,10 @@
                 if(!empty($data['purchase_bill_date'])) {
                     $purchase_bill_date = date('m-d-Y', strtotime($data['purchase_bill_date']));
                 }
-
-                 if(!empty($data['purchase_entry_number']) && $data['purchase_entry_number'] != $GLOBALS['null_value']) {
+                if(!empty($data['bill_number'])) {
+                    $bill_number = $data['bill_number'];
+                }
+                if(!empty($data['purchase_entry_number']) && $data['purchase_entry_number'] != $GLOBALS['null_value']) {
                     $purchase_entry_number = $data['purchase_entry_number'];
                 }
                 if(!empty($data['store_id']) && $data['store_id'] != $GLOBALS['null_value']) {
@@ -294,6 +296,12 @@
         $pdf->SetX(153);
         $pdf->SetFont('Arial','',8);
         $pdf->Cell(15,5,$purchase_entry_date,0,1,'R',0);
+        $pdf->SetX(115);
+        $pdf->SetFont('Arial','B',8);
+        $pdf->Cell(45, 5,'Purchase Bill No          :',0,0,'',0);
+        $pdf->SetX(153);
+        $pdf->SetFont('Arial','',8);
+        $pdf->Cell(15,5,$bill_number,0,1,'R',0);
 
         $pdf->SetY($bill_to_y);
         $pdf->cell(100,$y2-$bill_to_y,'',1,0,'L',0);
@@ -437,6 +445,12 @@
                     $pdf->SetX(153);
                     $pdf->SetFont('Arial','',8);
                     $pdf->Cell(15,5,$purchase_entry_date,0,1,'R',0);
+                    $pdf->SetX(115);
+                    $pdf->SetFont('Arial','B',8);
+                    $pdf->Cell(45, 5,'Purchase Bill No          :',0,0,'',0);
+                    $pdf->SetX(153);
+                    $pdf->SetFont('Arial','',8);
+                    $pdf->Cell(15,5,$bill_number,0,1,'R',0);
 
                     $pdf->SetY($bill_to_y);
                     $pdf->cell(100,$y2-$bill_to_y,'',1,0,'L',0);
@@ -707,6 +721,12 @@
             $pdf->SetX(153);
             $pdf->SetFont('Arial','',8);
             $pdf->Cell(15,5,$purchase_entry_date,0,1,'R',0);
+            $pdf->SetX(115);
+            $pdf->SetFont('Arial','B',8);
+            $pdf->Cell(45, 5,'Purchase Bill No          :',0,0,'',0);
+            $pdf->SetX(153);
+            $pdf->SetFont('Arial','',8);
+            $pdf->Cell(15,5,$bill_number,0,1,'R',0);
 
             $pdf->SetY($bill_to_y);
             $pdf->cell(100,$y2-$bill_to_y,'',1,0,'L',0);
@@ -889,7 +909,7 @@
             $pdf->SetFont('Arial','B',8);
             $pdf->Cell(165,5,'Round off',1,0,'R',0);
             $pdf->SetFont('Arial','',8);
-            $pdf->Cell(0,5,$round_off_value,1,1,'R',0);
+            $pdf->Cell(0,5,"0.".$round_off_value,1,1,'R',0);
         }
 
         if(!empty($bill_total)) {

@@ -121,9 +121,9 @@ include("../include/number2words.php");
             $pdf->SetX(10);
             $pdf->Cell(10,7,$index,0,0,'C',0);
         
-            if(!empty($data['invoice_number'])) {
+            if(!empty($data['estimate_number'])) {
                 $pdf->SetX(20);
-                $pdf->MultiCell(35,4,$data['invoice_number'],0,'C',0);
+                $pdf->MultiCell(35,4,$data['estimate_number'],0,'C',0);
             }
             $pdf->SetTextColor(255,0,0);
             if (($data['deleted']) == '1') {
@@ -137,9 +137,9 @@ include("../include/number2words.php");
 
             $pdf->SetY($start_y);
 
-            if(!empty($data['invoice_date'])) {
+            if(!empty($data['estimate_date'])) {
                 $pdf->SetX(55);
-                $pdf->MultiCell(35,7,date('d-m-Y',strtotime($data['invoice_date'])),0,'C',0);
+                $pdf->MultiCell(35,7,date('d-m-Y',strtotime($data['estimate_date'])),0,'C',0);
             }
             $date_end = $pdf->GetY();
 
