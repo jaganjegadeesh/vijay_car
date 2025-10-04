@@ -104,7 +104,13 @@
                                             </div>
                                             <div class="col-lg-3 col-md-4 col-5 px-lg-2 py-lg-0 py-2">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" name="search_text" style="height:34px;" placeholder="Search Bill No" aria-label="Search" aria-describedby="basic-addon2" onkeyup="Javascript:table_listing_records_filter();">
+                                                    <input type="text" class="form-control" name="search_text" style="height:34px;" placeholder="Search Entry No" aria-label="Search" aria-describedby="basic-addon2" onkeyup="Javascript:table_listing_records_filter();">
+                                                    <span class="input-group-text" style="height:34px;" id="basic-addon2"><i class="bi bi-search"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-4 col-5 px-lg-2 py-lg-0 py-2">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="search_bill_text" style="height:34px;" placeholder="Search Bill No" aria-label="Search" aria-describedby="basic-addon2" onkeyup="Javascript:table_listing_records_filter();">
                                                     <span class="input-group-text" style="height:34px;" id="basic-addon2"><i class="bi bi-search"></i></span>
                                                 </div>
                                             </div>

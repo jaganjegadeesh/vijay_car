@@ -801,7 +801,7 @@
 		$page_number = $_POST['page_number'];
 		$page_limit = $_POST['page_limit'];
 		$page_title = $_POST['page_title']; 
-        $from_date = ""; $to_date = ""; $search_text = ""; $party_id = "";
+        $from_date = ""; $to_date = ""; $search_text = "";$search_bill_text = ""; $party_id = "";
         $show_bill = 0;$show_draft_bill = 0;$material_type = "";
         if(isset($_POST['from_date'])) {
             $from_date = $_POST['from_date'];
@@ -814,6 +814,9 @@
         }
         if(isset($_POST['show_draft_bill'])) {
             $show_draft_bill = $_POST['show_draft_bill'];
+        }
+        if(isset($_POST['search_bill_text'])) {
+            $search_bill_text = $_POST['search_bill_text'];
         }
         if(isset($_POST['search_text'])) {
             $search_text = $_POST['search_text'];
@@ -833,6 +836,18 @@
             if(!empty($total_records_list)) {
                 foreach($total_records_list as $val) {
                     if( (strpos(strtolower($val['purchase_entry_number']), $search_text) !== false) ) {
+                        $list[] = $val;
+                    }
+                }
+            }
+            $total_records_list = $list;
+        }
+        if(!empty($search_bill_text)) {
+            $search_bill_text = strtolower($search_bill_text);
+            $list = array();
+            if(!empty($total_records_list)) {
+                foreach($total_records_list as $val) {
+                    if( (strpos(strtolower($val['purchase_entry_number']), $search_bill_text) !== false) ) {
                         $list[] = $val;
                     }
                 }
@@ -890,6 +905,7 @@
                 <tr>
                     <th>#</th>
                     <th>Date</th>
+                    <th>Entry Number</th>
                     <th>Bill Number</th>
                     <th>Party Name</th>
                     <th>QTY</th>
@@ -922,6 +938,14 @@
                                         }
                                     ?>
                                 </td>
+                                <td>
+                                    <?php
+                                        if(!empty($list['bill_number']) && $list['bill_number'] != $GLOBALS['null_value']) {
+                                            echo $list['bill_number'];
+                                        }
+                                    ?>
+                                </td>
+                                
                                 <td>
                                     <?php
                                         if(!empty($list['party_name_mobile_city']) && $list['party_name_mobile_city'] != $GLOBALS['null_value']) {
