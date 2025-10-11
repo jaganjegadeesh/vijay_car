@@ -929,7 +929,7 @@
     <?php }
 	}
 
-        if(isset($_REQUEST['delete_material_transfer_id'])) {
+    if(isset($_REQUEST['delete_material_transfer_id'])) {
         $delete_material_transfer_id = $_REQUEST['delete_material_transfer_id'];
         $delete_material_transfer_id = trim($delete_material_transfer_id);
         $msg = "";
