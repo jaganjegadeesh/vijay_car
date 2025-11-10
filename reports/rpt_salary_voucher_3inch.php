@@ -163,7 +163,7 @@ if (!empty($view_voucher_id)) {
            
            
             if(!empty($data['salary_amount']) && $data['salary_amount'] != $GLOBALS['null_value']){
-                $salary_amounts =$data['salary_amount'] - $total_ot_salary;
+                $salary_amounts =$data['salary_amount'];
                 $pdf->SetX(37); 
                 $pdf->Cell(18, 10,number_format($salary_amounts,2), 0, 1, 'R');
             }

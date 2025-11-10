@@ -62,7 +62,8 @@
                                 <tr>
                                     <th>S.No</th>
                                     <th>Engineer Name</th>
-                                    <th>Attendance</th>
+                                    <th>FN</th>
+                                    <th>AN</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -84,8 +85,12 @@
                                                         <input name="engineer_id[]" type="hidden" value="<?php if(!empty($data['engineer_id'])){ echo $data['engineer_id'] ; } ?>">
                                                     </td>
                                                     <td class="text-center">
-                                                        <input name="<?php echo $data['engineer_id']; ?>_full_present" type="checkbox" class="form-check-input full_present"
-                                                        value="1" checked onclick="presentCheck(this)">
+                                                        <input name="<?php echo $data['engineer_id']; ?>_fn_present" type="checkbox" class="form-check-input fn_present"
+                                                        value="1" checked onclick="fnnCheck(this)">
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input name="<?php echo $data['engineer_id']; ?>_an_present" type="checkbox" class="form-check-input an_present"
+                                                        value="1" checked onclick="anCheck(this)">
                                                     </td>
                                                 </tr>
                                                 <?php       
@@ -114,10 +119,10 @@
                                                         <input name="engineer_id[]" type="hidden" value="<?php if(!empty($data['engineer_id'])){ echo $data['engineer_id'] ; } ?>">
                                                     </td class="text-center">
                                                     <td class="text-center">
-                                                        <input name="<?php echo $data['engineer_id']; ?>_full_present" type="checkbox"  class="form-check-input full_present" value="<?php 
-                                                                if (!empty($data['present_status'])) { 
+                                                        <input name="<?php echo $data['engineer_id']; ?>_fn_present" type="checkbox"  class="form-check-input fn_present" value="<?php 
+                                                                if (!empty($data['forenoon'])) { 
 
-                                                                    if ($data['present_status'] != 'A') { 
+                                                                    if ($data['forenoon'] != 'A') { 
                                                                         echo '1'; 
                                                                         
                                                                     } else{
@@ -128,18 +133,55 @@
                                                                 } 
                                                             ?>" 
                                                             <?php 
-                                                                if (!empty($data['present_status'])) { 
-                                                                    if ($data['present_status'] != 'A') { 
+                                                                if (!empty($data['forenoon'])) { 
+                                                                    if ($data['forenoon'] != 'A') { 
                                                                         echo 'checked'; 
                                                                     } 
                                                                 } 
-                                                            ?> onclick="presentCheck(this)" <?php if($is_salaried == '1') { ?>disabled<?php } ?>>
+                                                            ?> onclick="fnCheck(this)" <?php if($is_salaried == '1') { ?>disabled<?php } ?>>
                                                         <?php
                                                             if($is_salaried == '1') {
                                                                 ?>
-                                                                <input type="hidden" name="<?php echo $data['engineer_id']; ?>_full_present" value="<?php 
-                                                                    if (!empty($data['present_status'])) { 
-                                                                        if ($data['present_status'] != 'A') { 
+                                                                <input type="hidden" name="<?php echo $data['engineer_id']; ?>_fn_present" value="<?php 
+                                                                    if (!empty($data['forenoon'])) { 
+                                                                        if ($data['forenoon'] != 'A') { 
+                                                                            echo '1'; 
+                                                                        } else{
+                                                                            echo '0';
+                                                                        }
+                                                                    } 
+                                                                ?>">
+                                                                <?php
+                                                            }
+                                                        ?>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input name="<?php echo $data['engineer_id']; ?>_an_present" type="checkbox"  class="form-check-input an_present" value="<?php 
+                                                                if (!empty($data['afternoon'])) { 
+
+                                                                    if ($data['afternoon'] != 'A') { 
+                                                                        echo '1'; 
+                                                                        
+                                                                    } else{
+                                                                        echo '0';
+                                                                    }
+
+                                                                    
+                                                                } 
+                                                            ?>" 
+                                                            <?php 
+                                                                if (!empty($data['afternoon'])) { 
+                                                                    if ($data['afternoon'] != 'A') { 
+                                                                        echo 'checked'; 
+                                                                    } 
+                                                                } 
+                                                            ?> onclick="anCheck(this)" <?php if($is_salaried == '1') { ?>disabled<?php } ?>>
+                                                        <?php
+                                                            if($is_salaried == '1') {
+                                                                ?>
+                                                                <input type="hidden" name="<?php echo $data['engineer_id']; ?>_an_present" value="<?php 
+                                                                    if (!empty($data['afternoon'])) { 
+                                                                        if ($data['afternoon'] != 'A') { 
                                                                             echo '1'; 
                                                                         } else{
                                                                             echo '0';
@@ -232,15 +274,40 @@
                     // Per day salary
                     $per_day_salary = $engineer_monthly_salary / $days_in_month;
 
-                    
-                    
-                    if (isset($_POST[$engineer_ids[$i].'_full_present']) && $_POST[$engineer_ids[$i].'_full_present'] == '1') {
-                        $full_presents[$i] = 'P';
-                        $per_day_salary = $per_day_salary;
+                    // if (isset($_POST[$engineer_ids[$i].'_full_present']) && $_POST[$engineer_ids[$i].'_full_present'] == '1') {
+                    //     $full_presents[$i] = 'P';
+                    //     $per_day_salary = $per_day_salary;
+                    // } else {
+                    //     $full_presents[$i] = 'A';
+                    //     $per_day_salary = 0;
+                    // }
+
+                    if (isset($_POST[$engineer_ids[$i].'_fn_present']) && $_POST[$engineer_ids[$i].'_fn_present'] == '1') {
+                        $fn_presents[$i] = 'P';
+                        // $per_day_salary = $per_day_salary;
                     } else {
-                        $full_presents[$i] = 'A';
-                        $per_day_salary = 0;
+                        $fn_presents[$i] = 'A';
+                        // $per_day_salary = 0;
                     }
+
+                    if (isset($_POST[$engineer_ids[$i].'_an_present']) && $_POST[$engineer_ids[$i].'_an_present'] == '1') {
+                        $an_presents[$i] = 'P';
+                        // $per_day_salary = $per_day_salary;
+                    } else {
+                        $an_presents[$i] = 'A';
+                        // $per_day_salary = 0;
+                    }
+                     
+                    $full_presents[$i] = $fn_presents[$i].$an_presents[$i];
+
+                    if($fn_presents[$i] =='A' || $an_presents[$i] =='A'){
+                        $per_day_salary = $per_day_salary/2;
+                    }
+
+                    if($fn_presents[$i] =='A' && $an_presents[$i] =='A'){
+                         $per_day_salary = 0;
+                    }
+
 
                     $engineer_daily_salaries[$i] = round($per_day_salary,2);
                 }
@@ -249,7 +316,7 @@
         else{
             $attendance_error = "No Engineer Available";
         }
-
+        
         $prev_present_id = "";$prev_engineer_name = "";
         if(!empty($attendance_date) && $attendance_date != $GLOBALS['null_value'] && empty($attendance_error)) {
             $prev_attendance_id = $obj->getPrevAttendanceID($attendance_date);
@@ -288,8 +355,8 @@
                                 $action = "New Attendance Created. Name - ". $engineer_names[$i];
                             }
                             $null_value = $GLOBALS['null_value'];
-                            $columns = array('created_date_time', 'creator', 'creator_name','bill_company_id', 'attendance_id', 'attendance_date', 'engineer_id', 'engineer_name', 'present_status','daily_salary','total_salary','salary_id', 'is_salaried', 'deleted');
-                            $values = array("'".$created_date_time."'", "'".$creator."'", "'".$creator_name."'", "'".$bill_company_id."'", "'".$null_value."'", "'".$attendance_date."'","'".$engineer_ids[$i]."'", "'".$engineer_names[$i]."'","'".$full_presents[$i]."'", "'".$engineer_daily_salaries[$i]."'","'".$engineer_daily_salaries[$i]."'", "'".$null_value."'", "'0'", "'0'");
+                            $columns = array('created_date_time', 'creator', 'creator_name','bill_company_id', 'attendance_id', 'attendance_date', 'engineer_id', 'engineer_name', 'present_status','forenoon','afternoon','daily_salary','total_salary','salary_id', 'is_salaried', 'deleted');
+                            $values = array("'".$created_date_time."'", "'".$creator."'", "'".$creator_name."'", "'".$bill_company_id."'", "'".$null_value."'", "'".$attendance_date."'","'".$engineer_ids[$i]."'", "'".$engineer_names[$i]."'","'".$full_presents[$i]."'","'".$fn_presents[$i]."'","'".$an_presents[$i]."'", "'".$engineer_daily_salaries[$i]."'","'".$engineer_daily_salaries[$i]."'", "'".$null_value."'", "'0'", "'0'");
                             $attendance_insert_id = $obj->InsertSQL($GLOBALS['attendance_table'], $columns, $values, 'attendance_id', '', $action);						
                             if(preg_match("/^\d+$/", $attendance_insert_id)) {
                                 $attendance_id = "";
@@ -336,8 +403,8 @@
                             
                                 $columns = array(); $values = array();						
                                 
-                                $columns = array('creator_name','bill_company_id', 'attendance_date', 'engineer_name', 'present_status','daily_salary','total_salary');
-                                $values = array("'".$creator_name."'", "'".$bill_company_id."'", "'".$attendance_date."'", "'".$engineer_names[$i]."'","'".$full_presents[$i]."'", "'".$engineer_daily_salaries[$i]."'","'".$engineer_daily_salaries[$i]."'");
+                                $columns = array('creator_name','bill_company_id', 'attendance_date', 'engineer_name', 'present_status','forenoon','afternoon','daily_salary','total_salary');
+                                $values = array("'".$creator_name."'", "'".$bill_company_id."'", "'".$attendance_date."'", "'".$engineer_names[$i]."'","'".$full_presents[$i]."'","'".$fn_presents[$i]."'", "'".$an_presents[$i]."'","'".$engineer_daily_salaries[$i]."'","'".$engineer_daily_salaries[$i]."'");
                                 $attendance_update_id = $obj->UpdateSQL($GLOBALS['attendance_table'], $getUniqueID, $columns, $values, $action);
                                 if(preg_match("/^\d+$/", $attendance_update_id)) {
                                     $result = array('number' => '1', 'msg' => 'Updated Successfully');						
@@ -435,12 +502,20 @@
 		<table class="table cursor text-center smallfnt">
             <thead class="bg-light">
                 <tr>
-                    <th>S.No</th>
-                    <th>Attendance Date</th>
-                    <th>No.Of Engineer</th>
-                    <th>No.Of Engineer (Present)</th>
-                    <th>No.Of Engineer (Absent)</th>
-                    <th>Action</th>
+                    <th class="border">S.No</th>
+                    <th class="border">Attendance Date</th>
+                    <th class="border">No.of Engineer</th>
+                    <th class="border" colspan="2">No.of Engineer(Present)</th>
+                    <th class="border" colspan="2">No.of Engineer(Absent)</th>
+                    <th class="border">Action</th>
+                </tr>
+                <tr>
+                    <th class="border" colspan="3"></th>
+                    <th class="border text-center">FN</th>
+                    <th class="border text-center">AN</th>
+                    <th class="border text-center">FN</th>
+                    <th class="border text-center">AN</th>
+                    <th class="border"></th>
                 </tr>
             </thead>
             <tbody>
@@ -463,23 +538,37 @@
                                 <td class="text-center px-2 py-2">
                                     <?php
                                         $total_present =0;
-                                        $total_present =$obj-> AttendanceDetails('total',$data['attendance_date']);
+                                        $total_present =$obj-> AttendanceDetails('total', $data['attendance_date']);
                                         echo $total_present;
                                     ?>    
                                 </td>
                                 <td class="text-center px-2 py-2">
                                     <?php
-                                        $total_present =0;
-                                        $total_present =$obj-> AttendanceDetails('P', $data['attendance_date']);
-                                        echo $total_present;
-                                    ?>    
+                                        $fn_present =0;    
+                                        $fn_present =$obj-> AttendanceDetails('fn_present', $data['attendance_date']) ;
+                                        echo $fn_present;   
+                                    ?>
                                 </td>
                                 <td class="text-center px-2 py-2">
                                     <?php
-                                        $total_present =0;
-                                        $total_present =$obj-> AttendanceDetails('A', $data['attendance_date']);
-                                        echo $total_present;
-                                    ?>    
+                                        $an_present =0;    
+                                        $an_present =$obj-> AttendanceDetails('an_present', $data['attendance_date']) ;
+                                        echo$an_present;
+                                    ?>
+                                </td>
+                                <td class="text-center px-2 py-2">
+                                    <?php
+                                        $fn_absent =0;    
+                                        $fn_absent =$obj-> AttendanceDetails('fn_absent', $data['attendance_date']) ;
+                                        echo $fn_absent;
+                                    ?>
+                                </td>
+                                <td class="text-center px-2 py-2">
+                                    <?php
+                                        $an_absent =0;    
+                                        $an_absent =$obj-> AttendanceDetails('an_absent', $data['attendance_date']) ;
+                                        echo  $an_absent;   
+                                    ?>
                                 </td>
                                 <?php 
                                     $edit_access_error = "";

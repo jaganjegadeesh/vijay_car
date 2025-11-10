@@ -1,0 +1,24 @@
+[26-Sep-2025 11:49:39 Asia/Calcutta] PHP Warning:  Undefined variable $total_amount in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/reports/rpt_purchase_entry_a4.php on line 888
+[26-Sep-2025 11:49:39 Asia/Calcutta] PHP Fatal error:  Uncaught TypeError: getIndianCurrency(): Argument #1 ($number) must be of type float, null given, called in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/reports/rpt_purchase_entry_a4.php on line 888 and defined in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/include/number2words.php:2
+Stack trace:
+#0 /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/reports/rpt_purchase_entry_a4.php(888): getIndianCurrency()
+#1 {main}
+  thrown in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/include/number2words.php on line 2
+[26-Sep-2025 14:47:43 Asia/Calcutta] PHP Warning:  Undefined variable $total_amount in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/reports/rpt_purchase_entry_a4.php on line 888
+[26-Sep-2025 14:47:43 Asia/Calcutta] PHP Fatal error:  Uncaught TypeError: getIndianCurrency(): Argument #1 ($number) must be of type float, null given, called in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/reports/rpt_purchase_entry_a4.php on line 888 and defined in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/include/number2words.php:2
+Stack trace:
+#0 /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/reports/rpt_purchase_entry_a4.php(888): getIndianCurrency()
+#1 {main}
+  thrown in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/include/number2words.php on line 2
+[26-Sep-2025 15:14:56 Asia/Calcutta] PHP Warning:  Undefined variable $total_amount in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/reports/rpt_purchase_entry_a4.php on line 888
+[26-Sep-2025 15:14:56 Asia/Calcutta] PHP Fatal error:  Uncaught TypeError: getIndianCurrency(): Argument #1 ($number) must be of type float, null given, called in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/reports/rpt_purchase_entry_a4.php on line 888 and defined in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/include/number2words.php:2
+Stack trace:
+#0 /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/reports/rpt_purchase_entry_a4.php(888): getIndianCurrency()
+#1 {main}
+  thrown in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/include/number2words.php on line 2
+[26-Sep-2025 15:15:28 Asia/Calcutta] PHP Warning:  Undefined variable $total_amount in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/reports/rpt_purchase_entry_a4.php on line 888
+[26-Sep-2025 15:15:28 Asia/Calcutta] PHP Fatal error:  Uncaught TypeError: getIndianCurrency(): Argument #1 ($number) must be of type float, null given, called in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/reports/rpt_purchase_entry_a4.php on line 888 and defined in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/include/number2words.php:2
+Stack trace:
+#0 /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/reports/rpt_purchase_entry_a4.php(888): getIndianCurrency()
+#1 {main}
+  thrown in /home/h2pil1aoovs5/public_html/subha2022/vijay_garage/include/number2words.php on line 2

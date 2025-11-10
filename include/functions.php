@@ -701,5 +701,21 @@
 			$list = $create_obj->setClearTableRecords($table);
 			return $list;
 		}
+
+		public function getEngineerAttendanceList($from_date, $to_date,$engineer_id){
+			$report_obj = "";
+			$report_obj = $this->report_function_object();
+			$result = "";
+			$result = $report_obj->getEngineerAttendanceList($from_date, $to_date,$engineer_id);
+			return $result;
+		}
+
+		public function getAttendanceList($from_date, $to_date){
+			$report_obj = "";
+			$report_obj = $this->report_function_object();
+			$result = "";
+			$result = $report_obj->getAttendanceList($from_date, $to_date);
+			return $result;
+		}
 	}
 ?>

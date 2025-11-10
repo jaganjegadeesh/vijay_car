@@ -195,3 +195,137 @@
            
         <?php }
     }
+
+
+    if(isset($_REQUEST['product_row_index'])) {
+        $product_id = $_REQUEST['selected_product_id'];
+        $selected_unit_id = $_REQUEST['selected_unit_id'];
+        $selected_quantity = $_REQUEST['selected_quantity'];
+        $rate = $_REQUEST['selected_rate'];
+        $amount = $_REQUEST['selected_amount'];
+        $product_row_index = $_REQUEST['product_row_index'];
+        $final_rate = $_REQUEST['final_rate'];
+        $tax_option = $_REQUEST['tax_option'];
+        $tax_type =$_REQUEST['tax_type'];
+        $final_rate_raw = 0;
+        $final_rate_raw = $final_rate;
+
+        // $selected_unit_id = $obj->getTableColumnValue($GLOBALS['product_table'],'product_id',$product_id,'unit_id');
+        
+        $product_tax = $obj->getTableColumnValue($GLOBALS['product_table'],'product_id',$product_id,'product_tax');
+        $product_name = $obj->getTableColumnValue($GLOBALS['product_table'],'product_id',$product_id,'product_name');
+        $hsn_code = $obj->getTableColumnValue($GLOBALS['product_table'],'product_id',$product_id,'hsn_code');
+
+        $unit_name = $obj->getTableColumnValue($GLOBALS['unit_table'],'unit_id',$selected_unit_id,'unit_name');
+        if($tax_option == '2' && $tax_type == '1')
+        {
+            if(!empty($product_tax))
+            {
+                $tax = str_replace("%","",$product_tax);
+                if($tax != "" && $tax != $GLOBALS['null_value']){
+                    $final_rate =$final_rate -( ($final_rate * $tax)/(100+$tax));
+                }
+            }
+            
+        }
+        
+        if(!empty($final_rate))
+        {
+            $final_rate = floor($final_rate * 100) / 100;
+            
+        }
+
+        $amount =$final_rate * $selected_quantity;
+        $product_tax = $product_tax.'%';
+        ?>
+        <tr class="product_row" id="product_row<?php  echo $product_row_index; ?>">
+            <td class="text-center px-2 py-2 sno"><?php  echo $product_row_index; ?></td>
+            <!-- <td class="text-center px-2 py-2 store_cover2">
+                <input type="hidden" name="job_card_id[]" value="<?php if(!empty($job_card_id)) { echo $job_card_id; } ?>">
+                <input type="hidden" name="job_card_number[]" value="<?php if(!empty($job_card_number)) { echo $job_card_number; } ?>">
+                <input type="hidden" name="store_entry_id[]" value="<?php if(!empty($store_entry_id)) { echo $store_entry_id; } ?>">
+                <input type="hidden" name="store_entry_number[]" value="<?php if(!empty($store_entry_number)) { echo $store_entry_number; } ?>">
+                <?php
+                    if(!empty($store_id)) {
+                        if(!empty($store_name) && $store_name != $GLOBALS['null_value']) {
+                            echo $obj->encode_decode('decrypt', $store_name);
+                        }
+                    }
+                ?>
+                <input type="hidden" name="store_id[]" value="<?php if(!empty($store_id)) { echo $store_id; } ?>">
+                <input type="hidden" name="store_name[]" value="<?php if(!empty($store_name)) { echo $store_name; } ?>">
+            </td> -->
+
+            <td class="text-center px-2 py-2">
+                <?php
+                    if(!empty($product_id)) {
+                        if(!empty($product_name) && $product_name != $GLOBALS['null_value']) {
+                            echo $obj->encode_decode('decrypt', $product_name);
+                        }
+                    }
+                ?>
+                <input type="hidden" name="product_id[]" value="<?php if(!empty($product_id)) { echo $product_id; } ?>"><br>
+                <input type="hidden" name="product_name[]" value="<?php if(!empty($product_name)) { echo $product_name; } ?>"><br>
+            
+            </td>
+            <td>
+                <?php if(!empty($hsn_code)&& $hsn_code != $GLOBALS['null_value']) {
+                    echo $obj->encode_decode('decrypt', $hsn_code);
+                } else {
+                    echo "-";
+                } ?>
+                <input type="hidden" name="hsn_code[]" value="<?php if(!empty($hsn_code)) { echo $hsn_code; } ?>">
+            </td>
+            
+            <td class="text-center px-2 py-2">
+                <?php 
+
+                if(!empty($unit_name) && $unit_name != $GLOBALS['null_value'])
+                {
+                    echo $obj->encode_decode("decrypt",$unit_name);
+                }
+                ?>
+                <input type="hidden" name="unit_id[]" class="form-control shadow-none" value="<?php if(!empty($selected_unit_id)) { echo $selected_unit_id; } ?>">
+                <input type="hidden" name="unit_name[]" class="form-control shadow-none" value="<?php if(!empty($unit_name)) { echo $unit_name; } ?>" >
+                    
+            </td>
+            <td class="text-center px-2 py-2">
+               
+                <input type="text" name="quantity[]" class="form-control shadow-none" value="<?php if(!empty($selected_quantity)) { echo $selected_quantity; } ?>" onfocus="Javascript:KeyboardControls(this,'number',8,'');" onkeyup="Javascript:CalcTotalAmount();">
+            </td>
+            <td class="tax_element <?php if($tax_option != '1'){ ?> d-none  <?php }?>">
+                <div class="form-group">
+                    <div class="form-label-group in-border mb-0">
+                        <select class="select2 select2-danger" name="product_tax[]" data-dropdown-css-class="select2-danger" style="width: 100%;"  onchange="ProductRowCheck(this);ShowGST();">
+                            <option value="">Select</option>
+                            <option value="0%" <?php if(isset($product_tax)){ if($product_tax == '0%'){ ?>selected<?php } } ?>>0%</option>
+                            <option value="5%" <?php if(isset($product_tax)){ if($product_tax == '5%'){ ?>selected<?php } } ?>>5%</option>
+                            <option value="12%" <?php if(isset($product_tax)){ if($product_tax == '12%'){ ?>selected<?php } } ?>>12%</option>
+                            <option value="18%" <?php if(isset($product_tax)){ if($product_tax == '18%'){ ?>selected<?php } } ?>>18%</option>
+                            <option value="28%" <?php if(isset($product_tax)){ if($product_tax == '28%'){ ?>selected<?php } } ?>>28%</option>
+                        </select>
+                        <label>Tax</label>
+                    </div>
+                </div> 
+            </td>
+            <td>
+                <input type="text" name="rate[]" class="form-control shadow-none" value="<?php if(!empty($rate)) { echo $rate; } ?>" onfocus="Javascript:KeyboardControls(this,'number',8,'');" onkeyup="Javascript:CalcTotalAmount();">
+                <p class="tax_element text-success final_rate inclusiv_final_rate fw-bold"><?php if(!empty($final_rate)){ echo "Final Rate : ".$final_rate; } ?></p>
+                <input type="hidden" name="final_rate[]" class="form-control shadow-none" value="<?php if(!empty($final_rate)) { echo $final_rate; } ?>" onfocus="Javascript:KeyboardControls(this,'number',8,'');" >
+                <input type="hidden" name="amount[]" class="form-control shadow-none" value="<?php if(!empty($amount)){ echo $amount; } ?>" onfocus="Javascript:KeyboardControls(this,'number',8,'');" onkeyup="Javascript:ProductRowCheck(this);">
+            </td>
+            <td class="amount text-end">
+
+            </td>
+            <th class="text-center px-2 py-2">
+                <button class="btn btn-danger" type="button" onclick="Javascript:DeleteSalesRow('<?php if(!empty($product_row_index)) { echo $product_row_index; } ?>', 'product_row');"><i class="fa fa-trash"></i></button>
+            </th>
+        </tr>
+        <script type="text/javascript">
+            if(jQuery('tr#product_row<?php if(!empty($product_row_index)) { echo $product_row_index; } ?>').find('select').length > 0) {
+                jQuery('tr#product_row<?php if(!empty($product_row_index)) { echo $product_row_index; } ?>').find('select').select2();
+            }
+            CalcTotalAmount();
+        </script>
+        <?php
+    }

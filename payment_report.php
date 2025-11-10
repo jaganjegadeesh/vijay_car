@@ -490,7 +490,7 @@
         } else if (type == 'Voucher') {
             url = "reports/rpt_voucher_a5.php?view_voucher_id=" + bill_id;
         } else if (type == 'Salary Voucher') {
-            url = "reports/rpt_salary_voucher_a5.php?view_salary_voucher_id=" + bill_id;
+            url = "reports/rpt_salary_voucher_3inch.php?view_voucher_id=" + bill_id;
         }
 
         var post_url = "dashboard_changes.php?check_login_session=1";
@@ -498,7 +498,7 @@
             url: post_url,
             success: function (check_login_session) {
                 if (check_login_session == 1) {
-                    jQuery('#PaymentModal .modal-header h1').html(type +"  Preview");
+                    jQuery('#PaymentModal modal-header h4').html(type +"  Preview");
 
                     jQuery('.payment_modal_button').trigger("click");
                     var iframe = '<iframe src="' + url + '" width="100%" height="500px" style="border:none;"></iframe>';

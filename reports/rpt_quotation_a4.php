@@ -265,8 +265,8 @@ if(isset($_REQUEST['view_quotation_id'])) {
     $pdf->SetY($box_y);
     $pdf->SetX(10);
     $pdf->Cell(11,8,'S.No.',1,0,'C',0);
-    $pdf->Cell(30,8,'Store',1,0,'C',0);
-    $pdf->Cell(40+$less_for_inclusive,8,'Products',1,0,'C',0);
+    // $pdf->Cell(30,8,'Store',1,0,'C',0);
+    $pdf->Cell(70+$less_for_inclusive,8,'Products',1,0,'C',0);
     $pdf->Cell(20+$less_for_tax,8,'Unit',1,0,'C',0);
     $pdf->Cell(20+$less_for_tax,8,'Quantity',1,0,'C',0);
     $pdf->Cell(20+$less_for_tax,8,'Rate(Rs.)',1,0,'C',0);
@@ -277,7 +277,7 @@ if(isset($_REQUEST['view_quotation_id'])) {
         $pdf->Cell(20,8,'Final(Rs.)',1,0,'C',0);
     }
     $pdf->Cell(20,8,'Amount(Rs.)',1,1,'C',0);
-    $pdf->SetFont('Arial','',7);
+    $pdf->SetFont('Arial','',8);
     $y_axis=$pdf->GetY();
 
     $index = 0;
@@ -288,8 +288,8 @@ if(isset($_REQUEST['view_quotation_id'])) {
             $pdf->SetY($y_axis);
             $pdf->SetX(10);
             $pdf->Cell(11,278-$y_axis,'',1,0,'L',0);
-            $pdf->Cell(30,278-$y_axis,'',1,0,'C',0);
-            $pdf->Cell(40+$less_for_inclusive,278-$y_axis,'',1,0,'C',0);
+            // $pdf->Cell(30,278-$y_axis,'',1,0,'C',0);
+            $pdf->Cell(70+$less_for_inclusive,278-$y_axis,'',1,0,'C',0);
             $pdf->Cell(20+$less_for_tax,278-$y_axis,'',1,0,'C',0);
             $pdf->Cell(20+$less_for_tax,278-$y_axis,'',1,0,'C',0);
             $pdf->Cell(20+$less_for_tax,278-$y_axis,'',1,0,'C',0);
@@ -397,8 +397,8 @@ if(isset($_REQUEST['view_quotation_id'])) {
             $y=$pdf->GetY();
             $pdf->SetX(10);
             $pdf->Cell(11,8,'S.No.',1,0,'C',0);
-            $pdf->Cell(30,8,'Store',1,0,'C',0);
-            $pdf->Cell(40+$less_for_inclusive,8,'Products',1,0,'C',0);
+            // $pdf->Cell(30,8,'Store',1,0,'C',0);
+            $pdf->Cell(70+$less_for_inclusive,8,'Products',1,0,'C',0);
             $pdf->Cell(20+$less_for_tax,8,'Unit',1,0,'C',0);
             $pdf->Cell(20+$less_for_tax,8,'Quantity',1,0,'C',0);
             $pdf->Cell(20+$less_for_tax,8,'Rate(Rs.)',1,0,'C',0);
@@ -415,8 +415,8 @@ if(isset($_REQUEST['view_quotation_id'])) {
         }
         $index = $i + 1;
         $pdf->Cell(11,8,$index,1,0,'C',0);
-        $pdf->Cell(30,8,$obj->encode_decode('decrypt', $store_names[$i]),1,0,'L',0);
-        $pdf->Cell(40+$less_for_inclusive,8,$obj->encode_decode('decrypt', $product_names[$i]),1,0,'L',0);
+        // $pdf->Cell(30,8,$obj->encode_decode('decrypt', $store_names[$i]),1,0,'L',0);
+        $pdf->Cell(70+$less_for_inclusive,8,$obj->encode_decode('decrypt', $product_names[$i]),1,0,'L',0);
         $pdf->Cell(20+$less_for_tax,8,$obj->encode_decode('decrypt', $unit_names[$i]),1,0,'C',0);
         $pdf->Cell(20+$less_for_tax,8,$quantity[$i],1,0,'R',0);        
         $pdf->Cell(20+$less_for_tax,8,number_format($rate[$i],2),1,0,'R',0);
@@ -438,8 +438,8 @@ if(isset($_REQUEST['view_quotation_id'])) {
         $pdf->SetY($y_axis);
         $pdf->SetX(10);
         $pdf->Cell(11,278-$y_axis,'',1,0,'L',0);
-        $pdf->Cell(30,278-$y_axis,'',1,0,'C',0);
-        $pdf->Cell(40+$less_for_inclusive,278-$y_axis,'',1,0,'C',0);
+        // $pdf->Cell(30,278-$y_axis,'',1,0,'C',0);
+        $pdf->Cell(70+$less_for_inclusive,278-$y_axis,'',1,0,'C',0);
         $pdf->Cell(20+$less_for_tax,278-$y_axis,'',1,0,'C',0);
         $pdf->Cell(20+$less_for_tax,278-$y_axis,'',1,0,'C',0);
         $pdf->Cell(20+$less_for_tax,278-$y_axis,'',1,0,'C',0);
@@ -548,8 +548,8 @@ if(isset($_REQUEST['view_quotation_id'])) {
         $pdf->SetX(10);
         $pdf->SetFillColor(52,58,64);
        $pdf->Cell(11,8,'S.No.',1,0,'C',0);
-        $pdf->Cell(30,8,'Store',1,0,'C',0);
-        $pdf->Cell(40+$less_for_inclusive,8,'Products',1,0,'C',0);
+        // $pdf->Cell(30,8,'Store',1,0,'C',0);
+        $pdf->Cell(70+$less_for_inclusive,8,'Products',1,0,'C',0);
         $pdf->Cell(20+$less_for_tax,8,'Unit',1,0,'C',0);
         $pdf->Cell(20+$less_for_tax,8,'Quantity',1,0,'C',0);
         $pdf->Cell(20+$less_for_tax,8,'Rate(Rs.)',1,0,'C',0);
@@ -567,7 +567,7 @@ if(isset($_REQUEST['view_quotation_id'])) {
 
     $pdf->setY($end_content);
     $pdf->Line(21,$y_axis,21,$end_content);
-    $pdf->Line(51,$y_axis,51,$end_content);
+    // $pdf->Line(51,$y_axis,51,$end_content);
     $pdf->Line(91+$less_for_inclusive,$y_axis,91+$less_for_inclusive,$end_content);
     $pdf->Line(111+$extra_no_tax+$less_for_tax,$y_axis,111+$extra_no_tax+$less_for_tax,$end_content);
     $pdf->Line(131+$extra_no_tax+($less_for_tax != 0 ? ($less_for_tax*2) : 0 ),$y_axis,131+$extra_no_tax+($less_for_tax != 0 ? ($less_for_tax*2) : 0 ),$end_content);

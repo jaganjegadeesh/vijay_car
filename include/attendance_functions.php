@@ -78,12 +78,18 @@
         public function AttendanceDetails($type, $attendance_date) {
 			$where = ""; $list = array(); $select_query = ""; $count = 0;
 
-            if($type == 'P') {
-                $where = "present_status = 'P' AND ";
-            }
-            else if($type == 'A') {
-                $where = "present_status = 'A' AND ";
-            }
+            if($type == 'fn_present') {
+				$where = "forenoon = 'P' AND ";
+			}
+			else if($type == 'fn_absent') {
+				$where = "forenoon = 'A' AND ";
+			}
+			else if($type == 'an_present') {
+				$where = "afternoon = 'P' AND ";
+			}
+			else if($type == 'an_absent') {
+				$where = "afternoon = 'A' AND ";
+			}
 
 			if(!empty($type) && !empty($attendance_date) && $attendance_date != "0000-00-00") {
 				$attendance_date = date('Y-m-d', strtotime($attendance_date));

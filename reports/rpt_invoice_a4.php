@@ -6,8 +6,8 @@ if(isset($_REQUEST['view_invoice_id'])) {
     $invoice_id = $_REQUEST['view_invoice_id'];
     $pdf_download_name ="";
     $pdf_download_name = "invoice Report PDF";
-    $invoice_number = ""; $invoice_date = date('d-m-Y'); $party_id = ""; $tax_option = ""; $igst_value = ''; $cgst_value = ''; $sgst_value = ''; $tax_type = ""; $overall_tax = ""; $company_state = "";$party_state = ""; $product_ids = array(); $product_names = array(); $unit_ids = array(); $unit_names = array(); $quantity = array(); $rate = array(); $product_tax = array(); $final_rate = array(); $amount = array(); $charges = ''; $charges_amount = ''; $discount = ''; $discount_amount = '';  $grand_total = "";
-    $end_content = 230; $tax = ''; $cancelled = '0';
+    $invoice_number = ""; $invoice_date = date('d-m-Y'); $party_id = ""; $tax_option = ""; $igst_value = ''; $cgst_value = ''; $sgst_value = ''; $tax_type = ""; $overall_tax = ""; $company_state = "";$party_state = ""; $product_ids = array(); $product_names = $bank_data =  array(); $unit_ids = array(); $unit_names = array(); $quantity = array(); $rate = array(); $product_tax = array(); $final_rate = array(); $amount = array(); $charges = ''; $charges_amount = ''; $discount = ''; $discount_amount = '';  $grand_total = "";
+    $end_content = 230; $tax = ''; $cancelled = '0'; $bank_id = ''; 
     if(!empty($invoice_id)) {
         $invoice_list = $obj->getSalesRecords('invoice', $invoice_id);
         if(!empty($invoice_list)) {
@@ -17,6 +17,9 @@ if(isset($_REQUEST['view_invoice_id'])) {
                 }
                 if(!empty($pi['party_id'])) {
                     $party_id = $pi['party_id'];
+                }
+                if(!empty($pi['bank_id'])) {
+                    $bank_id = $pi['bank_id'];
                 }
                 if(!empty($pi['party_details'])) {
                     $party_details = $obj->encode_decode('decrypt', $pi['party_details']);
@@ -142,6 +145,9 @@ if(isset($_REQUEST['view_invoice_id'])) {
             }
         }
     }
+    if(!empty($bank_id)) {
+        $bank_data = $obj->getTableRecords($GLOBALS['bank_table'],'bank_id',$bank_id);
+    }
     $company_state = $obj->getTableColumnValue($GLOBALS['company_table'], 'company_id', $GLOBALS['bill_company_id'], 'state');
     $company_state = $obj->encode_decode('decrypt',$company_state);
     $less_for_tax = 0; $less_for_inclusive = 0; $extra_no_tax = 0;
@@ -158,7 +164,11 @@ if(isset($_REQUEST['view_invoice_id'])) {
             $end_content = $end_content -5;
         }
     }
-
+    $total_row_height = 5;
+    if($end_content == 230) {
+        $end_content = 220;
+        $total_row_height = 10;
+    }
     if($tax == '1' && $tax_type != '1') {
         $less_for_tax = 3;
     }
@@ -177,12 +187,16 @@ if(isset($_REQUEST['view_invoice_id'])) {
         $extra_no_tax += 5;
     }
 
-    require_once('../fpdf/AlphaPDF.php');
+    require_once __DIR__ . '/../fpdf/AlphaPDF.php';
     $pdf = new AlphaPDF('P','mm','A4');
     $pdf->AliasNbPages(); 
     $pdf->AddPage();
     $pdf->SetAutoPageBreak(false);
     $yaxis = $pdf->GetY();
+    $pdf->SetY(13);
+    $pdf->SetFont('Arial','BI',10);
+    $pdf->Cell(0,1,'Orginal',0,1,'R',0);
+    $pdf->SetY($yaxis);
     $file_name="Invoice";
     include("rpt_header.php");
     if($cancelled == '0'){
@@ -265,8 +279,8 @@ if(isset($_REQUEST['view_invoice_id'])) {
     $pdf->SetY($box_y);
     $pdf->SetX(10);
     $pdf->Cell(11,8,'S.No.',1,0,'C',0);
-    $pdf->Cell(30,8,'Store',1,0,'C',0);
-    $pdf->Cell(40+$less_for_inclusive,8,'Products',1,0,'C',0);
+    // $pdf->Cell(30,8,'Store',1,0,'C',0);
+    $pdf->Cell(70+$less_for_inclusive,8,'Products',1,0,'C',0);
     $pdf->Cell(20+$less_for_tax,8,'Unit',1,0,'C',0);
     $pdf->Cell(20+$less_for_tax,8,'Quantity',1,0,'C',0);
     $pdf->Cell(20+$less_for_tax,8,'Rate(Rs.)',1,0,'C',0);
@@ -277,7 +291,7 @@ if(isset($_REQUEST['view_invoice_id'])) {
         $pdf->Cell(20,8,'Final(Rs.)',1,0,'C',0);
     }
     $pdf->Cell(20,8,'Amount(Rs.)',1,1,'C',0);
-    $pdf->SetFont('Arial','',7);
+    $pdf->SetFont('Arial','',8);
     $y_axis=$pdf->GetY();
 
     $index = 0;
@@ -288,8 +302,8 @@ if(isset($_REQUEST['view_invoice_id'])) {
             $pdf->SetY($y_axis);
             $pdf->SetX(10);
             $pdf->Cell(11,278-$y_axis,'',1,0,'L',0);
-            $pdf->Cell(30,278-$y_axis,'',1,0,'C',0);
-            $pdf->Cell(40+$less_for_inclusive,278-$y_axis,'',1,0,'C',0);
+            // $pdf->Cell(30,278-$y_axis,'',1,0,'C',0);
+            $pdf->Cell(70+$less_for_inclusive,278-$y_axis,'',1,0,'C',0);
             $pdf->Cell(20+$less_for_tax,278-$y_axis,'',1,0,'C',0);
             $pdf->Cell(20+$less_for_tax,278-$y_axis,'',1,0,'C',0);
             $pdf->Cell(20+$less_for_tax,278-$y_axis,'',1,0,'C',0);
@@ -314,6 +328,10 @@ if(isset($_REQUEST['view_invoice_id'])) {
             $page_number += 1;
             $total_pages[] = $page_number;
             $file_name="Invoice";
+            $pdf->SetY(13);
+            $pdf->SetFont('Arial','BI',10);
+            $pdf->Cell(0,1,'Orginal',0,1,'R',0);
+            $pdf->SetY($yaxis);
 
             include("rpt_header.php");
             if($cancelled == '0'){
@@ -397,8 +415,8 @@ if(isset($_REQUEST['view_invoice_id'])) {
             $y=$pdf->GetY();
             $pdf->SetX(10);
             $pdf->Cell(11,8,'S.No.',1,0,'C',0);
-            $pdf->Cell(30,8,'Store',1,0,'C',0);
-            $pdf->Cell(40+$less_for_inclusive,8,'Products',1,0,'C',0);
+            // $pdf->Cell(30,8,'Store',1,0,'C',0);
+            $pdf->Cell(70+$less_for_inclusive,8,'Products',1,0,'C',0);
             $pdf->Cell(20+$less_for_tax,8,'Unit',1,0,'C',0);
             $pdf->Cell(20+$less_for_tax,8,'Quantity',1,0,'C',0);
             $pdf->Cell(20+$less_for_tax,8,'Rate(Rs.)',1,0,'C',0);
@@ -415,8 +433,8 @@ if(isset($_REQUEST['view_invoice_id'])) {
         }
         $index = $i + 1;
         $pdf->Cell(11,8,$index,1,0,'C',0);
-        $pdf->Cell(30,8,$obj->encode_decode('decrypt', $store_names[$i]),1,0,'L',0);
-        $pdf->Cell(40+$less_for_inclusive,8,$obj->encode_decode('decrypt', $product_names[$i]),1,0,'L',0);
+        // $pdf->Cell(30,8,$obj->encode_decode('decrypt', $store_names[$i]),1,0,'L',0);
+        $pdf->Cell(70+$less_for_inclusive,8,$obj->encode_decode('decrypt', $product_names[$i]),1,0,'L',0);
         $pdf->Cell(20+$less_for_tax,8,$obj->encode_decode('decrypt', $unit_names[$i]),1,0,'C',0);
         $pdf->Cell(20+$less_for_tax,8,$quantity[$i],1,0,'R',0);        
         $pdf->Cell(20+$less_for_tax,8,number_format($rate[$i],2),1,0,'R',0);
@@ -430,6 +448,8 @@ if(isset($_REQUEST['view_invoice_id'])) {
         $invoice_subtotal += $amount[$i];
 
     }
+
+
     $pdf->SetFont('Arial','B',8);
 
    
@@ -438,8 +458,8 @@ if(isset($_REQUEST['view_invoice_id'])) {
         $pdf->SetY($y_axis);
         $pdf->SetX(10);
         $pdf->Cell(11,278-$y_axis,'',1,0,'L',0);
-        $pdf->Cell(30,278-$y_axis,'',1,0,'C',0);
-        $pdf->Cell(40+$less_for_inclusive,278-$y_axis,'',1,0,'C',0);
+        // $pdf->Cell(30,278-$y_axis,'',1,0,'C',0);
+        $pdf->Cell(70+$less_for_inclusive,278-$y_axis,'',1,0,'C',0);
         $pdf->Cell(20+$less_for_tax,278-$y_axis,'',1,0,'C',0);
         $pdf->Cell(20+$less_for_tax,278-$y_axis,'',1,0,'C',0);
         $pdf->Cell(20+$less_for_tax,278-$y_axis,'',1,0,'C',0);
@@ -467,6 +487,10 @@ if(isset($_REQUEST['view_invoice_id'])) {
         
         $file_name="Invoice";
 
+        $pdf->SetY(13);
+        $pdf->SetFont('Arial','BI',10);
+        $pdf->Cell(0,1,'Orginal',0,1,'R',0);
+        $pdf->SetY($yaxis);
         include("rpt_header.php");
         if($cancelled == '0'){
             include("rpt_watermark.php");
@@ -549,8 +573,8 @@ if(isset($_REQUEST['view_invoice_id'])) {
         $pdf->SetX(10);
         $pdf->SetFillColor(52,58,64);
        $pdf->Cell(11,8,'S.No.',1,0,'C',0);
-        $pdf->Cell(30,8,'Store',1,0,'C',0);
-        $pdf->Cell(40+$less_for_inclusive,8,'Products',1,0,'C',0);
+        // $pdf->Cell(30,8,'Store',1,0,'C',0);
+        $pdf->Cell(70+$less_for_inclusive,8,'Products',1,0,'C',0);
         $pdf->Cell(20+$less_for_tax,8,'Unit',1,0,'C',0);
         $pdf->Cell(20+$less_for_tax,8,'Quantity',1,0,'C',0);
         $pdf->Cell(20+$less_for_tax,8,'Rate(Rs.)',1,0,'C',0);
@@ -568,7 +592,7 @@ if(isset($_REQUEST['view_invoice_id'])) {
 
     $pdf->setY($end_content);
     $pdf->Line(21,$y_axis,21,$end_content);
-    $pdf->Line(51,$y_axis,51,$end_content);
+    // $pdf->Line(51,$y_axis,51,$end_content);
     $pdf->Line(91+$less_for_inclusive,$y_axis,91+$less_for_inclusive,$end_content);
     $pdf->Line(111+$extra_no_tax+$less_for_tax,$y_axis,111+$extra_no_tax+$less_for_tax,$end_content);
     $pdf->Line(131+$extra_no_tax+($less_for_tax != 0 ? ($less_for_tax*2) : 0 ),$y_axis,131+$extra_no_tax+($less_for_tax != 0 ? ($less_for_tax*2) : 0 ),$end_content);
@@ -585,14 +609,14 @@ if(isset($_REQUEST['view_invoice_id'])) {
         $pdf->Line(180,$y_axis,180,$end_content);
     }
     $pdf->Line(200,$y_axis,200,$end_content);
- 
-
+    
     if(!empty($invoice_subtotal)) {
         $subtotal = $obj->numberFormat($invoice_subtotal,2);
         $pdf->SetFont('Arial','B',8);
-        $pdf->Cell(170,5,'Sub Total',1,0,'R',0);
+        $pdf->SetX(150);
+        $pdf->Cell(30,$total_row_height,'Sub Total',1,0,'R',0);
         $pdf->SetFont('Arial','',8);
-        $pdf->Cell(20,5,$subtotal,1,1,'R',0);
+        $pdf->Cell(20,$total_row_height,$subtotal,1,1,'R',0);
     }
     
         $total_amount_ = $invoice_subtotal;
@@ -600,11 +624,13 @@ if(isset($_REQUEST['view_invoice_id'])) {
         if(!empty($discount) && $discount != $GLOBALS['null_value']) {
             
                 $pdf->SetFont('Arial','B',8);
-                $pdf->Cell(170,5,'Discount ('. $discount.')',1,0,'R',0);
+                $pdf->SetX(150);
+                $pdf->Cell(30,5,'Discount ('. $discount.')',1,0,'R',0);
                 $pdf->SetFont('Arial','',8);
                 $pdf->Cell(20,5,  '-'.$discount_amount,1,1,'R',0);
                 $pdf->SetFont('Arial','B',8);
-                $pdf->Cell(170,5,'Discounted Total',1,0,'R',0);
+                $pdf->SetX(150);
+                $pdf->Cell(30,5,'Discounted Total',1,0,'R',0);
                 $pdf->SetFont('Arial','',8);
                 $total_amount_ = (float)$total_amount_ - (float)$discount_amount;
                 $pdf->Cell(20,5,number_format(((float) $total_amount_),2),1,1,'R',0);
@@ -613,11 +639,13 @@ if(isset($_REQUEST['view_invoice_id'])) {
         if(!empty($charges) && $charges != $GLOBALS['null_value']) {
             
                 $pdf->SetFont('Arial','B',8);
-                $pdf->Cell(170,5,'Charges ('. $charges.')',1,0,'R',0);
+                $pdf->SetX(150);
+                $pdf->Cell(30,5,'Charges ('. $charges.')',1,0,'R',0);
                 $pdf->SetFont('Arial','',8);
                 $pdf->Cell(20,5,  '+'.$charges_amount,1,1,'R',0);
                 $pdf->SetFont('Arial','B',8);
-                $pdf->Cell(170,5,'After Charges Total',1,0,'R',0);
+                $pdf->SetX(150);
+                $pdf->Cell(30,5,'After Charges Total',1,0,'R',0);
                 $pdf->SetFont('Arial','',8);
                 $total_amount_ = (float)$total_amount_ + (float)$charges_amount;
                 $pdf->Cell(20,5,number_format(((float) $total_amount_),2),1,1,'R',0);
@@ -631,13 +659,15 @@ if(isset($_REQUEST['view_invoice_id'])) {
             }
             if(!empty($cgst_value)){  
                 $pdf->SetFont('Arial','B',8);
-                $pdf->Cell(170,5,'CGST'.$tax_value1 ,1,0,'R',0);
+                $pdf->SetX(150);
+                $pdf->Cell(30,5,'CGST'.$tax_value1 ,1,0,'R',0);
                 $pdf->SetFont('Arial','',8);
                 $pdf->Cell(20,5,$cgst_value,1,1,'R',0);
             }
             if(!empty($sgst_value)){  
                 $pdf->SetFont('Arial','B',8);
-                $pdf->Cell(170,5,'SGST'. $tax_value1,1,0,'R',0);
+                $pdf->SetX(150);
+                $pdf->Cell(30,5,'SGST'. $tax_value1,1,0,'R',0);
                 $pdf->SetFont('Arial','',8);
                 $pdf->Cell(20,5,$sgst_value,1,1,'R',0);
             }
@@ -650,29 +680,67 @@ if(isset($_REQUEST['view_invoice_id'])) {
             }
             if(!empty($igst_value)){  
                 $pdf->SetFont('Arial','B',8);
-                $pdf->Cell(170,5,'IGST' .$tax_value1,1,0,'R',0);
+                $pdf->SetX(150);
+                $pdf->Cell(30,5,'IGST' .$tax_value1,1,0,'R',0);
                 $pdf->SetFont('Arial','',8);
                 $pdf->Cell(20,5,$igst_value,1,1,'R',0);
             }
         }
         if(!empty($tax_amount) && $tax_amount != $GLOBALS['null_value'] && $tax_amount != '0.00'){  
             $pdf->SetFont('Arial','B',8);
-            $pdf->Cell(170,5,'Total Tax',1,0,'R',0);
+            $pdf->SetX(150);
+            $pdf->Cell(30,5,'Total Tax',1,0,'R',0);
             $pdf->SetFont('Arial','',8);
             $pdf->Cell(20,5,"+".$tax_amount,1,1,'R',0);
         }          
         if(!empty($round_off)){  
             $pdf->SetFont('Arial','B',8);
-            $pdf->Cell(170,5,'Round Off',1,0,'R',0);
+            $pdf->SetX(150);
+            $pdf->Cell(30,5,'Round Off',1,0,'R',0);
             $pdf->SetFont('Arial','',8);
             $pdf->Cell(20,5,"0.".$round_off,1,1,'R',0);
         }
         if(!empty($grand_total)){
             $pdf->SetFont('Arial','B',8);
-            $pdf->Cell(170,5,'Bill Total',1,0,'R',0);
+            $pdf->SetX(150);
+            $pdf->Cell(30,$total_row_height,'Bill Total',1,0,'R',0);
             $pdf->SetFont('Arial','',8);
-            $pdf->Cell(20,5,number_format($grand_total,2),1,1,'R',0);
+            $pdf->Cell(20,$total_row_height,number_format($grand_total,2),1,1,'R',0);
             $total_cal_y = $pdf->GetY();
+        }
+        
+        $pdf->setY($end_content);
+        $bank_height = $total_cal_y - $end_content;
+        if(!empty($bank_data)) {
+            $pdf->SetFont('Arial','BU',8);
+            $row_height = $bank_height / 4;
+            if($row_height > 7) {
+                $row_height = 7;
+            }
+            $account_number = $obj->encode_decode('decrypt',$bank_data[0]['account_number']);
+            $bank_name = $obj->encode_decode('decrypt',$bank_data[0]['bank_name']);
+            $ifsc_code = $obj->encode_decode('decrypt',$bank_data[0]['ifsc_code']);
+            $pdf->Cell(140,$row_height,'Bank Details :',0,1,'L');
+            $pdf->SetFont('Arial','B',8);
+            $pdf->Cell(40,$row_height,'              Bank Name',0,0,'L');
+            $pdf->SetFont('Arial','',8);
+            $pdf->Cell(110,$row_height,": ".$bank_name,0,1,'L');
+            $pdf->SetFont('Arial','B',8);
+            $pdf->Cell(40,$row_height,'              Account Number',0,0,'L');
+            $pdf->SetFont('Arial','',8);
+            $pdf->Cell(110,$row_height,": ".$account_number,0,1,'L');
+            $pdf->SetFont('Arial','B',8);
+            $pdf->Cell(40,$row_height,'              IFSC Code',0,0,'L');
+            $pdf->SetFont('Arial','',8);
+            $pdf->Cell(110,$row_height,": ".$ifsc_code,0,1,'L');
+
+            $pdf->setY($end_content);
+            $pdf->Cell(140,$bank_height,'',1,1,'L');
+
+
+
+        }
+
             $line_y = $total_cal_y;
                 $line_y = $total_cal_y;
             
@@ -680,7 +748,7 @@ if(isset($_REQUEST['view_invoice_id'])) {
             // echo $total_cal_y ,"<br>", $bank_y,"<br>", $line_y;
             $line_y = $pdf->GetY();
             $pdf->Line(10,$line_y,200,$line_y);
-
+        if(!empty($grand_total)){
             $pdf->SetFont('Arial','',8);
             $pdf->SetX(10);
             $pdf->Cell(40,5,'Amount (in words) :',0,0,'L',0);

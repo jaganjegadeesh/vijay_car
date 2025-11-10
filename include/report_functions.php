@@ -545,4 +545,79 @@
 			}
 			return $list;			
 		}
+
+		public function getEngineerAttendanceList($from_date, $to_date,$engineer_id){
+
+			$select_query = ""; $list = array(); $where = "";
+            if(!empty($from_date)) {
+				$from_date = date("Y-m-d", strtotime($from_date));
+				if(!empty($where)) {
+					$where = $where." AND attendance_date >= '".$from_date."'";
+				}
+				else {
+					$where = "attendance_date >= '".$from_date."'";
+				}
+			}
+			if(!empty($to_date)) {
+				$to_date = date("Y-m-d", strtotime($to_date));
+				if(!empty($where)) {
+					$where = $where." AND attendance_date <= '".$to_date."'";
+				}
+				else {
+					$where = "attendance_date <= '".$to_date."'";
+				}
+			}
+            if(!empty($engineer_id)) {
+                if(!empty($where)) {
+                    $where = $where." AND engineer_id = '".$engineer_id."'";
+                } 
+                else {
+                    $where = "engineer_id = '".$engineer_id."'";
+                }
+            }
+			
+			if(!empty($where)) {
+				 $select_query = "SELECT * FROM ".$GLOBALS['attendance_table']." WHERE ".$where." AND deleted = '0' ORDER BY attendance_date  ASC";	
+			}
+			else{
+				$select_query = "SELECT * FROM ".$GLOBALS['attendance_table']." WHERE deleted = '0' ORDER BY id ASC";
+			}
+			if(!empty($select_query)) {
+				$list = $this->getQueryRecords($GLOBALS['attendance_table'], $select_query);
+			}
+			return $list;
+
+		}
+        
+		public function getAttendanceList($from_date, $to_date) {
+			$list = array();
+			$where = "deleted = '0'"; 
+		
+			
+			if (!empty($from_date)) {
+				$from_date = date("Y-m-d", strtotime($from_date));
+				$where .= " AND attendance_date >= '".$from_date."'";
+			}
+		    
+			if (!empty($to_date)) {
+				$to_date = date("Y-m-d", strtotime($to_date));
+				$where .= " AND attendance_date <= '".$to_date."'";
+			}
+		
+
+			 $select_query = "
+				SELECT attendance_date, COUNT(CASE WHEN present_status = 'PP' THEN engineer_id END) AS psp_count,COUNT(CASE WHEN present_status = 'AA' THEN engineer_id END) AS psa_count,COUNT(CASE WHEN present_status = 'PA' THEN engineer_id END) AS pa_count,COUNT(CASE WHEN present_status = 'AP' THEN engineer_id END) AS ap_count
+				FROM ".$GLOBALS['attendance_table']."
+				WHERE $where
+				GROUP BY attendance_date
+				ORDER BY attendance_date ASC
+			";
+		
+			if (!empty($select_query)) {
+				$list = $this->getQueryRecords($GLOBALS['attendance_table'], $select_query);
+			}
+		
+			return $list;
+		}
+		
     }

@@ -214,6 +214,19 @@
             </div>    
             <script src="include/select2/js/select2.min.js"></script>
             <script src="include/select2/js/select.js"></script>
+            <script>
+                $('#custom_add_modal_button').on('shown.bs.modal', function () {
+    $(this).find('.select2').select2({
+        dropdownParent: $('#custom_add_modal_button')
+    });
+});
+
+            </script>
+            <style>
+                .select2-container {
+    z-index: 1055 !important; /* Bootstrap modal z-index range */
+}
+            </style>
         </form>
 		<?php
     } 
@@ -671,6 +684,7 @@
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+                                             <li><a class="dropdown-item"  target="_blank" href="reports/rpt_jobcard_a5.php?view_job_card_id=<?php if(!empty($list['job_card_id'])) { echo $list['job_card_id']; } ?>"><i class="fa fa-print"></i>&ensp;A5 Print</a><li>
                                             <?php 
                                                 if(empty($edit_access_error) && $list['deleted'] == '0') {
                                                     ?>

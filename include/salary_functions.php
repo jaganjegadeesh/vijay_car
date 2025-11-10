@@ -81,14 +81,25 @@
                 }
 			}
             if(empty($edit_id)){ 
-                $full_present_query = "SELECT COUNT(id) AS id_count FROM ".$GLOBALS['attendance_table']." WHERE ".$where." AND  present_status = 'P' AND is_salaried ='0' AND deleted = '0'";	
+                // $full_present_query = "SELECT COUNT(id) AS id_count FROM ".$GLOBALS['attendance_table']." WHERE ".$where." AND  present_status = 'P' AND is_salaried ='0' AND deleted = '0'";	
 
-                $select_query = "SELECT SUM(id_count) as total_count FROM ((".$full_present_query.") ) as g";
+                // $select_query = "SELECT SUM(id_count) as total_count FROM ((".$full_present_query.") ) as g";
+
+                $full_present_query = "SELECT COUNT(id) AS id_count FROM ".$GLOBALS['attendance_table']." WHERE ".$where." AND  present_status = 'PP' AND is_salaried ='0' AND deleted = '0'";	
+
+                $half_present_query = "SELECT (CAST(COUNT(id) AS DECIMAL(10,2)) / 2) AS id_count FROM ".$GLOBALS['attendance_table']." WHERE ".$where." AND (present_status = 'PA' OR present_status = 'AP') AND is_salaried ='0' AND deleted = '0'";	
+
+                $select_query = "SELECT SUM(id_count) as total_count FROM ((".$full_present_query.") UNION ALL (".$half_present_query.")) as g";
             }
             else {
-                $full_present_query = "SELECT COUNT(id) AS id_count FROM ".$GLOBALS['attendance_table']." WHERE ".$where." AND  present_status = 'P' AND is_salaried ='1' AND deleted = '0'";		
+                $full_present_query = "SELECT COUNT(id) AS id_count FROM ".$GLOBALS['attendance_table']." WHERE ".$where." AND  present_status = 'PP' AND is_salaried ='1' AND deleted = '0'";
 
-                $select_query = "SELECT SUM(id_count) as total_count FROM ((".$full_present_query.")) as g";
+                $half_present_query = "SELECT (CAST(COUNT(id) AS DECIMAL(10,2)) / 2) AS id_count FROM ".$GLOBALS['attendance_table']." WHERE ".$where." AND (present_status = 'PA' OR present_status = 'AP') AND is_salaried ='1' AND  deleted = '0'";	
+
+                $select_query = "SELECT SUM(id_count) as total_count FROM ((".$full_present_query.") UNION ALL (".$half_present_query.")) as g";
+                // $full_present_query = "SELECT COUNT(id) AS id_count FROM ".$GLOBALS['attendance_table']." WHERE ".$where." AND  present_status = 'P' AND is_salaried ='1' AND deleted = '0'";		
+
+                // $select_query = "SELECT SUM(id_count) as total_count FROM ((".$full_present_query.")) as g";
             }		
 			
 			if(!empty($select_query)) {

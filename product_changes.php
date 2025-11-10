@@ -598,13 +598,16 @@
                 $stock_date = ""; $store_id = ""; $quantity = "";
                 if(!empty($update_stock) && $update_stock == 1) {
                     if(!empty($store_room_ids) && !empty($quantitys) && !empty($stock_dates)) {
-                        $stock_date = explode(",", $stock_dates);
-                        $store_id = explode(",", $store_room_ids);  
-                        $quantity = explode(",", $quantitys);
-                        $remarks =  'Opening Stock';
-                        for($i=0; $i < count($store_id); $i++) {
-                            $stock_update = "";
-                            $stock_update =  $obj->StockUpdate($GLOBALS['product_table'],'In', $product_id,$GLOBALS['null_value'], $product_id, 'Opening Stock', $stock_date[$i], $store_id[$i], $unit_id, $quantity[$i], $GLOBALS['null_value']);
+                        if($store_room_ids != $GLOBALS['null_value']) {
+                            $stock_date = explode(",", $stock_dates);
+                            $store_id = explode(",", $store_room_ids);  
+                            $quantity = explode(",", $quantitys);
+                            $remarks =  'Opening Stock';
+                        
+                            for($i=0; $i < count($store_id); $i++) {
+                                $stock_update = "";
+                                $stock_update =  $obj->StockUpdate($GLOBALS['product_table'],'In', $product_id,$GLOBALS['null_value'], $product_id, 'Opening Stock', $stock_date[$i], $store_id[$i], $unit_id, $quantity[$i], $GLOBALS['null_value']);
+                            }
                         }
                     }
                 }

@@ -12,7 +12,8 @@
         $party_list = array();
         
 
-        $party_list = $obj->getJobCardPartyList('estimate');
+        $party_list = $obj->getPartyList('2'); 
+        // $party_list = $obj->getJobCardPartyList('estimate');
         $charges_id = array(); $charges_type = array(); $charges_value = array();  $product_tax =array(); $draft =0; $discount_name = ""; $charges_tax_array = array(); $round_off =""; $round_off_type =""; $round_off_value ="";
 
         $estimate_date = date('Y-m-d');$estimate_bill_date = date('Y-m-d'); $current_date = date('Y-m-d');$estimate_number = "";$discount =""; $discount_value="";$charges_value=""; $amount =array(); $round_off =""; $round_off_type =""; $round_off_value =""; $store_id = array(); $store_name = array(); $product_id = array(); $product_name = array(); $product_amount = array();$discount = ""; $discount_value = "";$extra_charges = ""; $extra_charges_value = ""; $unit_id =array(); $unit_name=array(); $charges_id = array(); $draft =0; $discount_name = ""; $gst_option = 0; $tax_type = 0; $tax_option = 0; $overall_tax = "";$charges_tax =array();$product_tax =array(); $charges_tax_array = array();
@@ -216,6 +217,12 @@
 			$company_state = $obj->encode_decode('decrypt', $company_state);
 		}
 
+        $unit_list = array();
+        $unit_list = $obj->getTableRecords($GLOBALS['unit_table'], 'bill_company_id', $GLOBALS['bill_company_id']);
+
+        $product_list = array();
+        $product_list = $obj->getTableRecords($GLOBALS['product_table'], '', '');
+
         
         ?>
         <form class="poppins pd-20 redirection_form" name="estimate_form" method="POST">
@@ -258,8 +265,8 @@
                                             ?>
                                                 <option value="<?php echo $data['party_id']; ?>" <?php if(!empty($party_id) && $party_id == $data['party_id']) { ?>selected<?php } ?>>
                                                     <?php
-                                                        if(!empty($data['party_name_mobile_city']) && $data['party_name_mobile_city'] != $GLOBALS['null_value']) {
-                                                            echo $obj->encode_decode('decrypt', $data['party_name_mobile_city']);
+                                                        if(!empty($data['name_mobile_city']) && $data['name_mobile_city'] != $GLOBALS['null_value']) {
+                                                            echo $obj->encode_decode('decrypt', $data['name_mobile_city']);
                                                         }
                                                     ?>
                                                 </option>
@@ -347,6 +354,79 @@
                     </div> 
                 </div>
             </div> 
+            <div class="row justify-content-center p-3">
+                <div class="col-lg-3 col-md-3 col-12 px-lg-1 py-2">
+                    <div class="form-group">
+                        <div class="form-label-group in-border chargesaction">
+                            <div class="input-group ">
+                                <select class="select2 select2-danger" name="selected_product_id" id="selected_product_id" data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="Javascript:getUnit(this.value);">
+                                    <option value="">Select</option>
+                                    <?php
+                                        if(!empty($product_list)) {
+                                            foreach ($product_list as $data) {
+                                                if(!empty($data['product_id']) && $data['product_id'] != $GLOBALS['null_value']) {
+                                                    ?>          
+                                                    <option value="<?php echo $data['product_id']; ?>" <?php if(!empty($product_ids) && $product_ids == $data['product_id']) { ?>selected<?php } ?>>
+                                                        <?php
+                                                            if(!empty($data['product_name']) && $data['product_name'] != $GLOBALS['null_value']) {
+                                                                echo $obj->encode_decode('decrypt', $data['product_name']);
+                                                            }
+                                                        ?>
+                                                    </option>
+                                    <?php
+                                                }
+                                            }
+                                        }
+                                    ?>
+                                </select>
+                                <label>Product</label>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" onclick="Javascript:CustomAddModalContent('product');" style="background-color:#f06548!important; cursor:pointer; height:100%;"><i class="fa fa-plus text-white"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>        
+                </div>
+                <div class="col-lg-2 col-md-3 col-6 px-lg-1 py-2">
+                    <div class="form-group">
+                        <div class="form-label-group in-border">
+                            <select class="select2 select2-danger" name="selected_unit_id"  id="selected_unit_id" data-dropdown-css-class="select2-danger" style="width: 100%;" onchange=javascript:getTotalQuantity();>
+                                <option value="">Select</option>
+                            </select>
+                            <label>Unit</label>
+                        </div>
+                    </div>     
+                </div> 
+                 <div class="col-lg-1 col-md-3 col-6 px-lg-1 py-2">
+                    <div class="form-group">
+                        <div class="form-label-group in-border">
+                            <input type="text" name="selected_quantity" class="form-control shadow-none" onkeyup="javascript:getTotalQuantity();" onfocus="Javascript:KeyboardControls(this,'number',8,'');" required="">
+                            <label class="qty_cover">QTY</label>
+                        </div>
+                    </div> 
+                </div>
+                <div class="col-lg-1 col-md-3 col-6 px-lg-1 py-2">
+                    <div class="form-group">
+                        <div class="form-label-group in-border">
+                            <input type="text" name="selected_rate" class="form-control shadow-none" onkeyup="javascript:getTotalQuantity();" onfocus="Javascript:KeyboardControls(this,'number',8,'');" required="">
+                            <label>Rate</label>
+                        </div>
+                    </div> 
+                </div> 
+                <div class="col-lg-1 col-md-3 col-6 px-lg-1 py-2">
+                    <div class="form-group">
+                        <div class="form-label-group in-border">
+                            <input type="text" name="selected_amount" id="selected_amount" class="form-control shadow-none" required="" readonly>
+                            <label>Amount</label>
+                        </div>
+                    </div> 
+                </div>
+                <div class="col-lg-1 col-md-2 col-4 py-2 px-lg-1 text-center">
+                    <button class="btn btn-danger add_products_button w-100" style="font-size:12px;" type="button" onclick="Javascript:AddDetails();">
+                        Add
+                    </button>
+                </div> 
+            </div>  
             <div class="row">    
                 <div class="col-lg-12">
                     <div class="table-responsive text-center">
@@ -356,7 +436,7 @@
                             <thead class="bg-dark smallfnt">
                                 <tr>
                                     <th>#</th>
-                                    <th>Store</th>
+                                    <!-- <th>Store</th> -->
                                     <th>Product</th>
                                     <th>HSN Code</th>
                                     <th>Unit</th>
@@ -364,6 +444,7 @@
                                     <th style="width: 10%;" class="<?php if($tax_type != '1'){ ?>d-none <?php }?> tax_element">Tax</th>
                                     <th style="width:90px;">Rate</th>
                                     <th>Amount</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -389,7 +470,7 @@
                                     <?php } ?>
                                     <tr class="product_row" id="product_row<?php  echo $index; ?>">
                                         <td class="text-center px-2 py-2 sno"><?php  echo $index; ?></td>
-                                        <td class="text-center px-2 py-2 store_cover2">
+                                        <!-- <td class="text-center px-2 py-2 store_cover2">
                                             <input type="hidden" name="job_card_id[]" value="<?php if(!empty($job_card_id[$i])) { echo $job_card_id[$i]; } ?>">
                                             <input type="hidden" name="job_card_number[]" value="<?php if(!empty($job_card_number[$i])) { echo $job_card_number[$i]; } ?>">
                                             <input type="hidden" name="store_entry_id[]" value="<?php if(!empty($store_entry_id[$i])) { echo $store_entry_id[$i]; } ?>">
@@ -403,7 +484,7 @@
                                             ?>
                                             <input type="hidden" name="store_id[]" value="<?php if(!empty($store_id[$i])) { echo $store_id[$i]; } ?>">
                                             <input type="hidden" name="store_name[]" value="<?php if(!empty($store_name[$i])) { echo $store_name[$i]; } ?>">
-                                        </td>
+                                        </td> -->
 
                                         <td class="text-center px-2 py-2">
                                             <?php
@@ -420,6 +501,8 @@
                                         <td>
                                             <?php if(!empty($hsn_code[$i])) {
                                                 echo $obj->encode_decode('decrypt', $hsn_code[$i]);
+                                            } else {
+                                                echo "-";
                                             } ?>
                                             <input type="hidden" name="hsn_code[]" value="<?php if(!empty($hsn_code[$i])) { echo $hsn_code[$i]; } ?>">
                                         </td>
@@ -468,6 +551,9 @@
                                         <td class="amount text-end">
                                             <?php if(!empty($amount[$i])){ echo number_format($amount[$i],2); } ?>
                                         </td>
+                                        <th class="text-center px-2 py-2">
+                                            <button class="btn btn-danger" type="button" onclick="Javascript:DeleteSalesRow('<?php if(!empty($index)) { echo $index; } ?>', 'product_row');"><i class="fa fa-trash"></i></button>
+                                        </th>
                                     </tr>
                                     <?php $index++; 
                                     $prev_job_card = $job_card_id[$i];
@@ -477,7 +563,7 @@
                             </tbody> 
                             <tfoot>
                                 <tr>
-                                    <td colspan="7" class="text-end h6 subtotal_amount"> Total : </td>
+                                    <td colspan="6" class="text-end h6 subtotal_amount"> Total : </td>
                                     <td class="text-end h6 sub_total"></td>     
                                 </tr>
                             </tfoot>

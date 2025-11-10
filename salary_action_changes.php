@@ -24,13 +24,13 @@ if(isset($_REQUEST['product_row_index'])) {
 
             if(!empty($data['engineer_id']) && !empty($from_date) && !empty($to_date)){
                 $engineer_working_days = $obj->EngineerWorkingDays($data['engineer_id'],'',$from_date,$to_date);
-                // if(!empty($engineer_working_days)){
-                //     $engineer_working_days = number_format($engineer_working_days, 1);
-                // }else{
-                //     $engineer_working_days = 0;
-                // }
-                // $engineer_working_days = str_replace(",", "", $engineer_working_days);
-               
+                if(!empty($engineer_working_days)){
+                    $engineer_working_days = number_format($engineer_working_days, 1);
+                }else{
+                    $engineer_working_days = 0;
+                }
+                $engineer_working_days = str_replace(",", "", $engineer_working_days);
+  
             }
 
             $engineer_salary = 0; $ot_salary = 0;

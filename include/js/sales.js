@@ -38,23 +38,23 @@ function ChangeVehicle(selectElement) {
     if(jQuery('select[name="party_id"]').length > 0) {
         party_id = jQuery('select[name="party_id"]').val();
     }
-    var check_login_session = 1; var all_errors_check = 1;
-        var post_url = "dashboard_changes.php?check_login_session=1";
-        jQuery.ajax({
-            url: post_url, success: function (check_login_session) {
-                if (check_login_session == 1) {
-                    post_url = "sales_bill_changes.php?product_row_vehicle_id="+ selectElement.value + "&party_id="+party_id;
-                    jQuery.ajax({
-                        url: post_url, success: function (result) {
-                            if (jQuery('.sales_table tbody').length > 0) {
-                                jQuery('.sales_table tbody').empty().html(result);
-                            }
-                            CalcTotalAmount();
-                        }
-                    });
-                }
-            }
-        });
+    // var check_login_session = 1; var all_errors_check = 1;
+    //     var post_url = "dashboard_changes.php?check_login_session=1";
+    //     jQuery.ajax({
+    //         url: post_url, success: function (check_login_session) {
+    //             if (check_login_session == 1) {
+    //                 post_url = "sales_bill_changes.php?product_row_vehicle_id="+ selectElement.value + "&party_id="+party_id;
+    //                 jQuery.ajax({
+    //                     url: post_url, success: function (result) {
+    //                         if (jQuery('.sales_table tbody').length > 0) {
+    //                             jQuery('.sales_table tbody').empty().html(result);
+    //                         }
+    //                         CalcTotalAmount();
+    //                     }
+    //                 });
+    //             }
+    //         }
+    //     });
 
 }
 
@@ -617,7 +617,7 @@ function getGST() {
             jQuery('.charges_tax').removeClass('d-none');
         }
         if (parseInt(tax_type) == 1) {
-            $(".subtotal_amount").attr('colspan', 8);
+            $(".subtotal_amount").attr('colspan', 7);
 
             if (jQuery('.tax_cover2').length > 0) {
                 jQuery('.tax_cover2').addClass('d-none');
@@ -627,7 +627,7 @@ function getGST() {
             }
         }
         else {
-            $(".subtotal_amount").attr('colspan', 7);
+            $(".subtotal_amount").attr('colspan', 6);
             if (jQuery('.tax_element').length > 0) {
                 jQuery('.tax_element').addClass('d-none');
             }
@@ -640,7 +640,7 @@ function getGST() {
         }
     }
     else {
-        $(".subtotal_amount").attr('colspan', 7);
+        $(".subtotal_amount").attr('colspan', 6);
 
         if (parseInt(tax_type) == 1) {
             if (jQuery('.tax_element').length > 0) {
@@ -1535,4 +1535,341 @@ function ProductRowCheck(obj) {
     }
     checkDiscount();
     calTotal();
+}
+
+function getUnit(product_id) {
+    if (jQuery('#product_unit_list').length > 0) {
+        jQuery('#product_unit_list').html('');
+    }
+    if (jQuery('.product_stock').length > 0) {
+        jQuery('.product_stock').html('');
+    }
+
+    var store_type = "";
+    var store_id = "";
+
+    var check_login_session = 1;
+    var post_url = "dashboard_changes.php?check_login_session=1";
+    jQuery.ajax({
+        url: post_url, success: function (check_login_session) {
+            if (check_login_session == 1) {
+
+                var post_url = "bill_changes.php?get_unit=" + product_id + "&store_id=" + store_id;
+                jQuery.ajax({
+                    url: post_url, success: function (product_unit) {
+                        $product_rate = ""; unit = ""; split_array = "";
+
+                        if (product_unit != '') {
+                            split_array = product_unit.split("$$$");
+                            split_array[0] = jQuery.trim(split_array[0]);
+                            split_array[1] = jQuery.trim(split_array[1]);
+
+                        }
+                        if (jQuery('#selected_unit_id').length > 0) {
+                            jQuery('#selected_unit_id').html(split_array[0]);
+                        }
+                        if (jQuery('input[name="selected_rate"]').length > 0) {
+                            jQuery('input[name="selected_rate"]').val();
+                        }
+                        if (jQuery('input[name="selected_quantity"]').length > 0) {
+                            jQuery('input[name="selected_quantity"]').focus();
+                        }
+                    }
+                });
+
+            }
+            else {
+                window.location.reload();
+            }
+        }
+    });
+}
+
+function getTotalQuantity() {
+
+    var total_quantity = 0;
+    var product_id = "";
+    if (jQuery('select[name="selected_product_id"]').length > 0) {
+        product_id = jQuery('select[name="selected_product_id"]').val();
+        product_id = jQuery.trim(product_id);
+    }
+    var unit = "";
+    if (jQuery('select[name="selected_unit_id"]').length > 0) {
+        unit = jQuery('select[name="selected_unit_id"]').val();
+        unit = jQuery.trim(unit);
+    }
+
+    var quantity = 0;
+    if (jQuery('input[name="selected_quantity"]').length > 0) {
+        quantity = jQuery('input[name="selected_quantity"]').val();
+        quantity = jQuery.trim(quantity);
+    }
+
+
+
+    var rate = 0;
+    if (jQuery('input[name="selected_rate"]').length > 0) {
+        rate = jQuery('input[name="selected_rate"]').val();
+        rate = jQuery.trim(rate);
+    }
+
+    var post_url = "bill_changes.php?selected_unit=" + unit + "&quantity=" + quantity + "&product_id=" + product_id + "&rate=" + rate;
+    jQuery.ajax({
+        url: post_url, success: function (result) {
+            if (result != "") {
+                result = jQuery.trim(result);
+                if (jQuery('input[name="selected_amount"]').length > 0) {
+                    jQuery('input[name="selected_amount"]').val(result);
+                }
+            }
+        }
+    });
+
+}
+
+
+function AddDetails() {
+    var check_login_session = 1; var all_errors_check = 1; var form_name = 'sales_form';
+    var post_url = "dashboard_changes.php?check_login_session=1";
+    jQuery.ajax({
+        url: post_url, success: function (check_login_session) {
+            if (check_login_session == 1) {
+
+                if (jQuery('.infos').length > 0) {
+                    jQuery('.infos').each(function () { jQuery(this).remove(); });
+                }
+
+                
+                
+                var selected_product_id = "";
+                if (jQuery('select[name="selected_product_id"]').length > 0) {
+                    selected_product_id = jQuery('select[name="selected_product_id"]').val();
+                    selected_product_id = jQuery.trim(selected_product_id);
+                    if (typeof selected_product_id == "undefined" || selected_product_id == "" || selected_product_id == 0) {
+                        all_errors_check = 0;
+                        throwerrormsg('selected_product_id', 'select', 'Select Item', form_name);
+                    }
+                }
+
+                var selected_quantity = 0;
+                if (jQuery('input[name="selected_quantity"]').length > 0) {
+                    selected_quantity = jQuery('input[name="selected_quantity"]').val();
+                    selected_quantity = jQuery.trim(selected_quantity);
+                    if (typeof selected_quantity == "undefined" || selected_quantity == "" || selected_quantity == 0) {
+                        all_errors_check = 0;
+                        throwerrormsg('selected_quantity', 'input', 'Enter qty', form_name);
+                    }
+                }
+
+
+                var selected_unit_id = "";
+               
+                if (jQuery('select[name="selected_unit_id"]').length > 0) {
+                    selected_unit_id = jQuery('select[name="selected_unit_id"]').val();
+                    selected_unit_id = jQuery.trim(selected_unit_id);
+                    if (typeof selected_unit_id == "undefined" || selected_unit_id == "" || selected_unit_id == 0) {
+                        all_errors_check = 0;
+                        throwerrormsg('selected_unit_id', 'select', 'Select Unit', form_name);
+                    }
+                }
+
+                var selected_rate = 0;
+                if (jQuery('input[name="selected_rate"]').length > 0) {
+                    selected_rate = jQuery('input[name="selected_rate"]').val();
+                    selected_rate = jQuery.trim(selected_rate);
+                    if (typeof selected_rate == "undefined" || selected_rate == "" || selected_rate == 0) {
+                        all_errors_check = 0;
+                        throwerrormsg('selected_rate', 'input', 'Enter rate', form_name);
+                    }
+                    else if (price_regex.test(selected_rate) == false) {
+                        all_errors_check = 0;
+                        throwerrormsg('selected_rate', 'input', 'Enter rate', form_name);
+                    }
+                    else if (parseFloat(selected_rate) > 99999999) {
+                        all_errors_check = 0;
+                        throwerrormsg('selected_rate', 'input', 'Enter rate', form_name);
+                    }
+                }
+
+                var gst_option = "";
+                if (jQuery('input[name="gst_option"]').length > 0) {
+                    gst_option = jQuery('input[name="gst_option"]').val();
+                }
+
+                var tax_type = "";
+                if (jQuery('select[name="tax_type"]').length > 0) {
+                    tax_type = jQuery('select[name="tax_type"]').val();
+                }
+
+                var tax_option = "";
+                if (jQuery('select[name="tax_option"]').length > 0) {
+                    tax_option = jQuery('select[name="tax_option"]').val();
+                }
+
+                var tax_value = "";
+                if (jQuery('select[name="overall_tax"]').length > 0) {
+                    tax_value = jQuery('select[name="overall_tax"]').val();
+                }
+
+                var final_rate = "";
+ 
+                if (gst_option == '1') {
+                    if (tax_type == '2') {
+                        if (tax_option == '2') {
+                            tax_value = tax_value.trim("%");
+                            tax_value = (parseFloat(selected_rate) * parseFloat(tax_value)) / (parseInt(tax_value) + 100);
+                            final_rate = parseFloat(selected_rate) - parseFloat(tax_value);
+                        }
+                        else {
+                            final_rate = selected_rate;
+                        }
+                    }
+                    else {
+                        final_rate = selected_rate;
+                    }
+                }
+                else {
+                    final_rate = selected_rate;
+                }
+                // if (store_type == "1") {
+                //     $(".subtotal_amount").attr('colspan', 5);
+                // } else if (store_type == "2") {
+                //     $(".subtotal_amount").attr('colspan', 6);
+                // }
+
+                var selected_amount = 0;
+                if (jQuery('input[name="selected_amount"]').length > 0) {
+                    selected_amount = jQuery('input[name="selected_amount"]').val();
+                    selected_amount = jQuery.trim(selected_amount);
+                    if (typeof selected_amount == "undefined" || selected_amount == "" || selected_amount == 0) {
+                        all_errors_check = 0;
+                    }
+                    else if (price_regex.test(selected_amount) == false) {
+                        all_errors_check = 0;
+                    }
+
+                }
+
+                if (parseFloat(all_errors_check) == 1) {
+                    var add = 1;
+                    if (jQuery('input[name="product_id[]"]').length > 0) {
+                        jQuery('.sales_table tbody').find('tr').each(function () {
+                            var prev_product_id = ""; var prev_store_id = ""; var prev_unit_id = "";
+                            prev_product_id = jQuery(this).find('input[name="product_id[]"]').val();
+                            prev_unit_id = jQuery(this).find('input[name="unit_id[]"]').val();
+                            
+                            if (prev_product_id == selected_product_id && prev_unit_id == selected_unit_id) {
+                                add = 0;
+                            }
+                            
+                        });
+                    }
+                    if (parseFloat(add) == 1) {
+                        var product_count = 0;
+                        product_count = jQuery('input[name="product_count"]').val();
+                        product_count = parseInt(product_count) + 1;
+                        jQuery('input[name="product_count"]').val(product_count);
+
+                        var post_url = "sales_bill_changes.php?product_row_index=" + product_count + "&selected_product_id=" + selected_product_id + "&selected_unit_id=" + selected_unit_id + "&selected_quantity=" + selected_quantity + "&selected_rate=" + selected_rate + "&selected_amount=" + selected_amount + "&final_rate=" + final_rate + "&tax_option=" + tax_option + "&tax_type=" + tax_type;
+
+                        jQuery.ajax({
+                            url: post_url, success: function (result) {
+                                if (jQuery('.sales_table tbody').find('tr').length > 0) {
+                                    jQuery('.sales_table tbody').find('tr:first').before(result);
+                                }
+                                else {
+                                    jQuery('.sales_table tbody').append(result);
+                                }
+                                addChargesTax();
+                                if (jQuery('select[name="from_store_id"]').length > 0) {
+                                    jQuery('select[name="from_store_id"]').attr('disabled', true);
+                                    if (jQuery('input[name="from_store"]').length > 0) {
+                                        if (from_store_id != "") {
+                                            jQuery('input[name="from_store"]').attr('disabled', false);
+                                            jQuery('input[name="from_store"]').val(from_store_id);
+                                        }
+                                    }
+                                }
+                                if (jQuery('select[name="to_store_id"]').length > 0) {
+                                    jQuery('select[name="to_store_id"]').attr('disabled', true);
+                                    if (jQuery('input[name="to_store"]').length > 0) {
+                                        if (to_store_id != "") {
+                                            jQuery('input[name="to_store"]').attr('disabled', false);
+                                            jQuery('input[name="to_store"]').val(to_store_id);
+                                        }
+                                    }
+                                }
+                                if (jQuery('input[name="selected_quantity"]').length > 0) {
+                                    jQuery('input[name="selected_quantity"]').val('');
+                                }
+                                if (jQuery('input[name="selected_rate"]').length > 0) {
+                                    jQuery('input[name="selected_rate"]').val('');
+                                }
+                                
+                                if (jQuery('input[name="selected_amount"]').length > 0) {
+                                    jQuery('input[name="selected_amount"]').val('');
+                                }
+                                if (jQuery('select[name="selected_product_id"]').length > 0) {
+                                    jQuery('select[name="selected_product_id"]').val('').trigger('change');
+                                }
+                                
+                                if (jQuery('select[name="selected_unit_id"]').length > 0) {
+                                    jQuery('select[name="selected_unit_id"]').val('').trigger('change');
+                                }
+                               
+                                if (jQuery('#span_stock').length > 0) {
+                                    jQuery('#span_stock').addClass('d-none');
+                                }
+                                if (jQuery('select[name="store_type"]').length > 0) {
+                                    jQuery('select[name="store_type"]').attr('disabled', true);
+                                    jQuery('input[name="store_type"]').val(store_type);
+                                }
+                                calTotal();
+                            }
+                        });
+                    }
+                    else {
+                        jQuery('.sales_table').before('<span class="infos w-100 text-center mb-3" style="font-size: 15px;">This Product Already Exists</span>');
+                    }
+                }
+                else {
+                    jQuery('.sales_table').before('<span class="infos w-100 text-center mb-3" style="font-size: 15px;">Check All Details</span>');
+                }
+            }
+            else {
+                window.location.reload();
+            }
+        }
+    });
+}
+
+function DeleteSalesRow(row_index, id_name) {
+    var check_login_session = 1;
+    var post_url = "dashboard_changes.php?check_login_session=1";
+    jQuery.ajax({
+        url: post_url, success: function (check_login_session) {
+            if (check_login_session == 1) {
+                if (jQuery('#' + id_name + row_index).length > 0) {
+                    jQuery('#' + id_name + row_index).remove();
+                }
+                if (id_name == 'product_row') {
+                    var product_count = 0;
+                    product_count = jQuery('input[name="product_count"]').val();
+                    product_count = parseInt(product_count) - 1;
+                    jQuery('input[name="product_count"]').val(product_count);
+                    if (product_count == 0) {
+                        if (jQuery('select[name="store_type"]').length > 0) {
+                            jQuery('select[name="store_type"]').attr('disabled', false);
+                        }
+                    }
+                }
+                calTotal();
+                checkDiscount()
+                addChargesTax()
+            }
+            else {
+                window.location.reload();
+            }
+        }
+    });
 }

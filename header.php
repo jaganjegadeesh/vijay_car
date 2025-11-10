@@ -552,6 +552,9 @@
                             </a>
                             <div class="collapse menu-dropdown" id="report">
                                 <ul class="nav nav-lg flex-column">
+                                    <li class="nav-item" id="attendancereport">
+                                        <a href="attendance_report.php" class="nav-link"><i class="bi bi-dash"></i> Attendance Report </a>
+                                    </li>
                                     <li class="nav-item" id="stockreport">
                                         <a href="stock_report.php" class="nav-link"><i class="bi bi-dash"></i> Stock Report </a>
                                     </li>

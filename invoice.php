@@ -34,6 +34,7 @@
     <script type="text/javascript" src="include/js/keyboard_control.js"></script>
     <script type="text/javascript" src="include/js/payment.js"></script>
     <script type="text/javascript" src="include/js/common.js"></script>
+    <script type="text/javascript" src="include/js/add_modules.js"></script>
     <script type="text/javascript" src="include/js/sales.js"></script>
 </head>	
 <body>
