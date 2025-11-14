@@ -17,7 +17,7 @@
         $show_product_id = trim($show_product_id); 
         $to_date = date('Y-m-d');
         $entry_date = date('Y-m-d');     
-        $product_name = ""; $hsn_code = ""; $unit_id = ""; $product_rate = ""; $product_tax= ""; $store_room_ids = array(); $stock_dates = array();  $product_row_index = 0; $store_room_names = array(); $quantitys = array();  $product_id = "";  
+        $product_name = ""; $hsn_code = ""; $unit_id = ""; $product_rate = ""; $product_tax= ""; $store_room_ids = array(); $stock_dates = array();  $product_row_index = 0; $store_room_names = array(); $quantitys = array();  $product_id = "";  $stock_option = 1;
         if(!empty($show_product_id)) {
             $product_list = array();
             $product_list = $obj->getTableRecords($GLOBALS['product_table'], 'product_id', $show_product_id, '');
@@ -54,6 +54,9 @@
                     if(!empty($data['quantity']) && $data['quantity'] != $GLOBALS['null_value']) {
                         $quantitys = explode(",", $data['quantity']);
                     } 
+                    if(!empty($data['stock_option']) && $data['stock_option'] != $GLOBALS['null_value']) {
+                        $stock_option = $data['stock_option'];
+                    }
                 }
             }
         }
@@ -145,166 +148,176 @@
                         </div>
                     </div>    
                 </div>
-            </div> 
-            <div class="row justify-content-center p-3">
                 <div class="col-lg-2 col-md-3 col-6 px-lg-1 py-2">
-                    <div class="form-group pb-2">
-                        <div class="form-label-group in-border">
-                            <input type="date" class="form-control shadow-none" name="stock_date" id="stock_date" placeholder="" required="" value="<?php if(!empty($entry_date)) { echo $entry_date; } ?>"max="<?php if(!empty($to_date)) { echo $to_date; } ?>">
-                            <label>Stock Date</label>
+                    <div class="flex-shrink-0">
+                        <div class="form-check form-switch form-switch-right form-switch-md">
+                            <label for="stock_option" class="form-label text-muted smallfnt">Stock</label>
+                            <input class="form-check-input code-switcher" type="checkbox" name="stock_option" onchange="Javascript:ShowStock(this,this.value);"
+                            value="<?php echo $stock_option; ?>" <?php if ($stock_option == '1') echo 'checked'; ?> id="stock_option">
                         </div>
-                    </div> 
-                </div>
-                <div class="col-lg-2 col-md-3 col-6 px-lg-1 py-2">
-                    <div class="form-group">
-                        <div class="form-label-group in-border">
-                            <select class="select2 select2-danger" name="store_room_id" id="store_room_id" data-dropdown-css-class="select2-danger" style="width: 100%;">
-                                <option value="">Select Store Room</option>
-                                <?php
-                                    if(!empty($store_room_list)) {
-                                        foreach($store_room_list as $data) {
-                                            if(!empty($data['store_room_id'])) {?>
-                                                <option value="<?php echo $data['store_room_id']; ?>" <?php if(!empty($store_room_id) && $data['store_room_id'] == $store_room_id) { ?>selected<?php } ?>>
-                                                <?php
-                                                    if(!empty($data['store_room_name'])) {
-                                                        $data['store_room_name'] = $obj->encode_decode('decrypt', $data['store_room_name']);
-                                                        echo $data['store_room_name'];
-                                                    } 
-                                                ?>                     
-                                                </option>
-                                            <?php
-                                            }
-                                        }
-                                    }
-                                ?>
-                            </select>
-                            <label>Select Store</label>
-                        </div>
-                    </div>        
-                </div>
-                <div class="col-lg-1 col-md-3 col-6 px-lg-1 py-2">
-                    <div class="form-group">
-                        <div class="form-label-group in-border">
-                            <input type="text"  name="quantity" id="quantity" class="form-control shadow-none" onfocus="Javascript:KeyboardControls(this,'number',8,'');" placeholder="" required="">
-                            <label>QTY</label>
-                        </div>
-                    </div> 
-                </div>
-                <!-- <div class="col-lg-2 col-md-3 col-6 px-lg-1 py-2">
-                    <div class="form-group">
-                        <div class="form-label-group in-border">
-                            <select class="select2 select2-danger" data-dropdown-css-class="select2-danger" name="row_unit_id" id="row_unit_id" style="width: 100%;">
-                                <option value="">Select Unit</option>
-                                <?php
-                                    if(!empty($unit_list)) {
-                                        foreach($unit_list as $data) {
-                                            if(!empty($data['unit_id'])) {?>
-                                                <option value="<?php echo $data['unit_id']; ?>" <?php if(!empty($unit_id) && $data['unit_id'] == $unit_id) { ?>selected<?php } ?>>
-                                                <?php
-                                                    if(!empty($data['unit_name'])) {
-                                                        $data['unit_name'] = $obj->encode_decode('decrypt', $data['unit_name']);
-                                                        echo $data['unit_name'];
-                                                    } 
-                                                ?>                                              
-                                                </option>
-                                            <?php
-                                            }
-                                        }
-                                    }
-                                ?>
-                            </select>
-                            <label>Unit</label>
-                        </div>
-                    </div>        
-                </div> -->
-                <div class="col-lg-1 col-md-3 col-6 px-lg-1  py-2">
-                    <button class="btn btn-danger py-2" style="font-size:12px; width:100%;" type="button" onclick="Javascript:AddProductDetails();">Add</button>
-                </div>
-                <div class="col-lg-9">
-                    <div class="table-responsive text-center">
-                        <input type="hidden" name="product_count" value="<?php if(!empty($product_row_index)) { echo $product_row_index; } else { echo "0"; } ?>">
-                        <table class="table nowrap cursor smallfnt w-100 table-bordered added_product_table">
-                            <thead class="bg-dark smallfnt">
-                                <tr style="white-space:pre;">
-                                    <th>#</th>
-                                    <th>Stock Date</th>
-                                    <th>Store</th>
-                                    <th>QTY</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php 
-                                    if(!empty($store_room_ids)) {
-                                        for($i=0; $i < count($store_room_ids); $i++) { ?>
-                                        <tr class="product_row" id="product_row<?php echo $product_row_index; ?>">
-                                            <th class="sno text-center px-2 py-2">
-                                                <?php if(!empty($product_row_index)) { echo $product_row_index; } ?>
-                                            </th>
-                                            <th class="text-center px-2 py-2">
-                                                <?php
-                                                    if(!empty($stock_dates[$i])) {
-                                                        echo date('d-M-Y', strtotime($stock_dates[$i]));
-                                                    }
-                                                ?>
-                                                <input type="hidden" name="stock_dates[]" value="<?php if(!empty($stock_dates[$i])) { echo $stock_dates[$i]; } ?>">
-                                            </th>
-                                             <th class="text-center px-2 py-2">
-                                                <?php
-                                                    if(!empty($store_room_names[$i]) && $store_room_names[$i] != $GLOBALS['null_value']) {
-                                                        echo $obj->encode_decode('decrypt', $store_room_names[$i]);
-                                                    }
-                                                ?>
-                                                <input type="hidden" name="store_room_ids[]" value="<?php if(!empty($store_room_ids[$i])) { echo $store_room_ids[$i]; } ?>">
-                                            </th>
-                                            <th class="text-center px-2 py-2" style="width: 20%;">
-                                                <input type="text" name="quantitys[]" class="form-control shadow-none" value="<?php if(!empty($quantitys[$i])) { echo $quantitys[$i]; } ?>" onfocus="Javascript:KeyboardControls(this,'number',5,'');">
-                                                
-                                            </th>
-                                            <th class="text-center px-2 py-2">
-                                                <?php 
-                                                    $show_button = 0;$can_delete = 'true';  
-                                                    $current_inward_stock = 0; $current_outward_stock = 0; $current_unit_stock = 0;
-                                                    $current_inward_stock = $obj->getInwardQty($show_product_id,$store_room_ids[$i],$show_product_id,$unit_id);
-                                                    $current_outward_stock = $obj->getOutwardQty($show_product_id,$store_room_ids[$i],$show_product_id,$unit_id);                                                            
-                                                    if($current_inward_stock >= $current_outward_stock) {
-                                                        $show_button = 1;
-                                                    }
-                                                    $current_inward_stock = 0; $current_outward_stock = 0; $current_unit_stock = 0;
-                                                    if($show_button == '1' && $can_delete == "true") {
-                                                            ?>
-                                                            <button class="btn btn-danger" type="button" onclick="Javascript:DeleteCreationRow('product', '<?php echo $product_row_index; ?>');"><i class="fa fa-trash"></i></button>
-                                                            <?php
-                                                    }else{
-                                                        ?>
-                                                            <span class="text-danger" style="font-weight:bold!important;">Can't Delete</span>                                                                     
-                                                        <?php
-                                                    }        
-                                                ?>
-                                            </th>
-                                        </tr>
-
-                                        <?php 
-                                            $product_row_index--;
-                                        }
-                                    }
-                                ?>
-                            </tbody> 
-                        </table>
                     </div>
-                </div>    
-                <div class="col-md-12 pt-3 text-center">
-                     <button class="btn btn-dark submit_button" type="button" onClick="Javascript:SaveModalContent(event,'product_form', 'product_changes.php', 'product.php');">Submit
-                    </button>
                 </div>
+            </div> 
+            <div class="row justify-content-center p-3 stock_cover <?php if($stock_option == 2) { ?> d-none <?php } ?>">
+                
+                    <div class="col-lg-2 col-md-3 col-6 px-lg-1 py-2">
+                        <div class="form-group pb-2">
+                            <div class="form-label-group in-border">
+                                <input type="date" class="form-control shadow-none" name="stock_date" id="stock_date" placeholder="" required="" value="<?php if(!empty($entry_date)) { echo $entry_date; } ?>"max="<?php if(!empty($to_date)) { echo $to_date; } ?>">
+                                <label>Stock Date</label>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-6 px-lg-1 py-2">
+                        <div class="form-group">
+                            <div class="form-label-group in-border">
+                                <select class="select2 select2-danger" name="store_room_id" id="store_room_id" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                    <option value="">Select Store Room</option>
+                                    <?php
+                                        if(!empty($store_room_list)) {
+                                            foreach($store_room_list as $data) {
+                                                if(!empty($data['store_room_id'])) {?>
+                                                    <option value="<?php echo $data['store_room_id']; ?>" <?php if(!empty($store_room_id) && $data['store_room_id'] == $store_room_id) { ?>selected<?php } ?>>
+                                                    <?php
+                                                        if(!empty($data['store_room_name'])) {
+                                                            $data['store_room_name'] = $obj->encode_decode('decrypt', $data['store_room_name']);
+                                                            echo $data['store_room_name'];
+                                                        } 
+                                                    ?>                     
+                                                    </option>
+                                                <?php
+                                                }
+                                            }
+                                        }
+                                    ?>
+                                </select>
+                                <label>Select Store</label>
+                            </div>
+                        </div>        
+                    </div>
+                    <div class="col-lg-1 col-md-3 col-6 px-lg-1 py-2">
+                        <div class="form-group">
+                            <div class="form-label-group in-border">
+                                <input type="text"  name="quantity" id="quantity" class="form-control shadow-none" onfocus="Javascript:KeyboardControls(this,'number',8,'');" placeholder="" required="">
+                                <label>QTY</label>
+                            </div>
+                        </div> 
+                    </div>
+                    <!-- <div class="col-lg-2 col-md-3 col-6 px-lg-1 py-2">
+                        <div class="form-group">
+                            <div class="form-label-group in-border">
+                                <select class="select2 select2-danger" data-dropdown-css-class="select2-danger" name="row_unit_id" id="row_unit_id" style="width: 100%;">
+                                    <option value="">Select Unit</option>
+                                    <?php
+                                        if(!empty($unit_list)) {
+                                            foreach($unit_list as $data) {
+                                                if(!empty($data['unit_id'])) {?>
+                                                    <option value="<?php echo $data['unit_id']; ?>" <?php if(!empty($unit_id) && $data['unit_id'] == $unit_id) { ?>selected<?php } ?>>
+                                                    <?php
+                                                        if(!empty($data['unit_name'])) {
+                                                            $data['unit_name'] = $obj->encode_decode('decrypt', $data['unit_name']);
+                                                            echo $data['unit_name'];
+                                                        } 
+                                                    ?>                                              
+                                                    </option>
+                                                <?php
+                                                }
+                                            }
+                                        }
+                                    ?>
+                                </select>
+                                <label>Unit</label>
+                            </div>
+                        </div>        
+                    </div> -->
+                    <div class="col-lg-1 col-md-3 col-6 px-lg-1  py-2">
+                        <button class="btn btn-danger py-2" style="font-size:12px; width:100%;" type="button" onclick="Javascript:AddProductDetails();">Add</button>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="table-responsive text-center">
+                            <input type="hidden" name="product_count" value="<?php if(!empty($product_row_index)) { echo $product_row_index; } else { echo "0"; } ?>">
+                            <table class="table nowrap cursor smallfnt w-100 table-bordered added_product_table">
+                                <thead class="bg-dark smallfnt">
+                                    <tr style="white-space:pre;">
+                                        <th>#</th>
+                                        <th>Stock Date</th>
+                                        <th>Store</th>
+                                        <th>QTY</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php 
+                                        if(!empty($store_room_ids)) {
+                                            for($i=0; $i < count($store_room_ids); $i++) { ?>
+                                            <tr class="product_row" id="product_row<?php echo $product_row_index; ?>">
+                                                <th class="sno text-center px-2 py-2">
+                                                    <?php if(!empty($product_row_index)) { echo $product_row_index; } ?>
+                                                </th>
+                                                <th class="text-center px-2 py-2">
+                                                    <?php
+                                                        if(!empty($stock_dates[$i])) {
+                                                            echo date('d-M-Y', strtotime($stock_dates[$i]));
+                                                        }
+                                                    ?>
+                                                    <input type="hidden" name="stock_dates[]" value="<?php if(!empty($stock_dates[$i])) { echo $stock_dates[$i]; } ?>">
+                                                </th>
+                                                <th class="text-center px-2 py-2">
+                                                    <?php
+                                                        if(!empty($store_room_names[$i]) && $store_room_names[$i] != $GLOBALS['null_value']) {
+                                                            echo $obj->encode_decode('decrypt', $store_room_names[$i]);
+                                                        }
+                                                    ?>
+                                                    <input type="hidden" name="store_room_ids[]" value="<?php if(!empty($store_room_ids[$i])) { echo $store_room_ids[$i]; } ?>">
+                                                </th>
+                                                <th class="text-center px-2 py-2" style="width: 20%;">
+                                                    <input type="text" name="quantitys[]" class="form-control shadow-none" value="<?php if(!empty($quantitys[$i])) { echo $quantitys[$i]; } ?>" onfocus="Javascript:KeyboardControls(this,'number',5,'');">
+                                                    
+                                                </th>
+                                                <th class="text-center px-2 py-2">
+                                                    <?php 
+                                                        $show_button = 0;$can_delete = 'true';  
+                                                        $current_inward_stock = 0; $current_outward_stock = 0; $current_unit_stock = 0;
+                                                        $current_inward_stock = $obj->getInwardQty($show_product_id,$store_room_ids[$i],$show_product_id,$unit_id);
+                                                        $current_outward_stock = $obj->getOutwardQty($show_product_id,$store_room_ids[$i],$show_product_id,$unit_id);                                                            
+                                                        if($current_inward_stock >= $current_outward_stock) {
+                                                            $show_button = 1;
+                                                        }
+                                                        $current_inward_stock = 0; $current_outward_stock = 0; $current_unit_stock = 0;
+                                                        if($show_button == '1' && $can_delete == "true") {
+                                                                ?>
+                                                                <button class="btn btn-danger" type="button" onclick="Javascript:DeleteCreationRow('product', '<?php echo $product_row_index; ?>');"><i class="fa fa-trash"></i></button>
+                                                                <?php
+                                                        }else{
+                                                            ?>
+                                                                <span class="text-danger" style="font-weight:bold!important;">Can't Delete</span>                                                                     
+                                                            <?php
+                                                        }        
+                                                    ?>
+                                                </th>
+                                            </tr>
+
+                                            <?php 
+                                                $product_row_index--;
+                                            }
+                                        }
+                                    ?>
+                                </tbody> 
+                            </table>
+                        </div>
+                    </div>   
             </div>  
+            <div class="col-md-12 p-3 text-center">
+                    <button class="btn btn-dark submit_button" type="button" onClick="Javascript:SaveModalContent(event,'product_form', 'product_changes.php', 'product.php');">Submit
+                </button>
+            </div>
             <script src="include/select2/js/select2.min.js"></script>
             <script src="include/select2/js/select.js"></script>
         </form>
 		<?php
     } 
     if(isset($_POST['edit_id'])) {
-        $edit_id = ""; $product_name = ""; $product_name_error = ""; $hsn_code = ""; $hsn_code_error = ""; $unit_id = ""; $unit_id_error = ""; $product_rate = ""; $product_rate_error = ""; $product_tax = ""; $product_tax_error = ""; $form_name = "product_form";  $valid_product = ""; $stock_dates = array(); $store_room_ids = array(); $store_room_names = array(); $quantitys = array(); $product_row_error = ""; $store_room_names = array(); $stock_unique_ids = array(); $unit_name = "";
+        $edit_id = ""; $product_name = ""; $product_name_error = ""; $hsn_code = ""; $hsn_code_error = ""; $unit_id = ""; $unit_id_error = ""; $product_rate = ""; $product_rate_error = ""; $product_tax = ""; $product_tax_error = ""; $form_name = "product_form";  $valid_product = ""; $stock_dates = array(); $store_room_ids = array(); $store_room_names = array(); $quantitys = array(); $product_row_error = ""; $store_room_names = array(); $stock_unique_ids = array(); $unit_name = "";  $stock_option =2; $stock_option_error = "";
         if(isset($_POST['edit_id'])) {
 			$edit_id = $_POST['edit_id'];
             $edit_id = trim($edit_id);
@@ -393,17 +406,38 @@
                 }
             }
         }
-        if(isset($_POST['stock_dates'])) {
-            $stock_dates = $_POST['stock_dates'];
+        if(isset($_POST['stock_option']))
+        {
+            $stock_option = $_POST['stock_option'];
+            $stock_option = trim($stock_option);
+            $stock_option_error = $valid->common_validation($stock_option, 'Stock option', 'select');
+            if(empty($stock_option_error)) {
+                if($stock_option != 1 && $stock_option != 2) {
+                    $stock_option_error = "Invalid Stock option";
+                }
+            }
+        }
+        
+        if(!empty($stock_option_error)) {
+            if(!empty($valid_invoice)) {
+                $valid_invoice = $valid_invoice." ".$valid->error_display($form_name, 'stock_option', $stock_option_error, 'text');
+            }
+            else {
+                $valid_invoice = $valid->error_display($form_name, 'stock_option', $stock_option_error, 'text');
+            }
         }
 
-        if(isset($_POST['store_room_ids'])) {
-            $store_room_ids = $_POST['store_room_ids'];
-        }
+            if(isset($_POST['stock_dates'])) {
+                $stock_dates = $_POST['stock_dates'];
+            }
 
-        if(isset($_POST['quantitys'])) {
-            $quantitys = $_POST['quantitys'];
-        }
+            if(isset($_POST['store_room_ids'])) {
+                $store_room_ids = $_POST['store_room_ids'];
+            }
+
+            if(isset($_POST['quantitys'])) {
+                $quantitys = $_POST['quantitys'];
+            }
 
         if(!empty($store_room_ids) && empty($product_row_error)) {
             for($i=0; $i < count($store_room_ids); $i++) {
@@ -422,19 +456,27 @@
                         }
                         if(!empty($quantitys[$i])) {
                             if(!preg_match("/^[0-9]+(\\.[0-9]+)?$/",$quantitys[$i])) {
-                                $product_row_error = "Invalid Quantity - ".($obj->encode_decode('decrypt', $store_room_name));
+                                if($stock_option == 1) {
+                                    $product_row_error = "Invalid Quantity - ".($obj->encode_decode('decrypt', $store_room_name));
+                                }
                             }
                         }
                         else {
-                            $product_row_error = "Empty Quantity in  - ".($obj->encode_decode('decrypt', $store_room_name));
+                            if($stock_option == 1) {
+                                $product_row_error = "Empty Quantity in  - ".($obj->encode_decode('decrypt', $store_room_name));
+                            }
                         }
                     }
                     else {
-                        $product_row_error = "Stock Date is empty  - ".($obj->encode_decode('decrypt', $store_room_name));
+                        if($stock_option == 1) {
+                            $product_row_error = "Stock Date is empty  - ".($obj->encode_decode('decrypt', $store_room_name));
+                        }
                     }
                 }
                 else {
-                    $product_row_error = "Select Store Room Name";
+                    if($stock_option == 1) {
+                        $product_row_error = "Select Store Room Name";
+                    }
                 }
                 $unit_name = $obj->getTableColumnValue($GLOBALS['unit_table'], 'unit_id', $unit_id, 'unit_name');
                 $current_inward_stock = 0; $current_outward_stock = 0; $current_unit_stock = 0;
@@ -445,8 +487,11 @@
                 }
                 $current_unit_stock = $current_inward_stock - $current_outward_stock;     
                 if($current_unit_stock < 0) {
-                    $valid_stock = "Stock goes to Negative for ".($obj->encode_decode('decrypt', $store_room_names[$i])). " Unit => ". $obj->encode_decode('decrypt',$unit_name) . " Stock => ".$current_unit_stock;
-                    $stock_error = 1;                                                                
+                    if($stock_option == 1) {
+
+                        $valid_stock = "Stock goes to Negative for ".($obj->encode_decode('decrypt', $store_room_names[$i])). " Unit => ". $obj->encode_decode('decrypt',$unit_name) . " Stock => ".$current_unit_stock;
+                        $stock_error = 1;              
+                    }                                                  
                 }    
             }
         }
@@ -501,7 +546,9 @@
 
 				if(!empty($store_room_names)) {
 					$store_room_names = implode(",", $store_room_names);
-				}
+				} else {
+                    $store_room_names = $GLOBALS['null_value'];
+                }
 
                 $prev_product_id = ""; $product_error = "";
                 if(!empty($lower_case_name)) {
@@ -521,8 +568,8 @@
                             $action = "New Product Created - ".$obj->encode_decode("decrypt",$product_name);
                         }
                         $null_value = $GLOBALS['null_value'];
-                        $columns = array('created_date_time', 'creator', 'creator_name', 'bill_company_id', 'product_id', 'product_name', 'lower_case_name','hsn_code','unit_id', 'unit_name','product_rate', 'product_tax', 'stock_date', 'store_room_id', 'store_room_name', 'quantity', 'deleted');
-                        $values = array("'".$created_date_time."'", "'".$creator."'", "'".$creator_name."'", "'".$bill_company_id."'","'".$null_value."'", "'".$product_name."'",  "'".$lower_case_name."'","'".$hsn_code."'", "'".$unit_id."'", "'".$unit_name."'", "'".$product_rate."'", "'".$product_tax."'","'".$stock_dates."'", "'".$store_room_ids."'", "'".$store_room_names."'", "'".$quantitys."'", "'0'");
+                        $columns = array('created_date_time', 'creator', 'creator_name', 'bill_company_id', 'product_id', 'product_name', 'lower_case_name','hsn_code','unit_id', 'unit_name','product_rate', 'product_tax','stock_option', 'stock_date', 'store_room_id', 'store_room_name', 'quantity', 'deleted');
+                        $values = array("'".$created_date_time."'", "'".$creator."'", "'".$creator_name."'", "'".$bill_company_id."'","'".$null_value."'", "'".$product_name."'",  "'".$lower_case_name."'","'".$hsn_code."'", "'".$unit_id."'", "'".$unit_name."'", "'".$product_rate."'", "'".$product_tax."'","'".$stock_option."'","'".$stock_dates."'", "'".$store_room_ids."'", "'".$store_room_names."'", "'".$quantitys."'", "'0'");
                         $product_insert_id = $obj->InsertSQL($GLOBALS['product_table'], $columns, $values,'product_id','', $action);
                         if(preg_match("/^\d+$/", $product_insert_id)) {
                             $product_id = $obj->getTableColumnValue($GLOBALS['product_table'], 'id', $product_insert_id, 'product_id');
@@ -554,8 +601,8 @@
                             }
                         
                             $columns = array(); $values = array();						
-                            $columns = array('creator_name','product_name', 'lower_case_name', 'hsn_code','unit_id', 'unit_name','product_rate', 'product_tax', 'stock_date', 'store_room_id', 'store_room_name', 'quantity',);
-                            $values = array("'".$creator_name."'", "'".$product_name."'",  "'".$lower_case_name."'","'".$hsn_code."'", "'".$unit_id."'", "'".$unit_name."'", "'".$product_rate."'", "'".$product_tax."'","'".$stock_dates."'", "'".$store_room_ids."'", "'".$store_room_names."'", "'".$quantitys."'");
+                            $columns = array('creator_name','product_name', 'lower_case_name', 'hsn_code','unit_id', 'unit_name','product_rate', 'product_tax','stock_option', 'stock_date', 'store_room_id', 'store_room_name', 'quantity',);
+                            $values = array("'".$creator_name."'", "'".$product_name."'",  "'".$lower_case_name."'","'".$hsn_code."'", "'".$unit_id."'", "'".$unit_name."'", "'".$product_rate."'", "'".$product_tax."'","'".$stock_option."'","'".$stock_dates."'", "'".$store_room_ids."'", "'".$store_room_names."'", "'".$quantitys."'");
                             $entry_update_id = $obj->UpdateSQL($GLOBALS['product_table'], $getUniqueID, $columns, $values, $action);
                             if(preg_match("/^\d+$/", $entry_update_id)) {
                                 $update_stock = 1;	
@@ -575,28 +622,28 @@
                         }
                     }
                 }
-                 if($stock_remove == '1') {
-                    $prev_stock_list = array();
-                    $prev_stock_list = $obj->PrevStockList($edit_id);
-                    if(!empty($prev_stock_list)) {
-                        foreach($prev_stock_list as $data) {
-                            $stock_id = ""; 
-                            if(!empty($data['id']) && $data['id'] != $GLOBALS['null_value']) {
-                                $stock_id = $data['id'];
-                            }
-                            if(!in_array($stock_id, $stock_unique_ids)) {
-                                $columns = array(); $values = array();
-                                $columns = array('deleted');
-                                $values = array('"1"');
-                                $stock_update_id = $obj->UpdateSQL($GLOBALS['stock_table'], $stock_id, $columns, $values, '');                                
-                                if(preg_match("/^\d+$/", $stock_update_id)) {
-                                }
-                            }
-                        }
-                    }
-                }  
+                //  if($stock_remove == '1') {
+                //     $prev_stock_list = array();
+                //     $prev_stock_list = $obj->PrevStockList($edit_id);
+                //     if(!empty($prev_stock_list)) {
+                //         foreach($prev_stock_list as $data) {
+                //             $stock_id = ""; 
+                //             if(!empty($data['id']) && $data['id'] != $GLOBALS['null_value']) {
+                //                 $stock_id = $data['id'];
+                //             }
+                //             if(!in_array($stock_id, $stock_unique_ids)) {
+                //                 $columns = array(); $values = array();
+                //                 $columns = array('deleted');
+                //                 $values = array('"1"');
+                //                 $stock_update_id = $obj->UpdateSQL($GLOBALS['stock_table'], $stock_id, $columns, $values, '');                                
+                //                 if(preg_match("/^\d+$/", $stock_update_id)) {
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }  
                 $stock_date = ""; $store_id = ""; $quantity = "";
-                if(!empty($update_stock) && $update_stock == 1) {
+                if(!empty($update_stock) && $update_stock == 1 && $stock_option == 1) {
                     if(!empty($store_room_ids) && !empty($quantitys) && !empty($stock_dates)) {
                         if($store_room_ids != $GLOBALS['null_value']) {
                             $stock_date = explode(",", $stock_dates);
@@ -710,6 +757,7 @@
                             <th>Product Name</th>
                             <th>Unit</th>
                             <th>Rate</th>
+                            <th>Stock Check</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -745,6 +793,14 @@
                                                     echo "-";
                                                 }
                                             ?>
+                                        </td>
+                                        <td>
+                                            <div class="flex-shrink-0">
+                                                <div class="form-check form-switch form-switch-right form-switch-md">
+                                                    <input class="form-check-input code-switcher" type="checkbox" name="stock_option" onchange="Javascript:ChangeStockOption(this,'<?php if(!empty($list['product_id'])) { echo $list['product_id']; } ?>');"
+                                                    value="<?php echo $list['stock_option']; ?>" <?php if ($list['stock_option'] == '1') echo 'checked'; ?> id="stock_option_<?php if(!empty($list['product_id'])) { echo $list['product_id']; } ?>">
+                                                </div>
+                                            </div>
                                         </td>
                                          <?php 
                                             $edit_access_error = "";
@@ -918,6 +974,19 @@
             echo $clear_records;
             exit;
         }
+    }
+
+    if(isset($_REQUEST['change_stock_option'])) {
+        $product_id = $_REQUEST['change_stock_option'];
+        $option = $_REQUEST['option'];
+
+        $getUniqueID = $obj->getTableColumnValue($GLOBALS['product_table'],'product_id',$product_id,'id');
+        $name = $obj->getTableColumnValue($GLOBALS['product_table'],'product_id',$product_id,'product_name');
+        $columns = $values = array();
+        $columns = array('stock_option');
+        $values = array("'".$option."'");
+        $msg = $obj->UpdateSQL($GLOBALS['product_table'], $getUniqueID, $columns, $values, 'change Stock option');
+        echo  $obj->encode_decode('decrypt',$name);
     }
     ?>
 

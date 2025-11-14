@@ -618,6 +618,7 @@
                     $unit_ids[$i] = trim($unit_ids[$i]);
                     $unit_name = $obj->getTableColumnValue($GLOBALS['unit_table'], 'unit_id', $unit_ids[$i], 'unit_name');
                     $unit_names[$i] = $unit_name; 
+                    $stock_option = $obj->getTableColumnValue($GLOBALS['product_table'], 'product_id', $product_ids[$i], 'stock_option');
                     
                     $quantity[$i] = trim($quantity[$i]);
                     if(!empty($quantity[$i])) {
@@ -626,12 +627,14 @@
                             $current_inward_stock = $obj->getInwardQty($edit_id,$store_ids[$i],$product_ids[$i],$unit_ids[$i]);
                             $current_outward_stock = $obj->getOutwardQty($edit_id,$store_ids[$i],$product_ids[$i],$unit_ids[$i]);                                                            
                             $current_unit_stock = ($current_inward_stock - $current_outward_stock);     
-                            if(($current_unit_stock- $quantity[$i]) < 0) {
-                                $valid_stock = "Stock goes to Negative for ".($obj->encode_decode('decrypt', $product_names[$i])). "; Unit => ". $obj->encode_decode('decrypt',$unit_names[$i]) . " Stock => ".$current_unit_stock;
-                                $stock_error = 1;                                                                
-                            }                                                                                                                
-                            if(!empty($edit_id)) {
-                                $stock_unique_ids[$i] = $obj->getStockUniqueID($edit_id,$store_ids[$i], $product_ids[$i], $unit_ids[$i]);
+                            if($stock_option == '1') {
+                                if(($current_unit_stock- $quantity[$i]) < 0) {
+                                    $valid_stock = "Stock goes to Negative for ".($obj->encode_decode('decrypt', $product_names[$i])). "; Unit => ". $obj->encode_decode('decrypt',$unit_names[$i]) . " Stock => ".$current_unit_stock;
+                                    $stock_error = 1;                                                                
+                                }                                                                                                                
+                                if(!empty($edit_id)) {
+                                    $stock_unique_ids[$i] = $obj->getStockUniqueID($edit_id,$store_ids[$i], $product_ids[$i], $unit_ids[$i]);
+                                }
                             }
                         }
                         else {
@@ -806,7 +809,10 @@
                         $store_ids = explode(",",$store_ids);
                         $index = 0;
                         for($i=0; $i < count($product_ids); $i++) {
-                            $stock_update = $obj->StockUpdate($GLOBALS['store_entry_table'], "Out", $store_entry_id,$store_entry_number, $product_ids[$i],$store_entry_number, $store_entry_date, $store_ids[$i], $unit_ids[$i], $quantity[$i],'');
+                            $stock_option = $obj->getTableColumnValue($GLOBALS['product_table'], 'product_id', $product_ids[$i], 'stock_option');
+                            if($stock_option == '1') {
+                                $stock_update = $obj->StockUpdate($GLOBALS['store_entry_table'], "Out", $store_entry_id,$store_entry_number, $product_ids[$i],$store_entry_number, $store_entry_date, $store_ids[$i], $unit_ids[$i], $quantity[$i],'');
+                            }
                         }
                     }
                 } 

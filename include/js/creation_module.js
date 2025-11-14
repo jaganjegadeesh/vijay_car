@@ -723,3 +723,82 @@ function AddProductDetails(){
         }
     });
 }
+
+function ShowStock(obj) {
+    var check_login_session = 1;
+    var post_url = "dashboard_changes.php?check_login_session=1";
+    jQuery.ajax({
+        url: post_url, success: function (check_login_session) {
+            if (check_login_session == 1) {
+                var option = 1;
+                if (jQuery('#stock_option').prop('checked') == false) {
+                    jQuery('#stock_option').val(0);
+                    option = 0;
+                }
+                else {
+                    jQuery('#stock_option').val(1)
+                }
+                if (jQuery(obj).parent().find('input[type="checkbox"]').length > 0) {
+                    jQuery(obj).parent().find('input[type="checkbox"]').val(option);
+                }
+
+                if (option == 1) {
+                    if (jQuery('.stock_cover').length > 0) {
+                        jQuery('.stock_cover').removeClass("d-none");
+                    }
+                }
+                else {
+                    if (jQuery('.stock_cover').length > 0) {
+                        jQuery('.stock_cover').addClass("d-none");
+                    }
+                   
+                }
+            }
+            else {
+                window.location.reload();
+            }
+        }
+    });
+}
+
+function ChangeStockOption(obj,product) {
+    var check_login_session = 1;
+    var post_url = "dashboard_changes.php?check_login_session=1";
+    jQuery.ajax({
+        url: post_url, success: function (check_login_session) {
+            if (check_login_session == 1) {
+                var option = 1;
+                if (jQuery('#stock_option_' + product).prop('checked') == false) {
+                    jQuery('#stock_option_' + product).val(2);
+                    option = 2;
+                }
+                else {
+                    jQuery('#stock_option_' + product).val(1)
+                }
+                if (jQuery(obj).parent().find('input[type="checkbox"]').length > 0) {
+                    jQuery(obj).parent().find('input[type="checkbox"]').val(option);
+                }
+
+                post_url = "product_changes.php?change_stock_option="+product+"&option="+option;
+                jQuery.ajax({
+                    url: post_url, success: function (result) {
+                        if (jQuery('div.alert').length > 0) {
+                            jQuery('div.alert').remove();
+                        }
+                        console.log(result);
+				        jQuery('form[name="table_listing_form"]').find('.row:first').before('<div class="alert alert-success alert-dismissible fade show" role="alert">'+ result + ' Stock Status Sucessfully Updated. </div>');
+                        setTimeout(function () {
+                            if (jQuery('div.alert').length > 0) {
+                                jQuery('div.alert').remove();
+                            }
+                        }, 1000);
+                    }
+                })
+
+            }
+            else {
+                window.location.reload();
+            }
+        }
+    });
+}

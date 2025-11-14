@@ -196,8 +196,8 @@
 
                         
 						
-						$columns = array('loginer_name', 'login_date_time', 'logout_date_time', 'ip_address', 'browser', 'os_detail','type', 'user_id', 'deleted');
-						$values = array("'".$loginer_name."'", "'".$create_date_time."'", "'".$GLOBALS['null_value']."'", "'".$ip_address."'", "'".$browser."'", "'".$os_detail."'",  "'".$_SESSION[$GLOBALS['site_name_user_prefix'].'_user_type']."'", "'".$_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id']."'", "'0'");			
+						$columns = array('loginer_name', 'login_date_time', 'ip_address', 'browser', 'os_detail','type', 'user_id', 'deleted');
+						$values = array("'".$loginer_name."'", "'".$create_date_time."'", "'".$ip_address."'", "'".$browser."'", "'".$os_detail."'",  "'".$_SESSION[$GLOBALS['site_name_user_prefix'].'_user_type']."'", "'".$_SESSION[$GLOBALS['site_name_user_prefix'].'_user_id']."'", "'0'");			
                                             
 						$user_login_record_id = $obj->InsertSQL($GLOBALS['login_table'], $columns, $values, '', '', $action);						
 						if(preg_match("/^\d+$/", $user_login_record_id)) {	

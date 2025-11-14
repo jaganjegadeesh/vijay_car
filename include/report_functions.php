@@ -9,55 +9,55 @@
 			{
 				if(!empty($where))
 				{
-					$where .="store_id = '".$store_id."' AND "; 
+					$where .="s.store_id = '".$store_id."' AND "; 
 				}
 				else
 				{
-					$where = "store_id = '".$store_id."' AND ";
+					$where = "s.store_id = '".$store_id."' AND ";
 				}
 			}
 			if(!empty($from_date)) {
 				$from_date = date("Y-m-d", strtotime($from_date));
 				if(!empty($where)) {
-					$where = $where." stock_date >= '".$from_date."'  AND";
+					$where = $where." s.stock_date >= '".$from_date."'  AND";
 				}
 				else {
-					$where = "stock_date >= '".$from_date."'  AND";
+					$where = "s.stock_date >= '".$from_date."'  AND";
 				}
 			}
 
 			if(!empty($to_date)) {
 				$to_date = date("Y-m-d", strtotime($to_date));
 				if(!empty($where)) {
-					$where = $where."  stock_date <= '".$to_date."' AND";
+					$where = $where."  s.stock_date <= '".$to_date."' AND";
 				}
 				else {
-					$where = "stock_date <= '".$to_date."' AND";
+					$where = "s.stock_date <= '".$to_date."' AND";
 				}
 			}
 			
 			if(!empty($product_id)) {
 				if(!empty($where)) {
-					$where = $where." product_id = '".$product_id."' AND ";
+					$where = $where." s.product_id = '".$product_id."' AND ";
 				}
 				else {
-					$where = "product_id = '".$product_id."' AND ";
+					$where = "s.product_id = '".$product_id."' AND ";
 				}
 			}
 			if(!empty($party_id)) {
 				if(!empty($where)) {
-					$where = $where." party_id = '".$party_id."' AND ";
+					$where = $where." s.party_id = '".$party_id."' AND ";
 				}
 				else {
-					$where = "party_id = '".$party_id."' AND ";
+					$where = "s.party_id = '".$party_id."' AND ";
 				}
 			}
 
 			if(!empty($where)) {
-				$select_query = "SELECT * FROM ".$GLOBALS['stock_table']." WHERE ".$where."  deleted = '0' ". (!empty($product_id) ? '' : 'GROUP BY product_id') ." ORDER BY id ASC";	
+				$select_query = "SELECT * FROM ".$GLOBALS['stock_table']." AS s LEFT JOIN ". $GLOBALS['product_table'] ." AS p ON s.product_id = p.product_id  WHERE ".$where."  s.deleted = '0' AND p.stock_option = '1' ". (!empty($product_id) ? '' : 'GROUP BY s.product_id') ." ORDER BY s.id ASC";	
 			}
 			else{
-				$select_query = "SELECT * FROM ".$GLOBALS['stock_table']." WHERE deleted = '0' ". (!empty($product_id) ? '' : 'GROUP BY product_id') ." ORDER BY id ASC";
+				$select_query = "SELECT * FROM ".$GLOBALS['stock_table']." As s LEFT JOIN ". $GLOBALS['product_table'] ." AS p ON s.product_id = p.product_id  WHERE s.deleted = '0' AND p.stock_option = '1' ". (!empty($product_id) ? '' : 'GROUP BY s.product_id') ." ORDER BY s.id ASC";
 			}
 			// echo $select_query;
 			if(!empty($select_query)) {

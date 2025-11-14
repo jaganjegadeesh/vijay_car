@@ -4,9 +4,9 @@
 		public $con;		
 		public function connect() {			
 			$servername = "localhost";
-			$username = "subha2022";
-			$password = "TI8y[W360]^_";					
-			$this->db_name = "subha2022";
+			$username = "root";
+			$password = "";					
+			$this->db_name = "vijay_garage_170925";
 			
 			try {
 			  $con = new PDO("mysql:host=$servername;dbname=".$this->db_name.";charset=utf8", $username, $password);

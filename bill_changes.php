@@ -178,7 +178,9 @@
         $store_id = $_REQUEST['GetStoreProduct'];
         $product_list = array();
         if(!empty($store_id)) {
-            $product_list = $obj->getStockReportList('','','',$store_id);
+            // $product_list = $obj->getStockReportList('','','',$store_id);
+            $product_list = $obj->getProductList($store_id);
+            print_r($product_list);
             ?>
             <option value="">Select</option>
             <?php
@@ -196,7 +198,7 @@
                     $current_stock_unit = $inward_unit - $outward_unit;
                     
                     ?>
-                    <option value="<?php echo $product_id; ?>" data-currnet_stock="<?php echo $current_stock_unit; ?>"><?php echo $product_name; ?></option>
+                    <option value="<?php echo $product_id; ?>" data-currnet_stock="<?php echo $current_stock_unit; ?>" data-stock_option="<?php echo $data['stock_option']; ?>"><?php echo $product_name; ?></option>
                     <?php
                 }
             }

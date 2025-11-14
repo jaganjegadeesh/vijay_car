@@ -13,3 +13,8 @@ ALTER TABLE `vijay_garage_quotation` CHANGE `total_qty` `total_qty` MEDIUMTEXT C
 ALTER TABLE `vijay_garage_estimate` CHANGE `total_qty` `total_qty` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL; 
 
 
+
+
+-- 10/11/2025
+ALTER TABLE `vijay_garage_product` ADD `stock_option` INT NULL DEFAULT '0' AFTER `product_tax`;
+ALTER TABLE `vijay_garage_product` CHANGE `stock_option` `stock_option` INT(11) NULL DEFAULT '1';

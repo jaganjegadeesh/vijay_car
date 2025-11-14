@@ -36,7 +36,7 @@
     $store_list = array();
     $store_list = $obj->getTableRecords($GLOBALS['store_room_table'], '','', '');
     $product_list = array();
-    $product_list = $obj->getTableRecords($GLOBALS['product_table'], '','', '');
+    $product_list = $obj->getTableRecords($GLOBALS['product_table'], 'stock_option','1', '');
 
     $total_records_list = array();
 

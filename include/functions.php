@@ -506,6 +506,13 @@
 			$list = $report_obj->getStockReportList($from_date,$to_date,$product_id,$store_id);
 			return $list;
 		}
+		public function getProductList($store_id) {
+			$report_obj = "";
+			$report_obj = $this->creation_function_object();
+			$list = array();
+			$list = $report_obj->getProductList($store_id);
+			return $list;
+		}
 		
 
 		public function DeleteProduct($bill_unique_id){

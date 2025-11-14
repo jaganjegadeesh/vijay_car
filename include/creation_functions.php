@@ -688,5 +688,27 @@
 			}
 			return $success;
 		}
+		public function getProductList($store_id) {
+			$select_query = ""; $list = array(); $where = "";
+
+			
+			if(!empty($store_id))
+			{
+					$where = "( s.store_id = '".$store_id."' OR p.stock_option = '2') ";
+				
+			}
+			
+
+			if(!empty($where)) {
+				$select_query = "SELECT p.* FROM ".$GLOBALS['product_table']." AS p LEFT JOIN ". $GLOBALS['stock_table'] ." AS s ON s.product_id = p.product_id AND s.deleted = '0' WHERE ".$where."    GROUP BY p.product_id ORDER BY p.id ASC";	
+			}
+			else{
+				$select_query = "SELECT p.* FROM ".$GLOBALS['product_table']." AS p LEFT JOIN ". $GLOBALS['stock_table'] ." AS s ON s.product_id = p.product_id AND  s.deleted = '0' WHERE  (p.stock_option = '1' OR p.stock_option = '2') GROUP BY p.product_id ORDER BY p.id ASC";	
+			}
+			if(!empty($select_query)) {
+				$list = $this->getQueryRecords($GLOBALS['product_table'], $select_query);
+			}
+			return $list;
+		}
     }
 ?>

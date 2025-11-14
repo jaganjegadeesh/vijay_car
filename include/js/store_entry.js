@@ -100,6 +100,9 @@ function getUnit(selectElement) {
     var current_stock = 0;
     current_stock = selectElement.options[selectElement.selectedIndex].getAttribute('data-currnet_stock');
 
+    var stock_options = selectElement.options[selectElement.selectedIndex].getAttribute('data-stock_option');
+     
+
     var check_login_session = 1;
     var post_url = "dashboard_changes.php?check_login_session=1";
     jQuery.ajax({
@@ -123,11 +126,20 @@ function getUnit(selectElement) {
                         if (jQuery('input[name="selected_quantity"]').length > 0) {
                             jQuery('input[name="selected_quantity"]').focus();
                         }
-                        if (jQuery('input[name="current_stock"]').length > 0) {
-                            jQuery('input[name="current_stock"]').val(current_stock);
-                        }
-                        if(jQuery('.current_stock_span').length > 0) {
-                            jQuery('.current_stock_span').html("Current Stock : " + current_stock);
+                        if(stock_options == '1') {
+                            if (jQuery('input[name="current_stock"]').length > 0) {
+                                jQuery('input[name="current_stock"]').val(current_stock);
+                            }
+                            if(jQuery('.current_stock_span').length > 0) {
+                                jQuery('.current_stock_span').html("Current Stock : " + current_stock);
+                            }
+                        } else {
+                             if (jQuery('input[name="current_stock"]').length > 0) {
+                                jQuery('input[name="current_stock"]').val('');
+                            }   
+                            if(jQuery('.current_stock_span').length > 0) {
+                                jQuery('.current_stock_span').html('');
+                            }
                         }
                     }
                 });
@@ -214,7 +226,7 @@ function AddStoreEntry() {
                         throwerrormsg('selected_product_id', 'select', 'Select Item', form_name);
                     }
                 }
-
+                var stock_options = $('select[name="selected_product_id"] option:selected').data('stock_option');
                 var selected_quantity = 0; var current_stock = 0;
                 if (jQuery('input[name="current_stock"]').length > 0) {
                     current_stock = jQuery('input[name="current_stock"]').val();
@@ -233,9 +245,9 @@ function AddStoreEntry() {
                         all_errors_check = 0;
                         throwerrormsg('selected_quantity', 'input', 'Enter valid qty', form_name);
                     }
-                    if (parseFloat(selected_quantity) > parseFloat(current_stock)) {
+                    if (parseFloat(selected_quantity) > parseFloat(current_stock) && stock_options == '1') {
                         all_errors_check = 0;
-                        throwerrormsg('selected_quantity', 'input', 'Enter valid qty', form_name);
+                        throwerrormsg('selected_quantity', 'input', 'Stock Goes Negative', form_name);
                     }
                 }
 
